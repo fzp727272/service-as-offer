@@ -208,6 +208,105 @@ button:focus-visible, a:focus-visible, select:focus-visible {
 .slot.unavailable { text-decoration: none; }
 .slot:disabled { cursor: not-allowed; }
 .store-card[role="button"]:focus-visible { outline: 2px solid var(--flow-brand); outline-offset: 2px; }
+.booking-service-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 8px 0;
+  margin: 8px 0 0;
+}
+.booking-service-card .service-thumb {
+  width: 72px;
+  height: 72px;
+  flex: none;
+  overflow: hidden;
+  background: var(--flow-soft);
+}
+.booking-service-card .service-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.booking-service-card .service-info { min-width: 0; }
+.booking-service-card .service-info strong {
+  display: block;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 22px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.booking-service-card .service-info span {
+  display: block;
+  margin-top: 3px;
+  color: var(--flow-muted);
+  font-size: 14px;
+  line-height: 20px;
+}
+.booking-equipment {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 10px;
+  margin: 0 0 8px;
+  background: var(--flow-soft);
+}
+.booking-equipment-label {
+  color: var(--flow-muted);
+  flex: none;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 650;
+}
+.booking-equipment-value {
+  overflow-wrap: anywhere;
+  color: var(--flow-ink);
+  font-size: 13px;
+  line-height: 20px;
+}
+html body[data-page="store"],
+html body[data-page="schedule"] { background: #fff; }
+html body[data-page="store"] .body,
+html body[data-page="schedule"] .body { background: #fff; }
+body[data-page="store"] .store-card:not(.selected) { background: var(--flow-soft); }
+body.vitamin-app.purchase-flow[data-page="store"] .store-card {
+  gap: 0;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+body[data-page="store"] .store-card-head { gap: 6px; }
+body[data-page="store"] .store-map {
+  min-height: 32px;
+  gap: 5px;
+  margin-top: 1px;
+  font-size: 12px;
+  line-height: 18px;
+}
+body[data-page="store"] .store-map .store-distance { font-size: 12px; }
+body[data-page="store"] .store-bottom {
+  gap: 6px;
+  margin-top: 2px;
+  padding-top: 3px;
+}
+body[data-page="store"] .store-hours { font-size: 12px; line-height: 14px; }
+body[data-page="store"] .store-contact-button {
+  min-height: 28px;
+  padding: 0 8px;
+}
+body[data-page="schedule"] .body .store-summary { background: var(--flow-soft); }
+body[data-page="schedule"] .dates .date:not(.selected):not(.disabled),
+body[data-page="schedule"] .slots .slot:not(.selected):not(.full):not(.unavailable) {
+  background: #fff;
+}
+body[data-page="schedule"] .booking-store-divider {
+  height: 1px;
+  margin: 8px 0;
+  border: 0;
+  background: var(--flow-line);
+}
 [hidden] { display: none !important; }
 
 @media (max-width: 900px) {

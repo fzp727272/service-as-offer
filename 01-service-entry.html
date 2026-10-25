@@ -194,24 +194,24 @@
     .directory-tab[aria-current="location"] { color: var(--accent); font-weight: 700; }
     .directory-tab[aria-current="location"]::after { content: ""; position: absolute; bottom: 0; left: 28%; right: 28%; height: 3px; background: var(--accent); }
     .directory-tab:disabled { color: #aaa; cursor: not-allowed; }
-    .directory-groups { display: grid; gap: var(--space-s); }
+    .directory-groups { display: grid; gap: var(--space-xs); }
     .directory-group { margin-top: 24px; }
     .directory-group:last-child { min-height: var(--category-viewport, 0px); }
     .directory-group-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
     .directory-group-heading h3 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 16px; }
     .directory-group-heading span { color: var(--muted); font-size: 11px; }
-    .directory-service { width: 100%; display: flex; align-items: flex-start; gap: var(--space-s); padding: var(--space-s); border: 1px solid var(--line); border-radius: var(--radius-regular); background: #fff; text-align: left; cursor: pointer; transition: border-color .15s, background .15s; }
-    .service-image { position: relative; flex: 0 0 80px; overflow: hidden; background: var(--soft); }
-    .service-image img { display: block; width: 80px; height: 96px; object-fit: cover; }
+    .directory-service { width: 100%; display: flex; align-items: flex-start; gap: 10px; padding: 10px; border: 1px solid var(--line); border-radius: var(--radius-regular); background: #fff; text-align: left; cursor: pointer; transition: border-color .15s, background .15s; }
+    .service-image { position: relative; flex: 0 0 72px; overflow: hidden; background: var(--soft); }
+    .service-image img { display: block; width: 72px; height: 80px; object-fit: cover; }
     .image-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 3px 0; background: #fffffff2; color: var(--muted); text-align: center; font-size: 10px; }
     .directory-service-copy { flex: 1; min-width: 0; }
     .service-title { display: block; font-size: 14px; font-weight: 700; line-height: 20px; }
-    .service-description { display: block; margin: 4px 0 8px; color: var(--muted); font-size: 12px; line-height: 18px; }
+    .service-description { display: block; margin: 2px 0 4px; color: var(--muted); font-size: 12px; line-height: 18px; }
     .service-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-    .service-tag { padding: 2px 4px; background: var(--soft); color: var(--muted); font-size: 10px; line-height: 14px; }
+    .service-tag { padding: 1px 4px; background: var(--soft); color: var(--muted); font-size: 10px; line-height: 14px; }
     .service-tag.recommended { color: var(--accent); background: var(--accent-soft); }
-    .service-bottom { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 12px; }
-    .service-price { color: var(--ink); font-family: "Decathlon Display", "Decathlon Text", sans-serif; font-size: 18px; line-height: 18px; font-weight: 600; white-space: nowrap; }
+    .service-bottom { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 8px; }
+    .service-price { color: var(--accent); font-family: "Decathlon Display", "Decathlon Text", sans-serif; font-size: 18px; line-height: 18px; font-weight: 600; white-space: nowrap; }
     .service-price small { margin-right: 2px; font-size: 12px; }
     .service-price .price-suffix { margin: 0 0 0 3px; }
     .price-label { color: var(--muted); font-size: 11px; }
@@ -249,7 +249,7 @@
       .app { padding: 0 var(--space-m) max(24px, env(safe-area-inset-bottom)); }
     }
     @media (max-width: 360px) {
-      .personal-section, .directory-service { padding: 12px; }
+      .personal-section { padding: 12px; }
       .directory-tab { font-size: 12px; }
       .service-image { flex-basis: 52px; }
       .service-image img { width: 52px; height: 68px; }
@@ -290,6 +290,7 @@
     </aside>
   </main>
   <div class="live-region" id="live" aria-live="polite"></div>
+  <script src="service-catalog.js"></script>
   <script>
     const baseScenario = {
       orders: ["待预约"],
@@ -303,34 +304,20 @@
         name: "公路自行车",
         detail: "商品订单 810263 · 权益归属示例",
         benefits: [
-          { title: "新车安全检查", detail: "购车关联权益 · 不可转让" },
-          { title: "6 个月免费安全检查", detail: "购车关联权益示例" }
+          { title: "新车安全检查", detail: "购车关联权益（有效期至2026年12月30日）" },
+          { title: "6 个月免费安全检查", detail: "购车关联权益（有效期至2026年12月30日）" }
         ]
       }
     };
     const categories = [
-      { id: "all", title: "全部", subtitle: "15 项服务", heading: "运动装备，一站养护", detail: "检查、保养、穿线、打蜡，按你的装备选服务" },
+      { id: "all", title: "全部", subtitle: `${serviceCatalog.length} 项服务`, heading: "运动装备，一站养护", detail: "检查、保养、穿线、打蜡，按你的装备选服务" },
       { id: "bike", title: "自行车", subtitle: "检查 / 保养", heading: "从安全检查，到深度保养", detail: "按骑行需求选择养护方案，深度保养限指定门店" },
       { id: "badminton", title: "羽毛球/网球", subtitle: "球拍穿线", heading: "为下一场挥拍做好准备", detail: "按取拍时效、球拍和球线购买渠道选择方案" },
       { id: "ski", title: "滑雪", subtitle: "打蜡 / 保养", heading: "上雪前养护，雪季后收纳", detail: "单板、双板养护与季末打蜡，按使用场景选择" }
     ];
-    const services = [
-      { category: "bike", title: "安全检查", detail: "检查主要部件、紧固件并润滑链条", price: 69.9, tags: ["基础检查", "链条润滑"] },
-      { category: "bike", title: "标准保养", detail: "安全检查基础上，增加部件调节与线管润滑", price: 199.9, tags: ["检查 + 调节", "日常养护"] },
-      { category: "bike", title: "全面保养", detail: "标准保养基础上，增加轮组矫正与轴承养护", price: 299.9, tags: ["轮圈矫正", "轴承养护"] },
-      { category: "bike", title: "深度保养", detail: "增加传动、轮组、车架及避震转点清洁", price: 499.9, tags: ["深度清洁", "指定门店"] },
-      { category: "badminton", title: "2 小时快速穿线", detail: "不区分球拍及球线的购买渠道", price: 60, tags: ["快速穿线", "购买渠道不限"] },
-      { category: "badminton", title: "48 小时取 · 自带球拍球线", detail: "非迪卡侬球拍 + 非迪卡侬球线", price: 40, tags: ["羽毛球拍", "常规穿线"] },
-      { category: "badminton", title: "48 小时取 · 单项购于迪卡侬", detail: "球拍或球线购于迪卡侬，二者满足其一", price: 30, tags: ["羽毛球拍", "购买条件适用"] },
-      { category: "badminton", title: "48 小时取 · 球拍球线均购于迪卡侬", detail: "迪卡侬球拍 + 迪卡侬球线", price: 20, tags: ["羽毛球拍", "购买条件适用"] },
-      { category: "badminton", title: "网球 · 2 小时快速穿线", detail: "不区分球拍及球线的购买渠道", price: 80, tags: ["网球拍", "快速穿线", "购买渠道不限"] },
-      { category: "badminton", title: "网球 · 48 小时取 · 自带球线", detail: "非迪卡侬球线；球拍购买渠道不限", price: 60, tags: ["网球拍", "常规穿线"] },
-      { category: "badminton", title: "网球 · 48 小时取 · 迪卡侬球线", detail: "迪卡侬球线；球拍购买渠道不限", price: 40, tags: ["网球拍", "购买条件适用"] },
-      { category: "ski", title: "手工打蜡（单层）", detail: "检查板底与板刃，完成打蜡及抛光", price: 149.9, tags: ["板底养护", "手工打蜡"] },
-      { category: "ski", title: "手工季末打蜡", detail: "雪季后长期存放保护；开季配套服务待确认", price: 149.9, tags: ["季末存放", "不刮蜡"] },
-      { category: "ski", title: "单板手工保养", detail: "单板手工磨刃 + 手工打蜡", price: 199.9, tags: ["单板适用", "磨刃 + 打蜡"] },
-      { category: "ski", title: "双板手工保养", detail: "双板手工磨刃 + 手工打蜡", price: 249.9, tags: ["双板适用", "磨刃 + 打蜡"] }
-    ];
+    const services = serviceCatalog.map(service => ({
+      ...service, price: Math.min(...service.options.map(option => option.price))
+    }));
     const scenarioOptions = {
       all: { title: "重叠场景", orders: true, benefits: true },
       orders: { title: "只有订单场景", orders: true, benefits: false },
@@ -385,12 +372,12 @@
       if (!scenario.recommendations) return [];
       return [
         { title: "安全检查", category: "自行车" },
-        { title: "标准保养", category: "自行车" }
+        { title: "自行车保养", category: "自行车" }
       ];
     }
     function recommendationMarkup(scenario) {
       if (scenario.orders.length || scenario.benefits || !scenario.recommendations) return "";
-      const service = services.find(item => item.category === "bike" && item.title === "标准保养");
+      const service = services.find(item => item.id === "bike-maintenance").options[0];
       return `<section class="personal-section recommendation-section" aria-labelledby="recommendation-title">
         <div class="recommendation-card">
           <h3 id="recommendation-title">您的自行车已使用约<em>6个月</em></h3>
@@ -409,7 +396,7 @@
     }
     function serviceDirectoryMarkup() {
       return `<section class="section category-section" id="service-directory" aria-labelledby="directory-title">
-        <div class="section-heading"><h2 id="directory-title">全部服务</h2><span>一期精选 · 15 项服务</span></div>
+        <div class="section-heading"><h2 id="directory-title">全部服务</h2><span>一期精选 · ${services.length} 项服务</span></div>
         <div class="directory-navigation">
           <nav class="directory-tabs" aria-label="服务分类">${categories.map((category, index) => `<button type="button" class="directory-tab" id="tab-${category.id}" data-category="${category.id}" ${index === 0 ? 'aria-current="location"' : ""} aria-controls="${category.id === "all" ? "directory-results" : `category-${category.id}`}">${category.title}<small>${category.subtitle}</small></button>`).join("")}</nav>
         </div>
@@ -452,7 +439,7 @@
             <div class="directory-groups">${items.map(service => {
               const recommended = recommendedKeys.has(`${category.title}:${service.title}`);
               const name = `${category.title} · ${service.title}`;
-              return `<button type="button" class="directory-service" data-price="${service.price}" data-service-category="${service.category}" data-service-name="${esc(service.title)}" data-service-detail="${esc(service.detail)}" data-action="catalog" data-title="${esc(name)}" aria-label="${esc(name)}，参考价格 ${service.price.toFixed(2)} 元起">
+              return `<button type="button" class="directory-service" data-service-group="${service.id}" data-price="${service.price}" data-service-category="${service.category}" data-service-name="${esc(service.title)}" data-service-detail="${esc(service.detail)}" data-action="catalog" data-title="${esc(name)}" aria-label="${esc(name)}，参考价格 ${service.price.toFixed(2)} 元起">
                 <span class="service-image"><img src="assets/service-${service.category}.svg" alt="" width="74" height="80"><span class="image-caption">装备示意图</span></span>
                 <span class="directory-service-copy"><strong class="service-title">${esc(service.title)}</strong>
                   <span class="service-description">${esc(service.detail)}</span>
@@ -580,6 +567,7 @@
       const url = new URL("02-service-detail.html", location.href);
       url.searchParams.set("category", action.dataset.serviceCategory || "bike");
       url.searchParams.set("name", action.dataset.serviceName || action.dataset.title || "服务详情");
+      if (action.dataset.serviceGroup) url.searchParams.set("group", action.dataset.serviceGroup);
       if (action.dataset.serviceDetail) url.searchParams.set("description", action.dataset.serviceDetail);
       if (action.dataset.price) url.searchParams.set("price", action.dataset.price);
       location.assign(url);
@@ -687,7 +675,7 @@
       render();
     });
     let scrollFrame = 0;
-    screen.addEventListener("scroll", () => {
+    app.addEventListener("scroll", () => {
       if (scrollFrame) return;
       scrollFrame = requestAnimationFrame(() => {
         scrollFrame = 0;
@@ -697,7 +685,7 @@
     new ResizeObserver(() => {
       updateCategoryViewport();
       syncCategoryFromScroll();
-    }).observe(screen);
+    }).observe(app);
   </script>
 </body>
 </html>

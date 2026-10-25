@@ -439,7 +439,7 @@ body.vitamin-app {
 .vitamin-app.purchase-flow .store-image { width: 48px; height: 48px; background: var(--container-quiet); }
 .vitamin-app.purchase-flow .store-name { font-size: 16px; line-height: 24px; }
 .vitamin-app.purchase-flow .capability { font-size: 12px; line-height: 18px; }
-.vitamin-app.purchase-flow .store-summary { padding: 12px; margin-bottom: 20px; gap: 12px; }
+.vitamin-app.purchase-flow .store-summary {  margin-bottom: 20px; gap: 12px; }
 .vitamin-app.purchase-flow .store-summary strong { font-size: 14px; line-height: 22px; }
 .vitamin-app.purchase-flow .change { display: flex; align-items: center; min-height: 44px; flex: none; font-size: 14px; }
 .vitamin-app.purchase-flow .calendar-title { margin-bottom: 12px; }
@@ -591,13 +591,33 @@ body[data-page="schedule"] .store-summary {
   background: var(--container-neutral);
 }
 body[data-page="schedule"] .calendar-title {
+  position: relative;
   margin-top: 8px;
-  padding-top: 12px;
-  border-top: 8px solid var(--background-alternative);
+  padding-top: 20px;
+  border-top: 0;
+}
+body[data-page="schedule"] .calendar-title::before {
+  position: absolute;
+  top: 0;
+  right: -16px;
+  left: -16px;
+  height: 8px;
+  background: var(--container-quiet);
+  content: "";
 }
 body[data-page="schedule"] .section-title {
-  padding-top: 12px;
-  border-top: 8px solid var(--background-alternative);
+  position: relative;
+  padding-top: 20px;
+  border-top: 0;
+}
+body[data-page="schedule"] .section-title::before {
+  position: absolute;
+  top: 0;
+  right: -16px;
+  left: -16px;
+  height: 8px;
+  background: var(--container-quiet);
+  content: "";
 }
 
 body[data-page="result"] .presentation .artboard .body {

@@ -174,7 +174,7 @@
 
     storeCards.forEach((card) => {
       card.addEventListener("click", (event) => {
-        if (event.target.closest("[data-store-map], [data-store-contact]")) return;
+        if (event.target.closest("[data-store-map], [data-store-contact], .store-address")) return;
         selectedStore = card.dataset.storeId;
         render();
       });

@@ -132,8 +132,8 @@
     const orders = [
       { number: "DX20240905102", status: "待付款", title: "自行车基础保养", equipment: "Rockrider ST 530", store: "迪卡侬上海五角场店", price: "199", image: "order-bike-pending.png", actions: ["取消服务", "立即付款"] },
       { number: "DX20240905102", status: "待预约", title: "自行车基础保养", equipment: "Rockrider ST 530", store: "迪卡侬上海五角场店", price: "199", image: "order-bike-awaiting.png", actions: ["取消服务", "立即预约"] },
-      { number: "DX20240905101", status: "待服务", title: "自行车基础保养", equipment: "Rockrider ST 530", store: "迪卡侬上海五角场店", price: "199", image: "order-bike-awaiting.png", appointment: "9月5日 周六 · 14:00 到店", actions: ["修改预约", "查看预约"] },
-      { number: "DX20240908339", status: "待服务", benefit: "新车安装权益", title: "自行车新车安装", equipment: "Riverside Touring", store: "迪卡侬上海花木店", image: "order-bike-install.png", appointment: "9月8日 · 10:00 到店", actions: ["查看预约"] },
+      { number: "DX20240905101", status: "待到店", title: "自行车基础保养", equipment: "Rockrider ST 530", store: "迪卡侬上海五角场店", price: "199", image: "order-bike-awaiting.png", appointment: "9月5日 周六 · 14:00 到店", actions: ["修改预约", "查看预约"] },
+      { number: "DX20240908339", status: "待到店", benefit: "新车安装权益", title: "自行车新车安装", equipment: "Riverside Touring", store: "迪卡侬上海花木店", image: "order-bike-install.png", appointment: "9月8日 · 10:00 到店", actions: ["查看预约"] },
       { number: "DX20240905088", status: "服务中", title: "自行车维修", equipment: "Specialized Allez", store: "迪卡侬上海五角场店", image: "order-bike-repair.png", warning: "有新的维修方案需要确认", actions: ["查看并确认"] },
       { number: "DX20240821004", status: "已完成", title: "羽毛球拍穿线", equipment: "PERFLY BR 990", store: "上海五角场店", image: "order-badminton.png", actions: ["查看记录", "再次穿线"] },
     ];
@@ -141,7 +141,7 @@
       { id: "all", label: "全部", count: "20" },
       { id: "待付款", label: "待付款", count: "0" },
       { id: "待预约", label: "待预约", count: "0" },
-      { id: "待服务", label: "待服务", count: "1" },
+      { id: "待到店", label: "待到店", count: "1" },
       { id: "服务中", label: "服务中", count: "1" },
       { id: "已完成", label: "已完成", count: "18" },
       { id: "已取消", label: "已取消", count: "" },
@@ -149,7 +149,7 @@
     const primaryActions = {
       "待付款": "立即付款",
       "待预约": "立即预约",
-      "待服务": "查看预约",
+      "待到店": "查看预约",
       "服务中": "查看并确认",
       "已完成": "查看记录",
     };
@@ -169,7 +169,7 @@
         ${order.appointment ? `<div class="order-info-banner">▦ ${escapeHtml(order.appointment)}</div>` : ""}
         ${order.warning ? `<div class="order-info-banner warning">ⓘ ${escapeHtml(order.warning)}</div><div class="order-progress"><span>已接单 ✓</span><span>等待确认 ●</span><span>维修中</span><span>待取车</span></div>` : ""}
         <div class="order-card-divider"></div>
-        <div class="order-card-foot">${order.benefit ? '<strong class="order-benefit-label">免费权益</strong>' : order.price ? `<strong class="order-price">${order.status === "待服务" ? "已付款：" : ""}¥${escapeHtml(order.price)}</strong>` : "<span></span>"}<div class="order-card-foot-actions">${order.actions.map(action => `<button type="button" class="order-action ${action === primaryActions[order.status] ? "primary" : ""}" data-order-index="${orders.indexOf(order)}" data-order-action="${escapeHtml(action)}">${escapeHtml(action)}</button>`).join("")}</div></div>
+        <div class="order-card-foot">${order.benefit ? '<strong class="order-benefit-label">免费权益</strong>' : order.price ? `<strong class="order-price">${order.status === "待到店" ? "已付款：" : ""}¥${escapeHtml(order.price)}</strong>` : "<span></span>"}<div class="order-card-foot-actions">${order.actions.map(action => `<button type="button" class="order-action ${action === primaryActions[order.status] ? "primary" : ""}" data-order-index="${orders.indexOf(order)}" data-order-action="${escapeHtml(action)}">${escapeHtml(action)}</button>`).join("")}</div></div>
       </article>`;
     }
 
@@ -199,7 +199,7 @@
       const order = orders[Number(button.dataset.orderIndex)];
       const routes = { "立即付款": "05-order-checkout.html", "立即预约": "06-store-selection.html", "修改预约": "10-reschedule-review.html", "查看预约": "12-service-order-detail.html", "取消服务": "12-service-order-detail.html", "查看并确认": "12-service-order-detail.html", "查看记录": "12-service-order-detail.html", "再次穿线": "02-service-detail.html" };
       const next = new URL(routes[button.dataset.orderAction], location.href);
-      next.search = new URLSearchParams({ name: order.title, equipment: order.equipment, order: order.number, category: order.title.includes("羽毛球") ? "badminton" : "bike", booking: order.status === "待服务" ? "created" : "none" });
+      next.search = new URLSearchParams({ name: order.title, equipment: order.equipment, order: order.number, category: order.title.includes("羽毛球") ? "badminton" : "bike", booking: order.status === "待到店" ? "created" : "none" });
       if (order.price) next.searchParams.set("price", order.price);
       if (order.benefit) next.searchParams.set("context", "benefit");
       if (order.status === "待付款") next.searchParams.set("paymentState", "unpaid");

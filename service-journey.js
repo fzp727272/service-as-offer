@@ -292,6 +292,13 @@
     thumb.replaceChildren(image);
   });
   const setText = (selector, text) => root.querySelectorAll(selector).forEach(node => { node.textContent = text; });
+  const equipmentHints = {
+    bike: "可用于自行车，到店时确认具体型号",
+    badminton: "可用于羽毛球，到店时确认具体型号",
+    tennis: "可用于网球，到店时确认具体型号",
+    ski: "可用于滑雪装备，到店时确认具体型号",
+  };
+  setText(".booking-equipment-value", params.get("equipment") || equipmentHints[params.get("category")] || equipmentHints.bike);
   if (params.has("name")) {
     setText(".page-service-copy > strong, #service-name, .service-strip .service-info > strong", params.get("name"));
     setText(".service-name", params.get("name"));
@@ -429,7 +436,7 @@
         unpaid: { tag: "待付款", heading: "订单待支付", appointment: "尚未创建", location: "选择后显示", payment: "待支付", progress: 0, action: "继续支付", href: "05-order-checkout.html", ticket: false },
         pending: { tag: "待预约", heading: params.get("context") === "benefit" ? "权益服务，待预约" : "已支付，待预约", appointment: "尚未创建", location: "选择后显示", payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 0, action: "选择门店与时段", href: "06-store-selection.html", ticket: false },
         booked: { tag: "待到店", heading: "预约成功，待到店", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 1, action: "去门店", href: "#store-navigation-dialog", ticket: true },
-        queued: { tag: "排队中", heading: "已到店，正在排队", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 2, action: "查看订单", href: "my-orders.html", ticket: true },
+        queued: { tag: "排队中", heading: "已到店，正在排队", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 2, ticket: true },
         "booking-cancelled": { tag: "预约已取消", heading: "预约已取消，订单保留", appointment: "已取消", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 0, action: "重新预约", href: "06-store-selection.html", ticket: false, feedback: "本次预约已取消，服务订单保留。您可以重新选择门店和时间。" },
         active: { tag: "服务中", heading: "服务进行中", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 3, action: "返回我的订单", href: "my-orders.html", ticket: false },
         completed: { tag: "已完成", heading: "服务已完成", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 3, ticket: false },
@@ -528,7 +535,7 @@
         setText("#order-store-address", storeLocation.address);
         setText("#order-store-hours", `营业时间 ${storeLocation.hours}`);
         setText("#order-store-appointment-time", appointment);
-        const hasPrimaryAction = state !== "completed";
+        const hasPrimaryAction = !["queued", "completed"].includes(state);
         primaryAction.hidden = !hasPrimaryAction;
         if (hasPrimaryAction) {
           setText("#order-primary-action", current.action);

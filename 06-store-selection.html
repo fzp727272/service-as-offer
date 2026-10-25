@@ -25,9 +25,9 @@
     .store-name{min-width:0;flex:1;font-size:14px;line-height:18px}
     .store-selected{flex:none;color:var(--brand);font-size:11px;line-height:16px;font-weight:650}
     .store-distance{flex:none;padding:1px 5px;background:#f0f1ff;color:var(--brand);font-size:10px;line-height:14px;font-weight:650;white-space:nowrap}
-    .store-address{display:flex;align-items:flex-start;gap:5px;color:var(--quiet);font-size:11px;line-height:14px}
+    .store-address{display:flex;align-items:flex-start;gap:5px;color:var(--quiet);font-size:12px;line-height:18px}
     .store-address-icon{flex:none;display:flex;color:var(--brand)}
-    .store-address-icon svg{display:block;width:13px;height:13px}
+    .store-address-icon svg{display:block;width:16px;height:16px}
     .store-hours{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--quiet);font-size:11px;line-height:14px}
     .store-hours strong{color:var(--ink);font-weight:550}
     .store-card:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
@@ -50,11 +50,12 @@
     .store-card-select{width:100%;display:grid;gap:2px;padding:0;border:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer}
     .store-card-select:focus-visible,.store-contact-button:focus-visible,.wechat-dialog-close:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
     .store-card{cursor:pointer}
-    .store-map{min-height:44px;display:flex;align-items:center;gap:7px;margin-top:4px;color:var(--quiet);text-decoration:none}
-    .store-map [data-store-address]{flex:1;min-width:0}
-    .store-map .store-distance{padding:0;background:transparent;color:var(--quiet);font-size:11px;font-weight:500}
-    .store-map-chevron{width:7px;height:7px;flex:none;margin-right:3px;border-top:1.5px solid #888;border-right:1.5px solid #888;transform:rotate(45deg)}
-    .store-map:hover [data-store-address]{text-decoration:underline}
+    .store-location-row{display:flex;align-items:center;gap:8px;margin-top:4px}
+    .store-address{flex:1;min-width:0}
+    .store-map{min-height:32px;display:inline-flex;align-items:center;gap:6px;flex:none;color:var(--brand);text-decoration:none}
+    .store-map .store-distance{padding:0;background:transparent;color:var(--brand);font-size:12px;font-weight:600}
+    .store-map-chevron{width:8px;height:8px;flex:none;margin-right:2px;border-top:1.5px solid currentColor;border-right:1.5px solid currentColor;transform:rotate(45deg)}
+    .store-map:hover{text-decoration:underline}
     .store-bottom{gap:8px;margin-top:5px;padding-top:6px}
     .store-hours{min-width:0;flex:1}
     .store-contact-button{min-height:30px;flex:none;padding:0 10px;border:1px solid #d9ddf5;background:#f7f8ff;color:var(--brand);font-size:11px;line-height:16px;font-weight:650;white-space:nowrap;cursor:pointer}
@@ -77,10 +78,13 @@
       <section class="body">
         <div class="step" aria-label="预约进度"><span aria-current="step">1 选择门店</span><span class="step-line"></span><span>2 选择时间</span><span class="step-line"></span><span>3 预约完成</span></div>
         <h2 class="heading">选择服务门店</h2>
-        <p class="subheading">选择城市和门店，下一步查看可预约时间。</p>
-        <div class="service-strip">
-          <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><g stroke="#5e5e5e" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8m-8 0-2-4m12 4 2-5h5"/></g></svg></div>
-          <div class="service-info"><strong>自行车标准保养套餐</strong><span>已支付 · 待预约</span></div>
+        <div class="service-strip booking-service-card">
+          <div class="service-thumb" aria-hidden="true"></div>
+          <div class="service-info"><strong class="service-name">自行车标准保养套餐</strong><span>已支付 · 待预约</span></div>
+        </div>
+        <div class="booking-equipment">
+          <strong class="booking-equipment-label">服务装备</strong>
+          <span class="booking-equipment-value">可用于自行车，到店时确认具体型号</span>
         </div>
         <div class="city-control">
           <button class="city-trigger" id="city-select" type="button" aria-label="选择服务城市" aria-expanded="false" aria-controls="city-options">
@@ -98,12 +102,16 @@
               <span class="store-selected" data-store-selected>✓ 已选门店</span>
             </span>
           </button>
-          <a class="store-address store-map" data-store-map href="https://map.qq.com/" target="_blank" rel="noopener noreferrer">
-            <span class="store-address-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-            <span data-store-address>上海市杨浦区淞沪路161号</span>
-            <span class="store-distance" data-store-distance>2.3 km</span>
-            <span class="store-map-chevron" aria-hidden="true"></span>
-          </a>
+          <div class="store-location-row">
+            <div class="store-address">
+              <span class="store-address-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+              <span data-store-address>上海市杨浦区淞沪路161号</span>
+            </div>
+            <a class="store-map" data-store-map href="https://map.qq.com/" target="_blank" rel="noopener noreferrer">
+              <span class="store-distance" data-store-distance>2.3 km</span>
+              <span class="store-map-chevron" aria-hidden="true"></span>
+            </a>
+          </div>
           <div class="store-bottom"><div class="store-hours"><span>营业时间</span><strong data-store-hours>10:00–22:00</strong></div><button class="store-contact-button" type="button" data-store-contact>联系门店</button></div>
         </div>
         <div class="store-card" data-store-id="store-2">
@@ -113,12 +121,16 @@
               <span class="store-selected" data-store-selected hidden>✓ 已选门店</span>
             </span>
           </button>
-          <a class="store-address store-map" data-store-map href="https://map.qq.com/" target="_blank" rel="noopener noreferrer">
-            <span class="store-address-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-            <span data-store-address>上海市徐汇区漕溪北路</span>
-            <span class="store-distance" data-store-distance>4.8 km</span>
-            <span class="store-map-chevron" aria-hidden="true"></span>
-          </a>
+          <div class="store-location-row">
+            <div class="store-address">
+              <span class="store-address-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+              <span data-store-address>上海市徐汇区漕溪北路</span>
+            </div>
+            <a class="store-map" data-store-map href="https://map.qq.com/" target="_blank" rel="noopener noreferrer">
+              <span class="store-distance" data-store-distance>4.8 km</span>
+              <span class="store-map-chevron" aria-hidden="true"></span>
+            </a>
+          </div>
           <div class="store-bottom"><div class="store-hours"><span>营业时间</span><strong data-store-hours>10:00–22:00</strong></div><button class="store-contact-button" type="button" data-store-contact>联系门店</button></div>
         </div>
         <div class="state-message" id="resource-message" role="status" hidden></div>
