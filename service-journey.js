@@ -2,6 +2,134 @@
   document.body.classList.add("vitamin-app");
   const params = new URLSearchParams(location.search);
   const file = location.pathname.split("/").pop();
+  const changePages = {
+    "10-reschedule-review.html": "reschedule",
+    "13-service-cancel-review.html": "cancel",
+  };
+  if (changePages[file]) {
+    const destination = new URL("12-service-order-detail.html", location.href);
+    destination.search = params.toString();
+    destination.searchParams.set("change", changePages[file]);
+    if (changePages[file] === "reschedule" && !params.has("booking")) destination.searchParams.set("booking", "created");
+    if (changePages[file] === "cancel" && !params.has("paymentState") && !params.has("booking")) destination.searchParams.set("paymentState", "unpaid");
+    location.replace(destination.href);
+    return;
+  }
+  const changeDialog = document.createElement("dialog");
+  changeDialog.className = "service-change-dialog";
+  changeDialog.setAttribute("aria-labelledby", "service-change-title");
+  changeDialog.innerHTML = `
+    <h2 id="service-change-title"></h2>
+    <p data-change-message></p>
+    <dl data-change-summary></dl>
+    <div class="service-change-actions">
+      <button type="button" data-change-close autofocus></button>
+      <a data-change-reschedule>选择新时段</a>
+      <button type="button" data-change-cancel>确认取消服务单</button>
+    </div>`;
+  document.body.append(changeDialog);
+  const closeChange = changeDialog.querySelector("[data-change-close]");
+  const rescheduleChange = changeDialog.querySelector("[data-change-reschedule]");
+  const cancelChange = changeDialog.querySelector("[data-change-cancel]");
+  let changeContext;
+  closeChange.addEventListener("click", () => changeDialog.close());
+  cancelChange.addEventListener("click", () => {
+    changeDialog.close();
+    const localCancel = document.querySelector("[data-cancel-order]");
+    if (localCancel) {
+      localCancel.click();
+    } else {
+      const destination = new URL("12-service-order-detail.html", location.href);
+      destination.search = changeContext.toString();
+      destination.searchParams.set("demoState", "cancelled");
+      destination.searchParams.set("paymentState", "unpaid");
+      destination.searchParams.set("booking", "none");
+      destination.searchParams.delete("change");
+      location.assign(destination.href);
+    }
+  });
+  const openChange = (kind, context) => {
+    changeContext = context;
+    const rescheduling = kind === "reschedule";
+    const state = context.get("demoState");
+    const booking = context.get("booking");
+    const blocked = context.has("serviceState") || context.get("checkin") === "done" ||
+      ["queued", "active", "completed", "cancelled", "payment-unknown", "booking-unknown"].includes(state);
+    const canChange = !blocked && (rescheduling
+      ? (booking === "created" || (!context.has("booking") && !state)) &&
+        !["unpaid", "unknown"].includes(context.get("paymentState"))
+      : context.get("context") !== "benefit" && booking !== "created" && booking !== "unknown" &&
+        (context.get("paymentState") === "unpaid" || state === "unpaid" ||
+          (!context.has("paymentState") && !context.has("booking") && !state)));
+    changeDialog.querySelector("h2").textContent = rescheduling
+      ? canChange ? "更换预约时间？" : "当前无法更换预约"
+      : canChange ? "取消这笔待付款服务单？" : "当前服务单不可取消";
+    changeDialog.querySelector("[data-change-message]").textContent = rescheduling
+      ? canChange
+        ? "选择新时段期间，当前预约保持有效。新预约成功后才替换原预约；失败时原预约不变。"
+        : "仅待到店、尚未扫码签到的预约可以更换时间。请查看订单当前状态。"
+      : canChange
+        ? "取消后将不再继续支付。本原型只展示交互，不会变更真实订单。"
+        : context.get("paymentState") === "unknown" || state === "payment-unknown"
+          ? "支付结果待确认，暂不能取消服务单。请查看订单状态，勿重复支付。"
+          : "仅待付款服务单可取消。已支付订单在预约成功、扫码签到前可取消本次预约，服务单仍保留。";
+    closeChange.textContent = canChange ? rescheduling ? "保留当前预约" : "保留服务单" : "知道了";
+    rescheduleChange.hidden = !rescheduling || !canChange;
+    cancelChange.hidden = rescheduling || !canChange;
+    const summary = changeDialog.querySelector("[data-change-summary]");
+    summary.replaceChildren();
+    if (canChange) {
+      const rows = [["服务", context.get("name") || "自行车标准保养套餐"]];
+      if (rescheduling) {
+        rows.push(
+          ["门店", `${context.get("city") === "hangzhou" ? "杭州" : "上海"}门店 ${context.get("store") === "store-2" ? "02" : "01"}`],
+          ["当前预约", `${context.get("date") || "2026-10-24"} ${context.get("time") || "11:00"}`],
+        );
+        const destination = new URL("07-date-time-selection.html", location.href);
+        destination.search = context.toString();
+        destination.searchParams.delete("demoState");
+        destination.searchParams.delete("change");
+        destination.searchParams.set("reschedule", "1");
+        [["date", "2026-10-24"], ["time", "11:00"], ["city", "shanghai"], ["store", "store-1"]].forEach(([key, fallback]) => {
+          destination.searchParams.set(`old${key[0].toUpperCase()}${key.slice(1)}`, context.get(key) || fallback);
+        });
+        rescheduleChange.href = destination.href;
+      }
+      rows.forEach(([label, value]) => {
+        const term = document.createElement("dt");
+        const detail = document.createElement("dd");
+        term.textContent = label;
+        detail.textContent = value;
+        summary.append(term, detail);
+      });
+    }
+    summary.hidden = !canChange;
+    changeDialog.showModal();
+  };
+  document.addEventListener("click", event => {
+    const link = event.target.closest("a[href]");
+    if (!link) return;
+    const destination = new URL(link.href, location.href);
+    const kind = changePages[destination.pathname.split("/").pop()];
+    if (!kind || destination.origin !== location.origin) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const context = new URLSearchParams(location.search);
+    if (!link.closest(".journey-panel")) {
+      destination.searchParams.forEach((value, key) => context.set(key, value));
+    }
+    openChange(kind, context);
+  }, true);
+  if (file === "index.html") return;
+  if (params.has("change")) {
+    const kind = params.get("change");
+    const destination = new URL(location.href);
+    destination.searchParams.delete("change");
+    history.replaceState(null, "", destination);
+    if (kind === "reschedule" || kind === "cancel") {
+      setTimeout(() => openChange(kind, new URLSearchParams(location.search)), 0);
+    }
+  }
   const purchasePages = ["05-order-checkout.html", "05-payment-result.html", "06-store-selection.html", "07-date-time-selection.html", "08-appointment-result.html", "09-appointment-detail-cancel.html", "10-reschedule-review.html", "12-service-order-detail.html", "13-service-cancel-review.html"];
   document.body.classList.toggle("purchase-flow", purchasePages.includes(file));
   if (file === "09-appointment-detail-cancel.html" || (file === "08-appointment-result.html" && (!params.has("result") || params.get("result") === "created"))) {
@@ -46,10 +174,6 @@
       ["04-repair-request.html", "描述维修需求", "无法判断项目时先描述问题，不直接生成诊断或报价。"],
       ["my-orders.html", "我的订单", "按状态筛选，从对应订单继续付款、预约或查看记录。"],
       ["15-message-landing.html", "服务消息", "消息进入关联服务单，不跳转泛订单列表。"],
-    ] },
-    { title: "预约与服务变更", pages: [
-      ["10-reschedule-review.html", "更换预约时间", "新预约成功后替换旧预约；失败时保留原预约。"],
-      ["13-service-cancel-review.html", "取消服务单", "仅待支付服务单可取消；预约建立后在到店扫码前取消预约。"],
     ] },
   ];
   const current = groups.flatMap(group => group.pages).find(item => item[0].split("?")[0] === file);
@@ -178,12 +302,12 @@
   const cities = { shanghai: "上海门店", hangzhou: "杭州门店" };
   const storeLocations = {
     shanghai: [
-      { address: "上海市杨浦区淞沪路161号", distance: "2.3 km" },
-      { address: "上海市徐汇区漕溪北路", distance: "4.8 km" },
+      { address: "上海市杨浦区淞沪路161号", distance: "2.3 km", hours: "10:00–22:00" },
+      { address: "上海市徐汇区漕溪北路", distance: "4.8 km", hours: "10:00–22:00" },
     ],
     hangzhou: [
-      { address: "杭州市滨江区江南大道", distance: "1.8 km" },
-      { address: "杭州市西湖区古墩路", distance: "4.2 km" },
+      { address: "杭州市滨江区江南大道", distance: "1.8 km", hours: "10:00–22:00" },
+      { address: "杭州市西湖区古墩路", distance: "4.2 km", hours: "10:00–22:00" },
     ],
   };
   const city = cities[params.get("city")] ? params.get("city") : "shanghai";
@@ -309,12 +433,63 @@
         "booking-cancelled": { tag: "预约已取消", heading: "预约已取消，订单保留", appointment: "已取消", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 0, action: "重新预约", href: "06-store-selection.html", ticket: false, feedback: "本次预约已取消，服务订单保留。您可以重新选择门店和时间。" },
         active: { tag: "服务中", heading: "服务进行中", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 3, action: "返回我的订单", href: "my-orders.html", ticket: false },
         completed: { tag: "已完成", heading: "服务已完成", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 3, ticket: false },
-        cancelled: { tag: "订单已取消", heading: "服务订单已取消", appointment: "尚未创建", location: "未预约", payment: "未支付", progress: 0, action: "重新下单", href: "01-service-entry.html?scenario=all", ticket: false, outline: true, feedback: "待支付服务单已取消，无需继续支付。" },
+        cancelled: { tag: "订单已取消", heading: "服务订单已取消", appointment: "尚未创建", location: "未预约", payment: "未支付", progress: 0, action: "重新下单", href: "01-service-entry.html?scenario=all", ticket: false, outline: true, feedback: "订单已取消，无需继续支付" },
         "payment-unknown": { tag: "支付待确认", heading: "支付结果待确认", appointment: "尚未创建", location: "尚未预约", payment: "待确认", progress: -1, action: "查看支付结果", href: "05-payment-result.html?paymentState=unknown", ticket: false, feedback: "暂未确认扣款结果，请勿重复支付。结果确认后再预约。" },
         "booking-unknown": { tag: "预约待确认", heading: "预约结果待确认", appointment: "待确认", location: "提交结果待确认", payment: "已支付", progress: -1, action: "查看预约结果", href: "08-appointment-result.html?result=unknown", ticket: false, feedback: "请勿重复预约或改约，待结果确认后再操作。" },
       };
+      const statusIcons = {
+        unpaid: `<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18m-13 5h4"/>`,
+        pending: `<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-9 3v4m-2-2h4"/>`,
+        booked: `<path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/>`,
+        queued: `<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/>`,
+        "booking-cancelled": `<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-11 3 4 4m0-4-4 4"/>`,
+        active: `<path d="M8 4h8M8 20h8M6 4v3l6 5 6-5V4M6 20v-3l6-5 6 5v3"/>`,
+        completed: `<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>`,
+        cancelled: `<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/>`,
+        "payment-unknown": `<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18m-9 3v2m0 2v.01"/>`,
+        "booking-unknown": `<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-9 3v2m0 2v.01"/>`,
+      };
       let state = orderStates[initialState] ? initialState : "pending";
       const primaryAction = root.querySelector("#order-primary-action");
+      let copyToastTimer;
+      setText("#order-number", params.get("order") || "SO-2601024");
+      setText("#order-created-at", params.get("orderTime") || "2026-10-24 10:30");
+      root.querySelector("#order-number-copy").addEventListener("click", async () => {
+        const orderNumber = root.querySelector("#order-number").textContent.trim();
+        let copied = false;
+        if (navigator.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(orderNumber);
+            copied = true;
+          } catch (error) {
+            console.warn("无法使用剪贴板 API，将尝试兼容复制方式。", error);
+          }
+        }
+        if (!copied) {
+          const input = document.createElement("textarea");
+          input.value = orderNumber;
+          input.setAttribute("readonly", "");
+          input.setAttribute("aria-hidden", "true");
+          input.style.position = "fixed";
+          input.style.opacity = "0";
+          document.body.append(input);
+          input.select();
+          try {
+            copied = document.execCommand("copy");
+          } catch (error) {
+            console.warn("兼容复制方式也未能复制订单编号。", error);
+          } finally {
+            input.remove();
+          }
+        }
+        const toast = root.querySelector("#order-toast");
+        toast.textContent = copied ? "已复制订单编号" : "复制失败，请手动选择订单编号";
+        toast.hidden = false;
+        window.clearTimeout(copyToastTimer);
+        copyToastTimer = window.setTimeout(() => {
+          toast.hidden = true;
+        }, 2000);
+      });
       primaryAction.addEventListener("click", event => {
         if (state !== "booked") return;
         event.preventDefault();
@@ -327,9 +502,17 @@
       });
       const renderOrderState = () => {
         const current = orderStates[state];
+        const statusSymbol = root.querySelector(".order-status-symbol");
+        statusSymbol.dataset.state = state;
+        statusSymbol.querySelector("svg").innerHTML = statusIcons[state];
         setText("#order-status-tag", current.tag);
         setText("#order-status-heading", state === "booked" && params.get("reschedule") === "done" ? "预约已更新，待到店" : current.heading);
         setText("#order-transaction-status", current.payment);
+        setText("#order-payment-method", params.get("context") === "benefit"
+          ? "权益兑换"
+          : state === "payment-unknown" ? "待确认"
+            : state === "unpaid" || state === "cancelled" ? "未支付"
+              : params.get("payment") === "points" ? "燃值抵扣" : "微信支付");
         const unpaid = state === "unpaid" || state === "cancelled";
         const amount = Number(params.get("price") || 199.9);
         setText("#order-amount-label", state === "cancelled" ? "支付说明" : unpaid ? "待付金额" : state === "payment-unknown" ? "订单金额" : "实付金额");
@@ -342,8 +525,8 @@
         setText("#order-appointment-status", current.appointment);
         setText("#order-appointment-location", current.location);
         setText("#order-store-name", store);
-        setText("#order-store-distance", storeLocation.distance);
         setText("#order-store-address", storeLocation.address);
+        setText("#order-store-hours", `营业时间 ${storeLocation.hours}`);
         setText("#order-store-appointment-time", appointment);
         const hasPrimaryAction = state !== "completed";
         primaryAction.hidden = !hasPrimaryAction;
@@ -364,9 +547,16 @@
         const bookingSummary = root.querySelector("#booking-summary");
         const serviceDetails = root.querySelector("#order-service-details");
         const fulfillment = root.querySelector("#order-fulfillment");
+        const bookingCancelled = state === "booking-cancelled";
+        setText("#order-booking-title", bookingCancelled ? "已取消预约" : "预约信息");
+        appointmentDetails.classList.toggle("is-cancelled", bookingCancelled);
         appointmentDetails.hidden = !hasAppointment;
+        const orderCancelled = state === "cancelled";
+        const bookingCancelledNote = root.querySelector("#booking-cancelled-note");
+        bookingCancelledNote.hidden = !bookingCancelled;
+        bookingCancelledNote.textContent = bookingCancelled ? current.feedback : "";
         bookingSummary.hidden = hasAppointment;
-        if (state === "booking-cancelled") {
+        if (bookingCancelled) {
           fulfillment.after(appointmentDetails);
         } else if (state === "completed") {
           serviceDetails.after(appointmentDetails);
@@ -379,8 +569,10 @@
           fulfillment.before(bookingSummary);
         }
         root.querySelector("#appointment-qr").hidden = state !== "booked";
-        root.querySelector("#cancel-feedback").hidden = !current.feedback;
-        root.querySelector("#cancel-feedback").textContent = current.feedback || "";
+        const cancelFeedback = root.querySelector("#cancel-feedback");
+        const hasCancelFeedback = Boolean(current.feedback) && !bookingCancelled && !orderCancelled;
+        cancelFeedback.hidden = !hasCancelFeedback;
+        cancelFeedback.textContent = hasCancelFeedback ? current.feedback : "";
         root.querySelector("#cancel-appointment-action").hidden = state !== "booked";
         document.querySelector("#store-contact-name").textContent = store;
         const navigationUrl = new URL("https://apis.map.qq.com/uri/v1/search");
@@ -389,6 +581,9 @@
         navigationUrl.searchParams.set("referer", "service-as-offer");
         document.querySelector("#store-navigation-address").textContent = `${store} · ${storeLocation.address}`;
         document.querySelector("#wechat-navigation-link").href = navigationUrl.href;
+        const storeMapLink = root.querySelector("#order-store-map-link");
+        storeMapLink.href = navigationUrl.href;
+        storeMapLink.setAttribute("aria-label", `在微信地图中查看${store}`);
         root.querySelector("#order-timeline").closest(".page-section").hidden = unpaid || current.progress < 0;
         root.querySelectorAll("#order-timeline .page-timeline-item").forEach((item, index) => {
           const progress = state === "completed" ? 4 : current.progress;
@@ -408,7 +603,9 @@
         if (state === "active" || state === "completed") next.searchParams.set("serviceState", state);
         else next.searchParams.delete("serviceState");
         history.replaceState(null, "", next);
-        primaryAction.href = current.outline || current.href.startsWith("#") ? current.href : withContext(current.href).href;
+        if (hasPrimaryAction) {
+          primaryAction.href = current.outline || current.href.startsWith("#") ? current.href : withContext(current.href).href;
+        }
       };
       document.querySelectorAll("[data-order-state]").forEach(button => {
         button.addEventListener("click", () => {

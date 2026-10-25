@@ -9,26 +9,81 @@
   <link rel="stylesheet" href="post-purchase-flow.css">
   <link rel="stylesheet" href="service-system.css">
   <style>
+    body.order-detail {
+      --content-neutral: #17233b;
+      --content-quiet: #5c6678;
+      --background-alternative: #f4f6fa;
+      --container-commercial-light: #eef0ff;
+      --page-line: #e4e8f0;
+    }
+    .order-detail .page-nav { border-bottom: 0; }
+    .order-detail .page-artboard { position: relative; }
+    .order-detail .order-toast {
+      position: absolute;
+      z-index: 5;
+      bottom: calc(88px + env(safe-area-inset-bottom));
+      left: 50%;
+      max-width: calc(100% - 32px);
+      padding: 10px 16px;
+      transform: translateX(-50%);
+      background: var(--content-neutral);
+      color: #fff;
+      font-size: 13px;
+      line-height: 20px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .order-detail .page-body { scrollbar-gutter: stable; }
     .vitamin-app.purchase-flow.order-detail .page-body {
       padding: 0 0 24px;
       background: var(--background-alternative);
     }
     .vitamin-app.purchase-flow.order-detail .page-intro {
+      position: relative;
       margin: 0;
-      padding: 20px 16px;
+      padding: 16px 76px 16px 16px;
       background: var(--container-commercial-light);
     }
+    .order-detail .order-status-symbol {
+      position: absolute;
+      top: 28px;
+      right: 16px;
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border: 1px solid #cbd0f4;
+      border-radius: 50%;
+      color: var(--content-brand);
+    }
+    .order-detail .order-status-symbol svg { display: block; width: 24px; height: 24px; }
+    .order-detail .order-status-symbol[data-state="cancelled"],
+    .order-detail .order-status-symbol[data-state="booking-cancelled"] { color: var(--content-quiet); }
+    .order-detail .order-status-symbol[data-state="payment-unknown"],
+    .order-detail .order-status-symbol[data-state="booking-unknown"] { color: #c18a32; }
     .order-detail .page-intro .page-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       padding: 0;
       background: transparent;
       color: var(--content-brand);
       font-weight: 600;
     }
-    .vitamin-app.purchase-flow.order-detail .page-heading {
-      margin-top: 6px;
-      font-size: 22px;
-      line-height: 30px;
+    .order-detail .page-intro .page-tag::before {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      content: "";
     }
+    .vitamin-app.purchase-flow.order-detail .page-heading {
+      margin-top: 8px;
+      font-size: 24px;
+      line-height: 34px;
+      letter-spacing: -.5px;
+    }
+    .order-detail .page-intro .page-lede { margin-bottom: 0; }
     .vitamin-app.purchase-flow.order-detail .page-section {
       margin: 0;
       padding: 16px;
@@ -36,7 +91,7 @@
       background: var(--container-neutral);
     }
     .vitamin-app.purchase-flow.order-detail .page-section-title {
-      margin: 0 0 10px;
+      margin: 0 0 16px;
       padding: 0;
       font-size: 16px;
       line-height: 24px;
@@ -47,23 +102,23 @@
       background: transparent;
     }
     .vitamin-app.purchase-flow.order-detail .page-service {
-      align-items: flex-start;
+      align-items: center;
       gap: 12px;
-      padding: 0 0 12px;
+      padding: 0 0 16px;
       margin: 0 0 4px;
       border-bottom: 1px solid var(--page-line);
     }
-    .order-detail .page-thumb { width: 72px; height: 72px; }
+    .order-detail .page-thumb { width: 64px; height: 64px; overflow: hidden; border-radius: 0; background: var(--background-alternative); }
     .order-detail .page-service-copy { min-width: 0; padding-top: 2px; }
     .vitamin-app.order-detail .page-service-copy strong { font-size: 14px; line-height: 20px; }
     .order-detail .page-service-copy small { display: block; margin-top: 6px; overflow-wrap: anywhere; }
     .vitamin-app.purchase-flow.order-detail .page-row {
-      grid-template-columns: 70px minmax(0, 1fr);
-      padding: 8px 0;
+      grid-template-columns: 76px minmax(0, 1fr);
+      padding: 9px 0;
       border: 0;
-      line-height: 20px;
+      line-height: 32px;
     }
-    .vitamin-app.purchase-flow.order-detail .page-row strong { font-weight: 500; line-height: 20px; }
+    .vitamin-app.purchase-flow.order-detail .page-row strong { font-weight: 500; line-height:32px; }
     .order-detail .order-detail-card > .page-row:first-child { padding-top: 0; }
     .order-detail .order-detail-card > .page-row:last-child { padding-bottom: 0; }
     .vitamin-app.purchase-flow.order-detail .order-payment-total {
@@ -73,52 +128,234 @@
       border-top: 1px solid var(--page-line);
     }
     .vitamin-app.purchase-flow.order-detail #order-amount {
-      color: var(--content-brand);
-      font-size: 20px;
-      line-height: 28px;
+      color: var(--content-neutral);
+      font-size: 22px;
+      line-height: 30px;
       font-weight: 700;
+      font-variant-numeric: tabular-nums;
     }
+    .order-detail .order-store-card { display: flex; flex-direction: column; }
     .order-detail .order-store-label { margin-bottom: 6px; font-size: 12px; line-height: 18px; }
     .order-detail .order-store-head { align-items: flex-start; }
-    .order-detail .order-store-head > strong { font-size: 14px; line-height: 20px; }
-    .order-detail .order-store-address-row { align-items: flex-start; }
-    .order-detail .order-store-address { font-size: 12px; line-height: 18px; }
+    .order-detail .order-store-head > strong { font-size: 16px; line-height: 24px; }
+    .order-detail .order-booking-contact { display: flex; align-items: baseline; gap: 12px; margin: 8px 0 0; font-size: 13px; line-height: 20px; }
+    .order-detail .order-booking-contact span { color: var(--content-quiet); }
+    .order-detail .order-booking-contact strong { font-weight: 500; }
+    .order-detail .order-information .page-section-title {
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+    }
+    .order-detail .order-number-value { display: flex; width: 100%; min-width: 0; align-items: center; justify-content: space-between; gap: 8px; }
+    .order-detail .order-number-value strong { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+    .order-detail .order-number-copy {
+      flex: none;
+      min-height: 28px;
+      padding: 0 12px;
+      border: 1px solid var(--page-line);
+      border-radius: 0;
+      background: var(--container-neutral);
+      color: var(--content-neutral);
+      cursor: pointer;
+    }
+    .order-detail .order-number-copy:focus-visible { outline: 2px solid var(--content-brand); outline-offset: 2px; }
+    .order-detail .order-store-address-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      color: inherit;
+      text-decoration: none;
+    }
+    .order-detail .order-store-address-row:focus-visible {
+      outline: 2px solid var(--content-brand);
+      outline-offset: 3px;
+    }
+    .order-detail .order-store-address > span:first-child { flex: none; color: var(--content-brand); }
+    .order-detail .order-store-address > span:first-child svg { display: block; width: 18px; height: 18px; }
+    .order-detail .order-store-address { font-size: 13px; line-height: 20px; }
+    .order-detail .order-store-address-row .order-store-address {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+    }
+    .order-detail .order-store-map-chevron {
+      width: 8px;
+      height: 8px;
+      flex: none;
+      margin: 5px 3px 0 0;
+      border-top: 1.5px solid currentColor;
+      border-right: 1.5px solid currentColor;
+      color: var(--content-quiet);
+      transform: rotate(45deg);
+    }
+    .order-detail .order-store-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      justify-content: space-between;
+    }
+    .order-detail .order-store-hours,
     .order-detail .order-store-contact {
       display: inline-flex;
+      min-height: 36px;
       align-items: center;
-      min-height: 44px;
-      margin-top: -8px;
-      border: 0;
+      justify-content: center;
       padding: 0;
+      background: var(--container-neutral);
+      color: var(--content-quiet);
       font-size: 12px;
+      line-height: 18px;
+      white-space: nowrap;
     }
-    .order-detail .order-store-appointment { align-items: flex-start; gap: 12px; }
-    .order-detail .order-store-appointment > span { flex: none; }
-    .order-detail .order-store-appointment > strong { min-width: 0; font-size: 14px; font-weight: 600; }
+    .order-detail .order-store-contact {
+      /* gap: 5px; */
+      padding: 0 12px;
+      border: 1px solid var(--page-line);
+
+      color: var(--content-brand);
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .order-detail .wechat-dialog {
+      width: min(300px, calc(100% - 40px));
+      margin: auto;
+      padding: 18px 16px 14px;
+      border: 0;
+      text-align: center;
+      box-shadow: 0 18px 50px #0003;
+    }
+    .order-detail .wechat-dialog::backdrop { background: #10101088; }
+    .order-detail .wechat-dialog h2 { margin: 0; font-size: 18px; line-height: 26px; }
+    .order-detail .wechat-dialog-store { margin: 5px 0 0; color: var(--content-quiet); font-size: 12px; line-height: 18px; }
+    .order-detail .wechat-dialog .wechat-phone-unavailable { margin: 12px 0 0; color: var(--content-quiet); font-size: 12px; line-height: 18px; }
+    .order-detail .wechat-qr-placeholder {
+      display: grid;
+      width: 152px;
+      height: 152px;
+      place-items: center;
+      margin: 12px auto 0;
+      border: 1px dashed #b8bcc8;
+      background: #f7f8fa;
+      color: var(--content-quiet);
+      font-size: 12px;
+      line-height: 19px;
+    }
+    .order-detail .wechat-dialog-note { margin: 8px 0 0; color: var(--content-quiet); font-size: 11px; line-height: 17px; }
+    .order-detail .wechat-dialog-close {
+      width: 100%;
+      min-height: 38px;
+      margin-top: 12px;
+      border: 0;
+      background: var(--content-brand);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    .order-detail .order-store-details.is-cancelled .page-section-title,
+    .order-detail .order-store-details.is-cancelled .order-store-head > strong,
+    .order-detail .order-store-details.is-cancelled .order-store-address,
+    .order-detail .order-store-details.is-cancelled .order-store-address > span:first-child,
+    .order-detail .order-store-details.is-cancelled .order-store-appointment > strong {
+      color: var(--content-quiet);
+    }
+    .order-detail .order-store-details.is-cancelled .order-store-contact {
+      border-color: var(--border-quiet);
+      background: var(--container-quiet);
+      color: var(--content-quiet);
+    }
+    .order-detail .order-store-details.is-cancelled .order-store-hours {
+      border-color: var(--border-quiet);
+      color: var(--content-quiet);
+    }
+    .order-detail .order-store-appointment {
+      order: -1;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      margin: 0 0 18px;
+      padding: 12px 14px;
+      border: 0;
+      border-radius: 0;
+      background: var(--background-alternative);
+    }
+    .order-detail .order-store-appointment > span { flex: none; font-size: 12px; }
+    .order-detail .order-store-appointment > strong { min-width: 0; font-size: 18px; line-height: 26px; font-weight: 650; text-align: left; font-variant-numeric: tabular-nums; }
     .order-detail .appointment-actions { gap: 8px; padding-top: 4px; }
     .order-detail .appointment-actions :is(a, button) { font-size: 12px; }
-    .order-detail .ticket-code { padding-top: 20px; }
+    .order-detail .appointment-actions button { color: var(--content-quiet); }
+    .order-detail .ticket-code {
+      display: grid;
+      justify-items: center;
+      /* gap: 12px; */
+      margin: 0;
+      padding: 20px 20px 24px;
+      border-top:1px solid var(--border-quiet);
+      background: var(--container-commercial-light);
+      text-align: center;
+    }
+    /* .order-detail .ticket-code::before {
+      width: 100%;
+      height: 1px;
+      background: #d4d9f4;
+      content: "";
+    } */
+    .order-detail .ticket-qr {
+      width: clamp(160px, 52vw, 120px);
+      height: auto;
+      aspect-ratio: 1;
+      margin: 0;
+      padding: 6px;
+      background: #fff;
+    }
+    .order-detail .ticket-qr span {
+      top: 50%;
+      left: 50%;
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%);
+      padding: 4px 6px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .order-detail .ticket-copy { max-width: 280px; }
+    .order-detail .ticket-copy strong { font-size: 16px; line-height: 24px; }
+    .order-detail .ticket-copy p { margin: 4px 0 0; color: var(--content-quiet); font-size: 13px; line-height: 20px; }
+    .order-detail .ticket-copy small { display: block; margin-top: 8px; color: var(--content-quiet); font-size: 11px; line-height: 18px; }
     .order-detail .store-queue-result {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 4px 12px;
       margin: 0;
-      padding: 16px;
+      padding: 0 20px 20px;
       border: 0;
-      border-top: 8px solid var(--background-alternative);
-      background: var(--container-neutral);
+      background: var(--container-commercial-light);
       text-align: left;
     }
-    .order-detail .store-queue-result h2 { margin: 0; font-size: 12px; line-height: 18px; color: var(--content-quiet); font-weight: 500; }
-    .order-detail .store-queue-number { grid-column: 1; grid-row: 2 / 4; align-self: center; font-size: 36px; line-height: 44px; }
-    .order-detail .store-queue-status { grid-column: 2; grid-row: 1; margin: 0; font-size: 12px; line-height: 18px; font-weight: 500; }
-    .order-detail .store-queue-wait { grid-column: 2; grid-row: 2 / 4; align-self: center; margin: 0; font-size: 14px; line-height: 22px; }
-    .order-detail .store-queue-note { grid-column: 1 / -1; margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--page-line); font-size: 11px; line-height: 18px; }
+    .order-detail .store-queue-result h2 { margin: 0; padding-top: 16px; border-top: 1px solid #d4d9f4; font-size: 12px; line-height: 18px; color: var(--content-quiet); font-weight: 500; }
+    .order-detail .store-queue-number { grid-column: 1; grid-row: 2; align-self: center; font-size: 40px; line-height: 48px; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+    .order-detail .store-queue-status { grid-column: 2; grid-row: 1; margin: 0; padding-top: 16px; border-top: 1px solid #d4d9f4; color: var(--content-quiet); font-size: 12px; line-height: 18px; font-weight: 500; }
+    .order-detail .store-queue-wait { grid-column: 2; grid-row: 2; align-self: center; margin: 0; color: var(--content-neutral); font-size: 14px; line-height: 22px; font-weight: 600; }
+    .order-detail .store-queue-note { grid-column: 1 / -1; margin: 8px 0 0; font-size: 11px; line-height: 18px; }
     .order-detail .page-timeline { margin: 4px 0 0 5px; padding-left: 17px; border-color: var(--page-line); }
     .order-detail .page-timeline-item { padding: 0 0 18px 6px; }
     .order-detail .page-timeline-item:last-child { padding-bottom: 0; }
     .order-detail .page-timeline-item strong { font-size: 14px; line-height: 20px; }
     .order-detail .page-timeline-item p { margin-top: 4px; font-size: 12px; line-height: 18px; }
+    .order-detail .page-timeline-item.current strong { color: var(--content-brand); }
+    .order-detail .page-timeline-item.current::before {
+      border-color: var(--content-brand);
+      background: var(--content-brand);
+      box-shadow: 0 0 0 4px var(--container-commercial-light);
+    }
+    .vitamin-app.order-detail .page-foot .page-button { border-radius: 0px; }
+    .order-detail .page-foot:has(.page-foot-actions[hidden]) { display: none; }
+    @media (max-width: 360px) {
+      .vitamin-app.purchase-flow.order-detail .page-section { padding: 16px; }
+      .vitamin-app.purchase-flow.order-detail .page-heading { font-size: 22px; line-height: 32px; }
+      .order-detail .order-store-actions { gap: 4px; }
+      .order-detail .order-store-contact { padding: 0 8px; }
+    }
   </style>
   <script src="service-journey.js" defer></script>
 </head>
@@ -127,15 +364,40 @@
     <article class="page-artboard" aria-label="服务单详情评审原型">
       <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
       <header class="page-nav"><a class="page-back" href="my-orders.html" aria-label="返回我的订单">‹</a><span class="page-nav-title">订单详情</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <div class="order-toast" id="order-toast" role="status" aria-live="polite" hidden></div>
       <div class="page-body">
         <header class="page-intro">
           <span class="page-tag blue" id="order-status-tag">待预约</span>
           <h1 class="page-heading" id="order-status-heading">已支付，待预约</h1>
+          <span class="order-status-symbol" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="16" rx="2"/>
+              <path d="M7 3v4m10-4v4M3 11h18m-9 3v4m-2-2h4"/>
+            </svg>
+          </span>
+          <p class="page-lede" id="booking-cancelled-note" hidden></p>
         </header>
+        <section class="ticket-code" id="appointment-qr" aria-label="到店预约码" hidden>
+          <div class="ticket-qr" role="img" aria-label="到店二维码示意，不可扫码核销">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <g fill="none" stroke="currentColor" stroke-width="6">
+                <path d="M9 9h30v30H9zM81 9h30v30H81zM9 81h30v30H9z"/>
+                <path d="M51 9v18h12V9M51 39h18v18H51v18H9V51h18v12M81 51h30v18H93v18h18v24H81V93H63v18H51V87h18V69"/>
+              </g>
+              <path fill="currentColor" d="M18 18h12v12H18zM90 18h12v12H90zM18 90h12v12H18zM33 51h6v6h-6zM57 57h6v6h-6zM75 63h6v12h-6zM99 93h6v12h-6z"/>
+            </svg>
+            <span>示意码</span>
+          </div>
+          <div class="ticket-copy">
+            <!-- <strong></strong> -->
+            <p>到店请让门店工作人员扫码签到</p>
+            <!-- <small>原型示意，不可用于实际签到或核销</small> -->
+          </div>
+        </section>
         <section class="store-queue-result" id="store-queue-result" aria-labelledby="store-queue-title" aria-live="polite" hidden>
           <h2 id="store-queue-title">门店排队号</h2>
           <strong class="store-queue-number" id="store-queue-number">A-023</strong>
-          <p class="store-queue-status">扫码成功 · 正在排队</p>
+          <p class="store-queue-status">预计等待</p>
           <p class="store-queue-wait" id="store-queue-wait">预计等待约 20 分钟</p>
           <p class="store-queue-note">排队号和等待时间为原型示例，实际以门店系统为准。</p>
         </section>
@@ -145,29 +407,19 @@
             <p class="order-store-label">预约门店</p>
             <div class="order-store-head">
               <strong id="order-store-name"></strong>
-              <span class="order-store-distance" id="order-store-distance"></span>
             </div>
-            <div class="order-store-address-row">
+            <a class="order-store-address-row" id="order-store-map-link" href="https://map.qq.com/" target="_blank" rel="noopener noreferrer" aria-label="在微信地图中查看门店">
               <p class="order-store-address"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span id="order-store-address"></span></p>
+              <span class="order-store-map-chevron" aria-hidden="true"></span>
+            </a>
+            <div class="order-store-actions">
+              <span class="order-store-hours" id="order-store-hours"></span>
               <button class="order-store-contact" type="button" data-open-dialog="store-contact-dialog">联系门店</button>
             </div>
+            <p class="order-booking-contact"><span>预约人</span><strong id="order-booking-contact">XXX 131****7162</strong></p>
             <div class="order-store-appointment">
               <span>预约时间</span>
               <strong id="order-store-appointment-time"></strong>
-            </div>
-            <div class="ticket-code" id="appointment-qr" hidden>
-              <div class="ticket-qr" role="img" aria-label="到店二维码示意，不可扫码核销">
-                <svg viewBox="0 0 120 120" aria-hidden="true">
-                  <g fill="none" stroke="currentColor" stroke-width="6">
-                    <path d="M9 9h30v30H9zM81 9h30v30H81zM9 81h30v30H9z"/>
-                    <path d="M51 9v18h12V9M51 39h18v18H51v18H9V51h18v12M81 51h30v18H93v18h18v24H81V93H63v18H51V87h18V69"/>
-                  </g>
-                  <path fill="currentColor" d="M18 18h12v12H18zM90 18h12v12H90zM18 90h12v12H18zM33 51h6v6h-6zM57 57h6v6h-6zM75 63h6v12h-6zM99 93h6v12h-6z"/>
-                </svg>
-                <span>示意码</span>
-              </div>
-              <strong>预约凭证示意</strong>
-              <p>不可用于实际签到或核销</p>
             </div>
             <div class="appointment-actions" id="cancel-appointment-action" hidden>
               <a href="10-reschedule-review.html">更换预约时间</a>
@@ -175,7 +427,7 @@
             </div>
           </div>
         </section>
-        <p class="page-status" id="cancel-feedback" role="status" hidden>本次预约已取消，服务订单保留。您可以重新选择门店和时间。</p>
+        <p class="page-status" id="cancel-feedback" role="status" hidden></p>
         <section class="page-section" id="order-service-details">
           <h2 class="page-section-title">服务项目</h2>
           <div class="order-detail-card">
@@ -223,10 +475,24 @@
           <div class="page-row"><span>完成时间</span><strong>以门店服务记录为准</strong></div>
           </div>
         </section>
+        <section class="page-section order-information" id="order-information" aria-labelledby="order-information-title">
+          <h2 class="page-section-title" id="order-information-title">订单信息</h2>
+          <div class="order-detail-card">
+            <div class="page-row">
+              <span>订单编号</span>
+              <div class="order-number-value">
+                <strong id="order-number">SO-2601024</strong>
+                <button class="order-number-copy" id="order-number-copy" type="button">复制</button>
+              </div>
+            </div>
+            <div class="page-row"><span>下单时间</span><strong id="order-created-at">2026-10-24 10:30</strong></div>
+            <div class="page-row"><span>支付方式</span><strong id="order-payment-method">微信支付</strong></div>
+          </div>
+        </section>
       </div>
       <div class="page-foot">
         <div class="page-foot-actions single-action" id="order-foot-actions">
-          <button class="page-button secondary" id="order-cancel-action" type="button" data-open-dialog="cancel-order-dialog" hidden>取消订单</button>
+          <button class="page-button secondary" id="order-cancel-action" type="button" data-open-dialog="cancel-order-dialog" hidden>取消服务单</button>
           <a class="page-button" id="order-primary-action" href="06-store-selection.html">选择门店与时段</a>
         </div>
       </div>
@@ -234,8 +500,9 @@
     <aside class="page-annotation">
       <p class="page-annotation-kicker">UX SPEC 12 · REQ-012</p>
       <h1>订单详情</h1>
-      <p>排版沿用服务详情页：白色内容区之间以浅灰色间隔分区，不使用卡片描边；章节标题与信息区保留清晰层级。顶部浅品牌色突出当前订单状态，排队号与等待时间并列，金额使用品牌色强调；字段弱化为次要文字，保留底部固定操作区。</p>
-      <p>预约成功直接进入此订单。门店与时间统一归入预约信息：待到店、排队中置于服务项目上方，已完成置于服务项目下方，已取消置于服务履约下方。门店名称上方标注“预约门店”，联系门店位于地址右侧。到店后由门店工作人员扫描顾客二维码，签到成功后在订单内显示排队号和预计等待时间。</p>
+      <p>以门店服务凭证为视觉主线：顶部浅品牌色将当前状态、排队号与等待时间连成一个重点区域。白色内容区之间以浅灰分区，不增加卡片描边；金额使用深色强调，避免与当前进度争夺注意。保留底部固定操作区。</p>
+      <p>顶部状态图标随订单状态切换，统一使用付款、日历、时钟、进度和确认等通用线性符号，不使用特定装备元素，适用于不同服务品类。</p>
+      <p>预约成功直接进入此订单。门店与时间统一归入预约信息：待到店、排队中置于服务项目上方，已完成置于服务项目下方，已取消置于服务履约下方。预约时间优先展示，门店信息随后；联系门店与营业时间并列。待到店时展示紧凑的横向预约码凭证，到店后由工作人员扫码签到，再显示排队号与预计等待时间。二维码与排队数据均为原型示例。</p>
       <section class="arrival-flow" aria-labelledby="arrival-flow-title">
         <h2 id="arrival-flow-title">预约到店流程</h2>
         <ol>
@@ -263,8 +530,7 @@
       <ul><li>示例状态是已支付、待预约，不代表生产状态映射已确认。</li><li>服务图只帮助识别项目，不代替维修过程照片或检测报告。</li><li>无工单服务仍能查看服务单状态。</li></ul>
       <p class="page-status warning">GAP-016 · 状态映射与同步异常未定；预计等待时间为示例，需由门店系统提供。</p>
       <nav class="page-flow-nav" aria-label="页面原型导航">
-        <a href="10-reschedule-review.html">10 改约评审</a><a aria-current="page" href="12-service-order-detail.html">12 服务单</a>
-        <a href="13-service-cancel-review.html">13 取消服务单</a><a href="15-message-landing.html">15 消息落地</a>
+        <a aria-current="page" href="12-service-order-detail.html">12 服务单</a><a href="15-message-landing.html">15 消息落地</a>
       </nav>
     </aside>
   </main>
@@ -277,10 +543,10 @@
     </div>
   </dialog>
   <dialog class="page-modal" id="cancel-order-dialog" aria-labelledby="cancel-order-dialog-title">
-    <h2 id="cancel-order-dialog-title">取消这笔订单？</h2>
+    <h2 id="cancel-order-dialog-title">取消这笔服务单？</h2>
     <p>仅待支付的服务单可在此取消。支付成功后，预约建立且到店扫码前可取消本次预约；扫码签到后不再提供取消预约入口。</p>
     <div class="page-modal-actions">
-      <button class="page-button danger" type="button" data-cancel-order>确认取消订单</button>
+      <button class="page-button danger" type="button" data-cancel-order>确认取消服务单</button>
       <button class="page-button secondary" type="button" data-close-dialog autofocus>暂不取消</button>
     </div>
   </dialog>
@@ -292,12 +558,13 @@
       <button class="page-button secondary" type="button" data-close-dialog>暂不前往</button>
     </div>
   </dialog>
-  <dialog class="page-modal" id="store-contact-dialog" aria-labelledby="store-contact-dialog-title">
+  <dialog class="page-modal wechat-dialog" id="store-contact-dialog" aria-labelledby="store-contact-dialog-title">
     <h2 id="store-contact-dialog-title">联系服务门店</h2>
-    <p><strong id="store-contact-name"></strong><br>门店联系方式暂未接入，实际联系信息以门店系统为准。</p>
-    <div class="page-modal-actions">
-      <button class="page-button secondary" type="button" data-close-dialog autofocus>知道了</button>
-    </div>
+    <p class="wechat-dialog-store"><strong id="store-contact-name"></strong></p>
+    <p class="wechat-phone-unavailable">门店电话暂未接入，当前无法拨打。</p>
+    <div class="wechat-qr-placeholder" role="img" aria-label="企业微信二维码待门店提供">企业微信二维码<br>待门店提供</div>
+    <p class="wechat-dialog-note">点击长按添加门店服务人员微信</p>
+    <button class="wechat-dialog-close" type="button" data-close-dialog autofocus>关闭</button>
   </dialog>
   <script src="remaining-pages.js"></script>
 </body>

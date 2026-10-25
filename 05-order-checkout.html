@@ -28,7 +28,7 @@
     .service-name{font-size:14px;font-weight:700;line-height:20px;overflow-wrap:anywhere}
     .service-meta{margin-top:4px;color:var(--quiet);font-size:12px;line-height:18px}
     .price{font-size:14px;font-weight:650;white-space:nowrap}
-    .related-products{margin:16px 0;padding:12px;background:var(--soft)}
+    .related-products{margin: 0;padding:12px;background:var(--soft)}
     .related-products h4{margin:0 0 8px;color:var(--quiet);font-size:12px;line-height:18px;font-weight:400}
     .related-products ul{display:grid;gap:4px;margin:0;padding:0;list-style:none;font-size:14px;line-height:20px}
     [hidden]{display:none!important}
@@ -96,7 +96,7 @@
           <div class="related-products" id="related-products">
             <h4>服务装备</h4>
             <ul aria-label="服务装备">
-              <li id="checkout-equipment">未指定，到店时确认</li>
+              <li id="checkout-equipment">未指定，可用于自行车，到店时确认车型</li>
             </ul>
           </div>
         </section>
@@ -143,7 +143,7 @@
     document.querySelector("#service-name").textContent = name;
     document.querySelector("#service-meta").textContent = `${category} · ${description || "到店服务"}`;
     document.querySelector("#item-price").textContent = formattedPrice;
-    document.querySelector("#checkout-equipment").textContent = params.get("equipment") || "未指定，到店时确认";
+    document.querySelector("#checkout-equipment").textContent = params.get("equipment") || "可用于自行车，到店时确认具体型号";
     const points = Math.round(price * 100).toLocaleString("zh-CN");
     document.querySelector("#wechat-amount").textContent = `支付 ${formattedPrice}`;
     document.querySelector("#points-amount").textContent = `需扣除 ${points} 燃值`;

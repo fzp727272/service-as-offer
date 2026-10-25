@@ -20,6 +20,51 @@
   --shadow: 0 12px 12px rgb(16 16 16 / 4%);
 }
 
+.vitamin-app .service-change-dialog {
+  box-sizing: border-box;
+  width: min(360px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 24px;
+  overflow: auto;
+  border: 0;
+  border-radius: 0;
+  background: var(--container-neutral);
+  color: var(--content-neutral);
+  font: inherit;
+  text-align: left;
+}
+.service-change-dialog::backdrop { background: #10101066; }
+.service-change-dialog h2 { margin: 0; font-size: 20px; line-height: 28px; }
+.service-change-dialog p { margin: 12px 0 20px; color: var(--content-quiet); font-size: 14px; line-height: 22px; }
+.service-change-dialog dl { display: grid; grid-template-columns: auto 1fr; gap: 12px; margin: 0 0 24px; font-size: 14px; line-height: 22px; }
+.service-change-dialog dt { color: var(--content-quiet); }
+.service-change-dialog dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.service-change-actions { display: grid; gap: 12px; }
+.vitamin-app .service-change-actions :is(a, button) {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px;
+  border: 1px solid var(--content-brand);
+  border-radius: 0;
+  background: var(--content-brand);
+  color: white;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 22px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.vitamin-app .service-change-actions [data-change-close] { background: white; color: var(--content-brand); }
+.vitamin-app .service-change-actions [data-change-cancel] { background: var(--status-negative); border-color: var(--status-negative); }
+.service-change-actions :is(a, button):focus-visible { outline: 2px solid var(--content-brand); outline-offset: 3px; }
+.service-change-dialog [hidden] { display: none !important; }
+
 .order-store-card { background: var(--container-neutral); }
 .order-store-label { margin: 0 0 8px; color: var(--content-quiet); font-size: 14px; line-height: 20px; }
 .order-store-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -196,7 +241,7 @@ body.vitamin-app {
 .vitamin-app .page-form-field label { font-size: 14px; line-height: 20px; }
 .vitamin-app :is(.page-form-field small, .page-timeline-item p) { font-size: 12px; line-height: 18px; }
 .vitamin-app .page-timeline-item strong { font-size: 14px; line-height: 20px; }
-.vitamin-app :is(.store-card, .order-card, .equipment-card, .sheet, .panel, .page-modal) {
+.vitamin-app :is(.store-card, .order-card, .equipment-card, .order-detail-card, .order-store-card, .sheet, .panel, .page-modal) {
   border-radius: var(--radius-regular);
   box-shadow: none;
 }
@@ -283,14 +328,14 @@ body.vitamin-app {
   margin: 0 0 var(--space-s);
 }
 .vitamin-app.purchase-flow :is(.page-intro, .status-card, .success) {
-  margin: 0 0 var(--space-xl);
+  margin: 0 ;
 }
 .vitamin-app.purchase-flow :is(.page-heading, .heading, .status-title, .success h2) {
   font-size: 22px;
   line-height: 30px;
 }
 .vitamin-app.purchase-flow :is(.subheading, .status-sub, .success p, .page-lede) {
-  margin: 8px 0 16px;
+  /* margin: 8px 0 16px; */
   color: var(--content-quiet);
   font-size: 14px;
   line-height: 22px;
@@ -304,6 +349,9 @@ body.vitamin-app {
   border-bottom: 1px solid var(--border-quiet);
   font-size: 14px;
   line-height: 22px;
+}
+.vitamin-app.purchase-flow :is(.row, .detail, .detail-row, .page-row):last-child {
+  border-bottom: 0;
 }
 .vitamin-app.purchase-flow :is(.row, .detail, .detail-row, .page-row) strong {
   min-width: 0;

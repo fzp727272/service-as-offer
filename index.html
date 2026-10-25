@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>服务全流程 · Service as Offer</title>
   <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; }
@@ -82,13 +83,13 @@
         <ol>
           <li><a class="node" href="06-store-selection.html">选择门店</a><p>按城市查看可承接当前服务的门店。</p></li>
           <li><a class="node" href="07-date-time-selection.html">选择日期与时段</a><p>区分可约、约满和不可约。</p></li>
-          <li><a class="node" href="12-service-order-detail.html?booking=created">预约成功 / 订单详情</a><p>成功后直接进入订单，优先展示到店时间、门店与二维码。</p><div class="branch">预约变更与异常<br><a href="10-reschedule-review.html?booking=created">更换时间</a> / <a href="12-service-order-detail.html?booking=created">取消本次预约</a> / <a href="08-appointment-result.html?result=conflict">时段冲突</a></div></li>
+          <li><a class="node" href="12-service-order-detail.html?booking=created">预约成功 / 订单详情</a><p>成功后直接进入订单，优先展示到店时间、门店与二维码。待到店时可在订单内更换时间或取消本次预约。</p><div class="branch">预约异常<br><a href="08-appointment-result.html?result=conflict">时段冲突</a></div></li>
         </ol>
       </section>
       <section class="lane">
         <h2>到店与完成</h2>
         <ol>
-          <li><a class="node" href="12-service-order-detail.html?demoState=queued">服务单详情 · 扫码后排队</a><p>到店扫码成功后，在订单详情查看门店排队号。</p><div class="branch">其他订单状态<br><a href="12-service-order-detail.html?booking=created">查看预约信息</a> / <a href="13-service-cancel-review.html?paymentState=unpaid">取消待付款服务单</a></div></li>
+          <li><a class="node" href="12-service-order-detail.html?demoState=queued">服务单详情 · 扫码后排队</a><p>到店扫码成功后，在订单详情查看门店排队号。</p><div class="branch">其他订单状态<br><a href="12-service-order-detail.html?booking=created">查看预约信息</a> / <a href="12-service-order-detail.html?paymentState=unpaid">待付款服务单</a></div></li>
           <li><a class="node" href="12-service-order-detail.html?demoState=completed">服务完成与记录</a><p>在订单详情查看已完成的服务记录。</p></li>
           <li><a class="node" href="my-orders.html">我的订单</a><p>查看历史记录或再次购买服务。</p></li>
         </ol>
@@ -106,7 +107,7 @@
       <dl>
         <div><dt>同一套组件</dt><dd>Vitamin C 品牌蓝、直角容器、统一文字与间距。按钮、列表、表单、状态反馈和底栏由共享样式管理。</dd></div>
         <div><dt>同一笔服务</dt><dd>跨页保留服务、费用、装备、服务单、门店与时间。取消预约后保留服务单，重新预约不再购买。</dd></div>
-        <div><dt>05–13 交互约定</dt><dd>更换日期或门店后重新选择时段；定位未授权仍可手动选城市。失败和待确认不展示支付或预约成功，待确认时禁止重复提交。改约保留原门店和时间，成功后才更新订单；09 入口继续合并到 12 订单详情。</dd></div>
+        <div><dt>05–13 交互约定</dt><dd>更换日期或门店后重新选择时段；定位未授权仍可手动选城市。失败和待确认不展示支付或预约成功，待确认时禁止重复提交。更换预约时间与取消服务单在当前页弹层提示，不再进入独立页面；改约确认后选择新时段，成功后才更新订单。09 入口继续合并到 12 订单详情。</dd></div>
         <div><dt>界面与说明分离</dt><dd>手机内只保留业务信息和可操作的下一步。每页右侧提供同一套流程导航，设计说明与演示状态默认折叠。</dd></div>
       </dl>
       <details><summary>未确认的能力与演示边界</summary><ul>
