@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Service as Offer 09：预约详情与取消评审原型">
+  <title>09 · 预约详情 / 取消 · Service as Offer</title>
+  <link rel="stylesheet" href="remaining-pages.css">
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body class="gray-section-layout">
+  <main class="page-presentation">
+    <article class="page-artboard" aria-label="预约详情与取消原型">
+      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
+      <header class="page-nav"><a class="page-back" href="08-appointment-result.html" aria-label="返回预约结果">‹</a><span class="page-nav-title">预约详情</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <div class="page-body">
+        <header class="page-intro">
+          <span class="page-tag green">预约 · 已创建</span>
+          <h1 class="page-heading" style="margin-top:10px">预约成功，待到店</h1>
+        </header>
+        <section class="page-section" aria-labelledby="appointment-details-title">
+          <h2 class="page-section-title" id="appointment-details-title">本次预约</h2>
+          <div class="page-service">
+            <div class="page-thumb" aria-label="服务封面待提供">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#616161" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8"/></g></svg>
+            </div>
+            <div class="page-service-copy"><strong>自行车标准维保服务</strong><small>服务单 SO-2601024（评审示例）</small></div>
+          </div>
+          <div class="page-row"><span>预约状态</span><strong id="appointment-state">已创建 · 待到店</strong></div>
+          <div class="page-row"><span>预约时间</span><strong>2026 年 10 月 24 日（周六）11:00</strong></div>
+          <div class="page-row"><span>服务门店</span><strong>门店样例 01 · 地址待接入</strong></div>
+          <div class="page-row"><span>装备</span><strong>Rockrider ST 530 · 示例装备</strong></div>
+        </section>
+        <section class="page-section">
+          <p id="cancel-feedback" class="page-status" role="status" hidden>预约已取消，您可以重新选择门店和时间。</p>
+        </section>
+        <section class="page-section" id="cancel-appointment-action">
+          <button class="page-button secondary" type="button" data-open-dialog="cancel-dialog">取消这次预约</button>
+          <a class="page-inline-action" href="10-reschedule-review.html">更换预约时间</a>
+        </section>
+        <a class="page-inline-action" href="12-service-order-detail.html">查看服务单</a>
+      </div>
+      <div class="page-foot"><a class="page-button" style="display:block" href="12-service-order-detail.html">查看订单详情</a></div>
+    </article>
+    <aside class="page-annotation">
+      <p class="page-annotation-kicker">UX SPEC 09 · REQ-009</p>
+      <h1>预约详情 / 取消</h1>
+      <p>当前对象是预约，不是主服务单。取消后保留服务单与订单脉络；退款和权益处理不在此页作承诺。</p>
+      <h2>评审要点</h2>
+      <ul><li>取消前确认具体门店、时间、装备与预约。</li><li>不采用门店 SOP 的 2 小时作为顾客取消限制。</li><li>确认弹窗、失败恢复与取消后去向待业务决定。</li></ul>
+      <p class="page-status warning">GAP-013 · 取消确认与后续反馈未定</p>
+      <nav class="page-flow-nav" aria-label="页面原型导航">
+        <a href="08-appointment-result.html">08 预约结果</a><a aria-current="page" href="09-appointment-detail-cancel.html">09 预约取消</a>
+        <a href="10-reschedule-review.html">10 改约评审</a><a href="12-service-order-detail.html">12 服务单详情</a>
+      </nav>
+    </aside>
+  </main>
+  <dialog class="page-modal" id="cancel-dialog" aria-labelledby="cancel-dialog-title">
+    <h2 id="cancel-dialog-title">取消这次预约？</h2>
+    <p>取消本次门店和时段安排，保留服务单。此操作不申请退款。</p>
+    <div class="page-modal-actions">
+      <button class="page-button danger" type="button" data-cancel-appointment>确认取消预约</button>
+      <button class="page-button secondary" type="button" data-close-dialog>保留预约</button>
+    </div>
+  </dialog>
+  <dialog class="page-modal" id="reschedule-dialog" aria-labelledby="reschedule-dialog-title">
+    <h2 id="reschedule-dialog-title">改约规则待确认</h2>
+    <p>直接改约，还是取消后再预约，目前尚无已批准方案。此处不会释放当前时段。</p>
+    <div class="page-modal-actions"><button class="page-button secondary" type="button" data-close-dialog>返回预约详情</button></div>
+  </dialog>
+  <script src="remaining-pages.js"></script>
+</body>
+</html>

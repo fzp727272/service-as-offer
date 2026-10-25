@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="权益详情设计页：了解兑换服务，核对购买商品，使用权益而无需再次支付。">
+  <title>权益详情设计稿 · Service as Offer</title>
+  <style>
+    :root { color-scheme: light; --brand:#3643ba; --ink:#101010; --quiet:#616161; --line:#e1e0df; --wash:#f0f1ff; --canvas:#ededed; font-family:"Decathlon Text","Source Han Sans CN","PingFang SC",-apple-system,sans-serif; color:var(--ink); background:var(--canvas); font-synthesis:none; -webkit-font-smoothing:antialiased; }
+    * { box-sizing:border-box; }
+    body { margin:0; line-height:1.5; }
+    button,a,summary { -webkit-tap-highlight-color:transparent; }
+    button { font:inherit; cursor:pointer; }
+    a { color:inherit; text-decoration:none; }
+    button:focus-visible,a:focus-visible,summary:focus-visible { outline:2px solid var(--brand); outline-offset:4px; }
+    h1,h2,h3,p,dl,dd { margin:0; }
+    svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+    .presentation { display:flex; justify-content:center; align-items:center; gap:56px; min-height:100dvh; padding:28px; }
+    .phone { width:422px; height:min(894px,calc(100dvh - 56px)); min-height:560px; padding:9px; border:1px solid #333; border-radius:42px; background:#222; box-shadow:0 22px 60px #00000018; flex:none; }
+    .screen { height:100%; display:flex; flex-direction:column; background:white; border-radius:32px; position:relative; isolation:isolate; overflow:hidden; }
+    .statusbar { height:32px; flex:none; display:flex; align-items:center; justify-content:space-between; padding:0 24px; font-size:12px; font-weight:650; }
+    .statusbar svg { width:48px; height:13px; stroke-width:1.4; }
+    .nav { height:48px; flex:none; display:grid; grid-template-columns:80px 1fr 80px; align-items:center; padding:0 16px; }
+    .nav h1 { font-size:16px; font-weight:650; text-align:center; }
+    .back { width:44px; height:44px; display:grid; place-items:center; margin-left:-8px; }
+    .capsule { display:flex; align-items:center; justify-content:space-around; height:30px; border:1px solid var(--line); border-radius:18px; }
+    .capsule i { width:1px; height:16px; background:var(--line); }
+    .capsule svg { width:18px; height:18px; }
+    main { flex:1; min-height:0; overflow:auto; overscroll-behavior:contain; scrollbar-width:none; padding:0 20px 20px; }
+    main::-webkit-scrollbar { display:none; }
+    .benefit-intro { padding:22px 0 20px; }
+    .benefit-status { display:inline-flex; align-items:center; gap:6px; color:var(--brand); font-size:12px; font-weight:600; }
+    .benefit-status svg { width:15px; height:15px; }
+    .benefit-intro h2 { font-size:28px; font-weight:750; line-height:1.3; letter-spacing:-.8px; margin:10px 0 8px; }
+    .benefit-intro p { font-size:13px; color:var(--quiet); }
+    .service-section { padding:17px 16px 0; border:1px solid var(--line); border-top:3px solid var(--brand); }
+    .section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+    .section-heading h2 { font-size:16px; font-weight:700; }
+    .section-heading small { color:var(--quiet); font-size:11px; }
+    .service-link { display:grid; grid-template-columns:76px minmax(0,1fr) 14px; gap:12px; align-items:center; padding-bottom:17px; }
+    .service-photo { width:76px; height:76px; object-fit:cover; background:#ededed; }
+    .service-photo.failed { font-size:11px; line-height:1.4; display:grid; place-items:center; padding:8px; color:var(--quiet); text-align:center; }
+    .service-copy { min-width:0; }
+    .service-copy h3 { font-size:16px; font-weight:650; }
+    .service-copy p { font-size:12px; color:var(--quiet); margin:4px 0 7px; line-height:1.5; }
+    .original-price { display:flex; align-items:baseline; gap:6px; font-size:12px; color:var(--quiet); }
+    .original-price strong { color:var(--ink); font-size:18px; font-weight:650; font-variant-numeric:tabular-nums; }
+    .service-link > svg { width:14px; height:14px; color:var(--quiet); }
+    .exchange-strip { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 -16px; padding:11px 16px; background:var(--wash); color:var(--brand); font-size:12px; }
+    .exchange-strip span { display:flex; align-items:center; gap:7px; }
+    .exchange-strip svg { width:16px; height:16px; }
+    .exchange-strip strong { font-size:12px; font-weight:650; white-space:nowrap; }
+    .product-section { margin-top:24px; }
+    .product-box { padding:14px; background:#f8f8f8; }
+    .product { display:flex; align-items:center; gap:12px; }
+    .product-image { width:66px; height:66px; object-fit:contain; flex:none; background:white; }
+    .product-copy { min-width:0; }
+    .product-copy h3 { font-size:13px; line-height:1.55; font-weight:600; }
+    .product-copy p { font-size:11px; color:var(--quiet); margin-top:5px; }
+    .order-link { display:flex; align-items:center; justify-content:space-between; width:100%; min-height:44px; gap:12px; padding:12px 0 0; margin-top:12px; border:0; border-top:1px solid var(--line); background:none; text-align:left; font-size:11px; color:var(--quiet); }
+    .order-link span:last-child { display:flex; align-items:center; gap:4px; color:var(--ink); }
+    .order-link svg { width:13px; height:13px; }
+    .binding { display:flex; align-items:flex-start; gap:7px; margin-top:11px; color:var(--quiet); font-size:11px; line-height:1.6; }
+    .binding svg { width:14px; height:14px; margin-top:2px; }
+    .rules { margin-top:22px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    summary { display:flex; align-items:center; justify-content:space-between; min-height:52px; list-style:none; cursor:pointer; font-size:14px; font-weight:600; }
+    summary::-webkit-details-marker { display:none; }
+    summary svg { width:16px; height:16px; transition:transform .18s; }
+    details[open] summary svg { transform:rotate(180deg); }
+    .rules-content { padding:0 0 16px; }
+    .rules-content p { margin-bottom:8px; font-size:12px; color:var(--quiet); }
+    .rules-content p:last-child { margin:0; }
+    .demo-note { margin:14px 0 0; color:var(--quiet); font-size:10px; }
+    .footer { flex:none; padding:12px 20px calc(14px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line); background:white; }
+    .footer-note { display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:10px; }
+    .footer-note strong { font-size:14px; font-weight:650; }
+    .footer-note small { color:var(--quiet); font-size:11px; }
+    .primary,.secondary { display:flex; justify-content:center; align-items:center; width:100%; min-height:48px; padding:12px 16px; background:var(--brand); color:white; border:1px solid var(--brand); font:inherit; font-size:14px; font-weight:650; border-radius:4px; }
+    .primary:active { background:#29338f; }
+    .primary:disabled { color:var(--quiet); background:#ededed; border-color:#ededed; cursor:not-allowed; }
+    .secondary { background:white; color:var(--ink); border-color:var(--line); margin-top:8px; }
+    .annotation { width:274px; align-self:center; }
+    .annotation > p { color:var(--quiet); font-size:12px; }
+    .annotation h2 { margin:12px 0 16px; font-size:32px; letter-spacing:-1px; line-height:1.3; }
+    .annotation .description { font-size:14px; line-height:1.8; }
+    .annotation dl { margin-top:28px; border-top:1px solid #ccc; }
+    .annotation dl > div { padding:15px 0; border-bottom:1px solid #ccc; }
+    .annotation dt { font-size:11px; color:var(--quiet); }
+    .annotation dd { font-size:13px; margin-top:5px; }
+    .annotation a { display:inline-flex; align-items:center; min-height:44px; margin-top:12px; color:var(--brand); font-size:12px; text-decoration:underline; text-underline-offset:4px; }
+    .overlay { position:absolute; inset:0; z-index:4; display:flex; align-items:flex-end; background:#10101066; }
+    .sheet { width:100%; max-height:90%; overflow:auto; padding:10px 20px calc(20px + env(safe-area-inset-bottom,0px)); background:white; border-radius:18px 18px 0 0; }
+    .handle { width:32px; height:4px; background:#d2d2d2; margin:0 auto 20px; border-radius:4px; }
+    .sheet h2 { font-size:22px; line-height:1.4; }
+    .sheet > p { margin:8px 0 18px; font-size:13px; color:var(--quiet); line-height:1.7; }
+    .sheet dl { margin:0 0 20px; font-size:12px; }
+    .sheet dl > div { display:flex; justify-content:space-between; gap:18px; padding:11px 0; border-bottom:1px solid var(--line); }
+    .sheet dt { flex:none; color:var(--quiet); }
+    .sheet dd { text-align:right; overflow-wrap:anywhere; }
+    .state-message { margin-bottom:16px; padding:12px; background:#f5f4f5; border-left:2px solid var(--ink); font-size:12px; }
+    [hidden] { display:none !important; }
+    @media(max-width:820px) { .annotation { display:none; } }
+    @media(max-width:600px) {
+      :root { background:white; }
+      .presentation { display:block; padding:0; min-height:100dvh; }
+      .phone { width:100%; height:100dvh; min-height:0; padding:0; border:0; border-radius:0; background:white; box-shadow:none; }
+      .screen { border-radius:0; }
+    }
+    @media(prefers-reduced-motion:reduce) { summary svg { transition:none; } }
+  </style>
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body class="benefit-detail">
+  <svg hidden aria-hidden="true"><defs>
+    <symbol id="chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="link" viewBox="0 0 24 24"><path d="m10 13 4-4m-6 6-2 2a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m4 2 2-2a4 4 0 0 1 6 6l-4 4a4 4 0 0 1-6 0" transform="translate(1 0)"/></symbol>
+    <symbol id="info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-9v.1"/></symbol>
+  </defs></svg>
+  <div class="presentation">
+    <div class="phone">
+      <div class="screen">
+        <div class="statusbar" aria-hidden="true"><span>9:41</span><svg viewBox="0 0 48 13"><path d="M1 10V8m4 2V6m4 4V4m4 6V2M19 4q5-5 10 0m-8 3q3-3 6 0m-3 3h.1"/><rect x="33" y="2" width="12" height="9" rx="2"/><path d="M47 5v3M36 5h6v3h-6z"/></svg></div>
+        <header class="nav">
+          <a class="back" href="01-service-entry.html?scenario=benefits" aria-label="返回首页权益"><svg viewBox="0 0 24 24"><path d="m14 5-7 7 7 7"/></svg></a>
+          <h1>权益详情</h1>
+          <div class="capsule" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1"/></svg><i></i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></div>
+        </header>
+        <main id="content"></main>
+        <footer class="footer">
+          <div class="footer-note"><strong id="footer-label">权益兑换，无需支付</strong><small>适用于关联商品</small></div>
+          <button class="primary" id="redeem" type="button">使用权益兑换</button>
+        </footer>
+        <div class="overlay" id="overlay" hidden>
+          <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" tabindex="-1">
+            <div class="handle" aria-hidden="true"></div>
+            <h2 id="sheet-title"></h2><p id="sheet-description"></p><dl id="sheet-summary"></dl>
+            <button class="primary" id="confirm" type="button">确认兑换并预约</button>
+            <button class="secondary" id="close" type="button">暂不兑换</button>
+          </section>
+        </div>
+      </div>
+    </div>
+    <aside class="annotation">
+      <p>Service as Offer / 页面设计</p>
+      <h2>权益属于你，<br>只服务这件装备。</h2>
+      <p class="description">先了解兑换的服务，再核对它对应的商品。保留服务原价，但不让顾客再次购买。</p>
+      <dl><div><dt>已选方向</dt><dd>A · 服务优先，单一设计页面</dd></div><div><dt>服务与商品</dt><dd>服务卡片进入详情；来源订单关联具体装备。</dd></div><div><dt>演示边界</dt><dd>商品、资格及原价为示例，不执行兑换、支付或核销。</dd></div></dl>
+      <a href="../prd/service-as-offer-ux-spec.html#page-03">查看权益详情规范</a>
+    </aside>
+  </div>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const benefits = {
+      inspection: { title:"新车安全检查", service:"安全检查", description:"检查主要部件、紧固件并润滑链条", price:"¥69.90" },
+      installation: { title:"新车安装权益", service:"自行车新车安装", description:"到店安装并检查自行车", price:"以服务说明为准" },
+      "six-month": { title:"6 个月免费安全检查", service:"6 个月免费安全检查", description:"购车关联检查服务，具体范围以正式说明为准", price:"待确认" }
+    };
+    const benefitId = params.get("benefit") || "inspection";
+    const scenario = params.get("state") || "available";
+    const benefit = Object.hasOwn(benefits, benefitId) ? benefits[benefitId] : null;
+    const equipmentName = params.get("equipment") || (benefitId === "installation" ? "Riverside Touring 自行车" : "Rockrider ST 530 山地自行车");
+    const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+    const valid = benefit && ["available","pending","unavailable"].includes(scenario);
+    const content = document.getElementById("content");
+    const redeem = document.getElementById("redeem");
+    const overlay = document.getElementById("overlay");
+    const sheet = overlay.querySelector(".sheet");
+    const confirm = document.getElementById("confirm");
+    const close = document.getElementById("close");
+    let trigger = null;
+    const icon = name => `<svg aria-hidden="true"><use href="#${name}"/></svg>`;
+    if (!valid) {
+      content.innerHTML = '<section class="benefit-intro"><h2>无法展示此权益</h2><p>权益链接中的信息无效，请返回首页重新选择权益。</p></section>';
+      redeem.disabled = true;
+      redeem.textContent = "无法兑换";
+      document.getElementById("footer-label").textContent = "请重新核对权益";
+    } else {
+      const serviceUrl = new URL("02-service-detail.html", location.href);
+      serviceUrl.search = new URLSearchParams({category:"bike", name:benefit.service, description:benefit.description, context:"benefit", benefit:benefitId, state:scenario, equipment:equipmentName});
+      if (benefitId === "inspection") serviceUrl.searchParams.set("price","69.90");
+      content.innerHTML = `
+        <section class="benefit-intro" aria-labelledby="benefit-title">
+          <span class="benefit-status">${icon("check")}${scenario === "available" ? "可兑换权益" : scenario === "pending" ? "商品关联待同步" : "权益暂不可用"}</span>
+          <h2 id="benefit-title">${benefit.title}</h2>
+          <p>购买装备附带的服务，不用再买一次。</p>
+        </section>
+        ${scenario !== "available" ? `<p class="state-message" role="status">${scenario === "pending" ? "来源订单商品尚未同步，请稍后重新查看。核对关联商品后才可兑换。" : "当前权益不可兑换，请核对权益状态与使用条件，不要重复购买服务。"}</p>` : ""}
+        <section class="service-section" aria-labelledby="service-title">
+          <div class="section-heading"><h2 id="service-title">服务说明</h2><small>点击查看详情</small></div>
+          <a class="service-link" href="${serviceUrl.href}" aria-label="查看${benefit.service}服务详情">
+            <img class="service-photo" src="assets/figma/order-bike-repair.png" alt="自行车服务场景示意">
+            <div class="service-copy"><h3>${benefit.service}</h3><p>${benefit.description}</p><div class="original-price"><span>原价</span><strong>${benefit.price}</strong></div></div>
+            ${icon("chevron")}
+          </a>
+          <div class="exchange-strip"><span>${icon("check")}本次使用权益兑换</span><strong>无需再次支付</strong></div>
+        </section>
+        <section class="product-section" aria-labelledby="product-title">
+          <div class="section-heading"><h2 id="product-title">服务匹配商品</h2><small>权益来自此商品</small></div>
+          ${scenario === "pending" ? '<div class="product-box"><h3 class="product-copy">商品关联待同步</h3><p class="binding">正在等待来源订单的商品信息，不以其他同型号商品替代。</p></div>' : `
+          <div class="product-box">
+            <div class="product"><img class="product-image" src="assets/figma/${benefitId === "installation" ? "device-riverside.png" : "device-rockrider.png"}" alt="关联装备"><div class="product-copy"><h3>${escapeHtml(equipmentName)}</h3><p>此件装备专属服务</p></div></div>
+            <button class="order-link" id="source-order" type="button" aria-label="查看来源商品订单与明细"><span>来源商品订单</span><span>810263 ${icon("chevron")}</span></button>
+          </div>`}
+          <p class="binding">${icon("link")}<span>仅限此件商品使用，兑换后的服务仍与它关联。</span></p>
+        </section>
+        <details class="rules"><summary>使用须知<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="rules-content">
+          <p>兑换前请核对服务与来源商品，权益不可更换装备使用。</p>
+          <p>可用次数、有效期和服务门店以正式权益规则为准；“6 个月”不代表所有权益的统一有效期。</p>
+          <p>本次使用权益，无需支付服务原价。</p>
+        </div></details>
+        <p class="demo-note">设计演示：商品、订单、权益资格${benefitId === "inspection" ? "及原价" : ""}均为示意。</p>`;
+      redeem.disabled = scenario !== "available";
+      if (scenario !== "available") {
+        redeem.textContent = scenario === "pending" ? "商品关联待同步" : "权益暂不可用";
+        document.getElementById("footer-label").textContent = "核对权益后再兑换";
+      }
+    }
+    function showSheet(kind) {
+      trigger = document.activeElement;
+      const orderOnly = kind === "order";
+      document.getElementById("sheet-title").textContent = orderOnly ? "来源商品订单" : "确认使用权益";
+      document.getElementById("sheet-description").textContent = orderOnly ? "权益来自此订单中的这件商品，不适用于其他同型号装备。以下为示例数据。" : "请确认服务与商品一致。本次使用权益兑换，无需再次支付。";
+      document.getElementById("sheet-summary").innerHTML = `${orderOnly ? "" : `<div><dt>兑换服务</dt><dd>${benefit.service}</dd></div><div><dt>服务原价</dt><dd>${benefit.price}</dd></div>`}<div><dt>关联商品</dt><dd>${escapeHtml(equipmentName)}</dd></div><div><dt>来源商品订单</dt><dd>810263</dd></div>${orderOnly ? "" : '<div><dt>本次方式</dt><dd>权益兑换，无需支付</dd></div>'}`;
+      confirm.hidden = orderOnly;
+      close.textContent = orderOnly ? "返回权益详情" : "暂不兑换";
+      overlay.hidden = false;
+      [content, document.querySelector(".nav"), document.querySelector(".footer"), document.querySelector(".journey-panel")].filter(Boolean).forEach(el => { el.inert = true; });
+      sheet.focus();
+    }
+    function closeSheet() {
+      overlay.hidden = true;
+      [content, document.querySelector(".nav"), document.querySelector(".footer"), document.querySelector(".journey-panel")].filter(Boolean).forEach(el => { el.inert = false; });
+      trigger?.focus();
+    }
+    redeem.addEventListener("click", () => { if (valid && scenario === "available") showSheet("redeem"); });
+    document.getElementById("source-order")?.addEventListener("click", () => showSheet("order"));
+    confirm.addEventListener("click", () => {
+      const next = new URL("06-store-selection.html", location.href);
+      next.search = new URLSearchParams({ context: "benefit", benefit: benefitId, name: benefit.service, description: benefit.description, category: "bike", equipment: equipmentName, order: params.get("order") || "SO-2601024" });
+      location.assign(next);
+    });
+    close.addEventListener("click", closeSheet);
+    overlay.addEventListener("click", event => { if (event.target === overlay) closeSheet(); });
+    document.addEventListener("keydown", event => {
+      if (overlay.hidden) return;
+      if (event.key === "Escape") closeSheet();
+      if (event.key === "Tab") {
+        const buttons = [...sheet.querySelectorAll("button:not([hidden])")];
+        const first = buttons[0], last = buttons[buttons.length - 1];
+        if (event.shiftKey && (document.activeElement === first || document.activeElement === sheet)) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    });
+    document.querySelectorAll("img").forEach(img => img.addEventListener("error", () => {
+      const fallback = document.createElement("span");
+      fallback.className = `${img.className} service-photo failed`;
+      fallback.textContent = img.classList.contains("product-image") ? "商品图片暂不可用" : "服务图片暂不可用";
+      fallback.setAttribute("role","img");
+      fallback.setAttribute("aria-label",fallback.textContent);
+      img.replaceWith(fallback);
+    }));
+  </script>
+</body>
+</html>

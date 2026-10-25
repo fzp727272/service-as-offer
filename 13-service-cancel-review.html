@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Service as Offer 13：服务单取消评审原型">
+  <title>13 · 服务单取消 · Service as Offer</title>
+  <link rel="stylesheet" href="remaining-pages.css">
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body class="gray-section-layout">
+  <main class="page-presentation">
+    <article class="page-artboard" aria-label="服务单取消评审原型">
+      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
+      <header class="page-nav"><a class="page-back" href="12-service-order-detail.html" aria-label="返回服务单详情">‹</a><span class="page-nav-title">取消服务单</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <div class="page-body">
+        <header class="page-intro">
+          <h1 class="page-heading">取消待付款服务单</h1>
+        </header>
+        <section class="page-section">
+          <h2 class="page-section-title">服务信息</h2>
+          <div class="page-service">
+            <div class="page-thumb" aria-label="服务封面待提供">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#616161" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8"/></g></svg>
+            </div>
+            <div class="page-service-copy"><strong>自行车标准保养套餐</strong><small>服务单 SO-2601024 · 示例</small></div>
+          </div>
+          <div class="page-row"><span>服务单状态</span><strong>待支付</strong></div>
+          <div class="page-row"><span>预约</span><strong>尚未创建</strong></div>
+          <div class="page-row"><span>交易</span><strong>未支付</strong></div>
+        </section>
+        <section class="page-section">
+          <p class="page-status" id="service-cancel-boundary">仅待支付的服务单可取消。支付成功后，预约建立且到店扫码前可取消预约；扫码签到后不再提供取消预约入口。</p>
+          <p class="page-status success" id="service-cancel-feedback" role="status" hidden>待支付服务单已取消。此原型不会发起真实取消。</p>
+        </section>
+      </div>
+      <div class="page-foot">
+        <div class="page-foot-actions">
+          <a class="page-button secondary" style="display:block;text-decoration:none" href="12-service-order-detail.html">返回服务单</a>
+          <button class="page-button danger" type="button" data-open-dialog="service-cancel-dialog">取消服务单</button>
+        </div>
+      </div>
+    </article>
+    <aside class="page-annotation">
+      <p class="page-annotation-kicker">UX SPEC 13 · REQ-013</p>
+      <h1>服务单取消</h1>
+      <p>演示仅允许顾客取消尚未支付的服务单。支付后，顾客在预约成功、门店尚未扫码签到前可以取消本次预约；不在此取消已支付服务单。</p>
+      <h2>原型边界</h2>
+      <ul><li>取消按钮仅用于待支付状态。</li><li>预约取消后保留服务单；门店扫码签到后不显示取消预约操作。</li><li>实际取消、资金处理及失败恢复仍需接入业务规则。</li></ul>
+      <p class="page-status warning">支付后整单取消不在本次原型范围内。</p>
+      <nav class="page-flow-nav" aria-label="页面原型导航">
+        <a href="12-service-order-detail.html">12 服务单</a><a aria-current="page" href="13-service-cancel-review.html">13 取消服务单</a>
+        <a href="09-appointment-detail-cancel.html">09 取消预约</a><a href="15-message-landing.html">15 消息落地</a>
+      </nav>
+    </aside>
+  </main>
+  <dialog class="page-modal" id="service-cancel-dialog" aria-labelledby="service-cancel-dialog-title">
+    <h2 id="service-cancel-dialog-title">取消这笔待付款服务单？</h2>
+    <p>取消后将不再继续支付。本原型只展示交互，不会变更真实订单。</p>
+    <div class="page-modal-actions">
+      <button class="page-button danger" type="button" data-cancel-order-review>确认取消服务单</button>
+      <button class="page-button secondary" type="button" data-close-dialog autofocus>保留服务单</button>
+    </div>
+  </dialog>
+  <script src="remaining-pages.js"></script>
+</body>
+</html>

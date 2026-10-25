@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Service as Offer 04：维修需求评审原型">
+  <title>04 · 维修需求 · Service as Offer</title>
+  <link rel="stylesheet" href="remaining-pages.css">
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body class="gray-section-layout repair-request">
+  <main class="page-presentation">
+    <article class="page-artboard" aria-label="维修需求原型">
+      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
+      <header class="page-nav"><a class="page-back" href="02-service-detail.html" aria-label="返回服务详情">‹</a><span class="page-nav-title">描述维修需求</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <div class="page-body">
+        <header class="page-intro">
+          <h1 class="page-heading">告诉我们遇到的问题</h1>
+          <p class="page-lede">描述故障现象，由门店协助确认维修项目。</p>
+        </header>
+        <div class="page-service">
+          <div class="page-thumb" aria-label="服务封面待提供">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#616161" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8"/></g></svg>
+          </div>
+          <div class="page-service-copy"><strong>维修需求</strong><small>尚未选择维修服务</small></div>
+          <span class="page-tag">待确认</span>
+        </div>
+        <form data-repair-request>
+          <div class="page-form-field">
+            <label for="equipment-name">装备名称或型号（选填）</label>
+            <input id="equipment-name" name="equipment" autocomplete="off" placeholder="例如：山地自行车">
+            <small>不需要先绑定装备，也可以直接描述问题。</small>
+          </div>
+          <div class="page-form-field">
+            <label for="fault-description">问题描述</label>
+            <textarea id="fault-description" name="description" required placeholder="例如：骑行时后轮有异响，刹车感觉偏软"></textarea>
+          </div>
+          <div class="page-form-field">
+            <span class="repair-image-label" id="repair-image-label">问题图片（选填）</span>
+            <small id="repair-image-note">上传装备或故障部位照片，帮助门店提前了解情况；最多 5 张。</small>
+            <div class="repair-upload">
+              <input class="repair-image-input" id="repair-images" name="images" type="file" accept="image/*" multiple aria-labelledby="repair-image-label" aria-describedby="repair-image-note repair-image-preview repair-image-feedback">
+              <div class="repair-image-preview" id="repair-image-preview" aria-live="polite"></div>
+              <p class="repair-image-feedback" id="repair-image-feedback" role="status" hidden></p>
+            </div>
+            <small>本原型仅作本地预览，不会上传。</small>
+               <a class="page-inline-action" href="06-store-selection.html?name=自行车维修&amp;category=bike&amp;context=repair">查看服务门店</a>
+        
+          </div>
+          <div class="page-section"><button class="page-button" type="submit">保存维修需求</button></div>
+          <p id="request-feedback" class="page-status page-section" role="status" hidden>维修需求已在本页面保存。图片仅作本地预览，未上传；请到店由工作人员确认项目与报价。</p>
+       </form>
+      </div>
+    </article>
+    <aside class="page-annotation">
+      <p class="page-annotation-kicker">UX SPEC 04 · REQ-004</p>
+      <h1>维修需求</h1>
+      <p>用开放文字和选填图片承接问题，不把示例变成诊断字典。此页不替代技师检查，也不要求顾客完成自检。</p>
+      <h2>本轮边界</h2>
+      <ul><li>装备信息和问题图片均可选，最多添加 5 张图片，图片仅在本地预览。</li><li>提交仅作本地演示，不承诺需求单已创建或图片已上传。</li><li>图片大小限制及生产上传契约仍待确认。</li></ul>
+      <p class="page-status warning">GAP-008 · 需求输入契约未定</p>
+      <nav class="page-flow-nav" aria-label="页面原型导航">
+        <a href="03-benefit-detail-prototype.html">03 权益详情</a><a aria-current="page" href="04-repair-request.html">04 维修需求</a>
+        <a href="05-order-checkout.html">05 下单</a><a href="09-appointment-detail-cancel.html">09 预约取消</a>
+      </nav>
+    </aside>
+  </main>
+  <script src="remaining-pages.js"></script>
+</body>
+</html>

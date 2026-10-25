@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Service as Offer 购后预约流程设计稿 02：选择门店">
+  <title>06 · 选择门店 · Service as Offer</title>
+  <style>
+    :root{color-scheme:light;--ink:#101010;--quiet:#616161;--tertiary:#949494;--brand:#3643ba;--lime:#7affa6;--paper:#f8f8f8;--line:#e1e0df;--soft:#f5f4f5;--positive:#149b65;--warning:#db6900}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}body{background:#ececef}.presentation{min-height:100vh;display:grid;grid-template-columns:375px 310px;align-content:center;justify-content:center;align-items:center;gap:72px;padding:36px}.artboard{width:375px;height:812px;background:#fff;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 64px #10102424}.statusbar{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:14px;font-weight:650}.status-icons{display:flex;align-items:center;gap:6px;font-size:11px}.signal{font-size:13px;letter-spacing:-3px}.battery{width:19px;height:10px;border:1.4px solid #101010;border-radius:3px;position:relative}.battery:after{content:"";position:absolute;right:-3px;top:2px;width:2px;height:4px;background:#101010}.battery:before{content:"";position:absolute;inset:2px 4px 2px 2px;background:#101010;border-radius:1px}.nav{height:44px;flex:none;display:grid;grid-template-columns:52px 1fr 52px;align-items:center;border-bottom:1px solid var(--line);padding:0 12px}.back{font-size:25px;line-height:1;font-weight:300}.nav-title{text-align:center;font-size:16px;font-weight:650}.more{text-align:right;font-size:20px;letter-spacing:2px}.body{flex:1;overflow:hidden;padding:18px 18px 12px;background:#fff}.step{display:flex;align-items:center;gap:7px;margin-bottom:13px;color:var(--quiet);font-size:11px}.step b{color:var(--brand);font-weight:700}.step-line{height:1px;width:22px;background:#d5d5d9}.heading{font-size:22px;line-height:1.35;margin:0;font-weight:700;letter-spacing:-.3px}.subheading{font-size:12px;line-height:1.5;color:var(--quiet);margin:4px 0 13px}.service-strip{display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:9px;margin-bottom:13px}.service-icon{width:35px;height:35px;border-radius:6px;background:#e5e5e7;display:grid;place-items:center;flex:none}.service-icon svg{width:27px;height:27px}.service-info{flex:1;min-width:0}.service-info strong{font-size:12px;display:block}.service-info span{font-size:10px;color:var(--quiet);display:block;margin-top:2px}.city{height:43px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;margin-bottom:12px;font-size:13px}.city-label{font-size:11px;color:var(--quiet);margin-right:8px}.chevron{color:#777;font-size:18px}.list-label{display:flex;align-items:center;justify-content:space-between;margin:0 1px 8px;font-size:12px;font-weight:650}.list-label span{font-size:10px;color:var(--quiet);font-weight:400}.store-card{position:relative;border:1px solid var(--line);border-radius:11px;padding:10px;margin:0 0 9px;background:#fff}.store-card.selected{border:1.5px solid var(--brand);box-shadow:0 0 0 2px #3643ba10}.store-top{display:flex;gap:10px}.store-image{width:84px;height:64px;flex:none;border-radius:6px;background:#ededed;display:grid;place-items:center;color:#666;position:relative;overflow:hidden}.store-image svg{width:29px;height:29px;stroke:#777}.image-label{position:absolute;bottom:3px;font-size:8px;color:#666}.store-copy{min-width:0;flex:1}.store-name{font-size:13px;font-weight:700;line-height:1.4}.sample{display:inline-block;margin-left:4px;padding:2px 4px;border-radius:3px;background:#f0f1ff;color:var(--brand);font-size:8px;font-weight:600;vertical-align:1px}.address{font-size:10px;line-height:1.4;color:var(--quiet);margin-top:4px}.store-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:8px;border-top:1px solid #f0f0f0}.capability{font-size:10px;color:#4d4d4d;display:flex;align-items:center;gap:5px}.dot{width:6px;height:6px;border-radius:50%;background:var(--positive)}.radio{width:19px;height:19px;border:1.5px solid #aaa;border-radius:50%;flex:none}.selected .radio{border:5px solid var(--brand)}.placeholder-card{min-height:75px;border:1px dashed #d2d2d2;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#777;font-size:11px;padding:12px;text-align:center;line-height:1.5}.foot{flex:none;padding:11px 18px 17px;border-top:1px solid var(--line);background:#fff}.foot-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:11px}.foot-meta span:first-child{color:var(--quiet)}.foot-meta strong{font-size:12px}.cta{height:47px;border-radius:5px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:650}.annotation{max-width:310px}.ann-kicker{font-size:11px;letter-spacing:.13em;color:var(--brand);font-weight:700}.annotation h1{font-size:30px;line-height:1.22;margin:12px 0 9px;letter-spacing:-.7px}.ann-desc{font-size:14px;line-height:1.7;color:#555;margin:0 0 25px}.ann-list{border-top:1px solid #c9c9ce}.ann-row{padding:13px 0;border-bottom:1px solid #c9c9ce}.ann-label{font-size:11px;color:#777;margin-bottom:4px}.ann-value{font-size:13px;line-height:1.55}.note{margin-top:18px;padding:13px 14px;background:#fff7e8;border-left:3px solid var(--warning);font-size:12px;line-height:1.55;color:#5e4a2a}.sequence{font-size:11px;color:#777;margin-top:17px;letter-spacing:.04em}
+    .back,.cta,.change{text-decoration:none}.back{color:var(--ink);display:flex;align-items:center}
+    @media(max-width:800px){body{background:#fff}.presentation{display:block;padding:0}.artboard{margin:0 auto;box-shadow:none}.annotation{max-width:375px;margin:24px auto;padding:0 20px 28px}.annotation h1{font-size:24px}}
+  </style>
+  <style>
+    .body{overflow-y:auto;overscroll-behavior:contain;padding-top:10px}
+    .step{margin-bottom:8px}
+    .heading{font-size:21px;line-height:1.2}
+    .subheading{margin:3px 0 5px}
+    .service-strip{padding:5px 8px;margin-bottom:6px}
+    .city{height:36px;margin-bottom:6px}
+    .list-label{margin-bottom:5px}
+    .store-card{display:grid;gap:2px;padding:4px 7px;margin-bottom:4px;border:1px solid #e7e8ed;border-radius:0;box-shadow:0 1px 3px #10102408;transition:border-color .15s,background .15s}
+    .store-card.selected{border:1px solid var(--brand);background:#f7f8ff;box-shadow:0 0 0 1px #3643ba18}
+    .store-card-head{display:flex;align-items:center;gap:7px;min-width:0}
+    .store-name{min-width:0;flex:1;font-size:14px;line-height:18px}
+    .store-selected{flex:none;color:var(--brand);font-size:11px;line-height:16px;font-weight:650}
+    .store-distance{flex:none;padding:1px 5px;background:#f0f1ff;color:var(--brand);font-size:10px;line-height:14px;font-weight:650;white-space:nowrap}
+    .store-address{display:flex;align-items:flex-start;gap:5px;color:var(--quiet);font-size:11px;line-height:14px}
+    .store-address-icon{flex:none;display:flex;color:var(--brand)}
+    .store-address-icon svg{display:block;width:13px;height:13px}
+    .store-hours{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--quiet);font-size:11px;line-height:14px}
+    .store-hours strong{color:var(--ink);font-weight:550}
+    .store-card:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+    @media(prefers-reduced-motion:reduce){.store-card{transition:none}}
+  </style>
+  <link rel="stylesheet" href="post-purchase-flow.css">
+  <style>
+    .city-control{position:relative;z-index:2;margin:0 0 6px}
+    .city-trigger{min-height:40px;display:inline-flex;align-items:center;justify-content:flex-start;gap:10px;padding:0;border:0;background:transparent;color:var(--ink);text-align:left;font-size:20px;font-weight:650}
+    .city-trigger:focus-visible,.city-option:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+    .city-chevron{width:10px;height:10px;margin:-5px 0 0 2px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(45deg)}
+    .city-options{display:none;position:absolute;top:100%;left:0;z-index:5;min-width:150px;padding:5px;border:1px solid var(--line);background:#fff;box-shadow:0 8px 20px #0002}
+    .city-options.open{display:grid}
+    .city-option{min-height:40px;padding:0 10px;border:0;background:#fff;color:var(--ink);text-align:left;font-size:13px}
+    .city-option[aria-pressed="true"]{background:#f3f4ff;color:var(--brand);font-weight:650}
+  </style>
+  <link rel="stylesheet" href="iphone17-presentation.css">
+  <link rel="stylesheet" href="service-system.css">
+  <style>
+    .store-card-select{width:100%;display:grid;gap:2px;padding:0;border:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer}
+    .store-card-select:focus-visible,.store-contact-button:focus-visible,.wechat-dialog-close:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+    .store-card{cursor:pointer}
+    .store-map{min-height:44px;display:flex;align-items:center;gap:7px;margin-top:4px;color:var(--quiet);text-decoration:none}
+    .store-map [data-store-address]{flex:1;min-width:0}
+    .store-map .store-distance{padding:0;background:transparent;color:var(--quiet);font-size:11px;font-weight:500}
+    .store-map-chevron{width:7px;height:7px;flex:none;margin-right:3px;border-top:1.5px solid #888;border-right:1.5px solid #888;transform:rotate(45deg)}
+    .store-map:hover [data-store-address]{text-decoration:underline}
+    .store-bottom{gap:8px;margin-top:5px;padding-top:6px}
+    .store-hours{min-width:0;flex:1}
+    .store-contact-button{min-height:30px;flex:none;padding:0 10px;border:1px solid #d9ddf5;background:#f7f8ff;color:var(--brand);font-size:11px;line-height:16px;font-weight:650;white-space:nowrap;cursor:pointer}
+    .wechat-dialog{width:min(300px,calc(100% - 40px));margin:auto;padding:18px 16px 14px;border:0;background:#fff;color:var(--ink);text-align:center;box-shadow:0 18px 50px #0003}
+    .wechat-dialog::backdrop{background:#10101088}
+    .wechat-dialog h2{margin:0;font-size:18px;line-height:26px}
+    .wechat-dialog-store{margin:5px 0 0;color:var(--quiet);font-size:12px;line-height:18px}
+    .wechat-phone-unavailable{margin:10px 0 0;color:var(--quiet);font-size:12px;line-height:18px}
+    .wechat-qr-placeholder{width:152px;height:152px;display:grid;place-items:center;margin:12px auto 0;border:1px dashed #b8bcc8;background:#f7f8fa;color:var(--quiet);font-size:12px;line-height:19px}
+    .wechat-dialog-note{margin:8px 0 0;color:var(--quiet);font-size:11px;line-height:17px}
+    .wechat-dialog-close{width:100%;min-height:38px;margin-top:12px;border:0;background:var(--brand);color:#fff;font-size:14px;font-weight:650;cursor:pointer}
+  </style>
+  <script src="service-journey.js" defer></script>
+</head>
+<body data-page="store">
+  <main class="presentation">
+    <article class="artboard" aria-label="小程序设计画板：选择服务门店">
+      <div class="statusbar"><span>9:41</span><div class="status-icons"><span class="signal">▂▄▆</span><span>⌁</span><span class="battery"></span></div></div>
+      <header class="nav"><a class="back" href="12-service-order-detail.html" aria-label="返回服务订单">‹</a><span class="nav-title">选择门店</span><span class="more" aria-hidden="true">···</span></header>
+      <section class="body">
+        <div class="step" aria-label="预约进度"><span aria-current="step">1 选择门店</span><span class="step-line"></span><span>2 选择时间</span><span class="step-line"></span><span>3 预约完成</span></div>
+        <h2 class="heading">选择服务门店</h2>
+        <p class="subheading">选择城市和门店，下一步查看可预约时间。</p>
+        <div class="service-strip">
+          <div class="service-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><g stroke="#5e5e5e" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8m-8 0-2-4m12 4 2-5h5"/></g></svg></div>
+          <div class="service-info"><strong>自行车标准保养套餐</strong><span>已支付 · 待预约</span></div>
+        </div>
+        <div class="city-control">
+          <button class="city-trigger" id="city-select" type="button" aria-label="选择服务城市" aria-expanded="false" aria-controls="city-options">
+            <span data-city-label>上海</span><span class="city-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="city-options" id="city-options" role="group" aria-label="选择城市">
+            <button class="city-option" type="button" data-city="shanghai" aria-pressed="true">上海</button>
+            <button class="city-option" type="button" data-city="hangzhou" aria-pressed="false">杭州</button>
+          </div>
+        </div>
+        <div class="store-card selected" data-store-id="store-1">
+          <button class="store-card-select" type="button" data-store-select aria-pressed="true">
+            <span class="store-card-head">
+              <span class="store-name" data-store-name>上海门店 01</span>
+              <span class="store-selected" data-store-selected>✓ 已选门店</span>
+            </span>
+          </button>
+          <a class="store-address store-map" data-store-map href="https://map.qq.com/" target="_blank" rel="noopener noreferrer">
+            <span class="store-address-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <span data-store-address>上海市杨浦区淞沪路161号</span>
+            <span class="store-distance" data-store-distance>2.3 km</span>
+            <span class="store-map-chevron" aria-hidden="true"></span>
+          </a>
+          <div class="store-bottom"><div class="store-hours"><span>营业时间</span><strong data-store-hours>10:00–22:00</strong></div><button class="store-contact-button" type="button" data-store-contact>联系门店</button></div>
+        </div>
+        <div class="store-card" data-store-id="store-2">
+          <button class="store-card-select" type="button" data-store-select aria-pressed="false">
+            <span class="store-card-head">
+              <span class="store-name" data-store-name>上海门店 02</span>
+              <span class="store-selected" data-store-selected hidden>✓ 已选门店</span>
+            </span>
+          </button>
+          <a class="store-address store-map" data-store-map href="https://map.qq.com/" target="_blank" rel="noopener noreferrer">
+            <span class="store-address-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <span data-store-address>上海市徐汇区漕溪北路</span>
+            <span class="store-distance" data-store-distance>4.8 km</span>
+            <span class="store-map-chevron" aria-hidden="true"></span>
+          </a>
+          <div class="store-bottom"><div class="store-hours"><span>营业时间</span><strong data-store-hours>10:00–22:00</strong></div><button class="store-contact-button" type="button" data-store-contact>联系门店</button></div>
+        </div>
+        <div class="state-message" id="resource-message" role="status" hidden></div>
+      </section>
+      <footer class="foot"><div class="foot-meta"><span>当前选择</span><strong id="selected-store-label">上海门店 01</strong></div><button class="cta" id="primary-action" type="button">确定</button></footer>
+      <dialog class="wechat-dialog" id="store-contact-dialog" aria-labelledby="wechat-dialog-title">
+        <h2 id="wechat-dialog-title">联系门店</h2>
+        <p class="wechat-dialog-store" data-contact-store></p>
+        <p class="wechat-phone-unavailable">门店电话暂未接入，当前无法拨打。</p>
+        <div class="wechat-qr-placeholder" role="img" aria-label="企业微信二维码待门店提供">企业微信二维码<br>待门店提供</div>
+        <p class="wechat-dialog-note">点击长按添加门店服务人员微信</p>
+        <button class="wechat-dialog-close" type="button" data-close-contact>关闭</button>
+      </dialog>
+    </article>
+    <aside class="annotation">
+      <h1>选择<br>服务门店</h1>
+      <section class="prototype-controls" aria-labelledby="state-heading">
+        <h2 id="state-heading">状态切换</h2>
+        <p>切换门店查询结果，查看不同状态下的操作。</p>
+        <div class="state-options" role="group" aria-label="门店资源状态">
+          <button type="button" class="state-option" data-resource-state="available" aria-pressed="true">有候选门店</button>
+          <button type="button" class="state-option" data-resource-state="empty" aria-pressed="false">暂无匹配门店</button>
+          <button type="button" class="state-option" data-resource-state="denied" aria-pressed="false">定位未授权</button>
+        </div>
+        <p class="control-feedback" id="state-description" role="status">选择门店后可继续查看可约时段。</p>
+      </section>
+      <nav class="flow-nav" aria-label="购后流程页面">
+        <h2>流程导航</h2>
+        <div class="flow-links">
+          <a class="flow-link" href="05-payment-result.html">05 · 支付结果</a>
+          <a class="flow-link" href="06-store-selection.html" aria-current="step">06 · 选择门店</a>
+          <a class="flow-link" href="07-date-time-selection.html">07 · 选择时间</a>
+          <a class="flow-link" href="08-appointment-result.html">08 · 预约结果</a>
+        </div>
+      </nav>
+    </aside>
+  </main>
+  <script src="post-purchase-flow.js"></script>
+</body>
+</html>

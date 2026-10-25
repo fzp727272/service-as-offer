@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Service as Offer：统一订单详情，展示预约时间、门店与到店二维码">
+  <title>订单详情 · Service as Offer</title>
+  <link rel="stylesheet" href="remaining-pages.css">
+  <link rel="stylesheet" href="post-purchase-flow.css">
+  <link rel="stylesheet" href="service-system.css">
+  <style>
+    .vitamin-app.purchase-flow.order-detail .page-body {
+      padding: 0 0 24px;
+      background: var(--background-alternative);
+    }
+    .vitamin-app.purchase-flow.order-detail .page-intro {
+      margin: 0;
+      padding: 20px 16px;
+      background: var(--container-commercial-light);
+    }
+    .order-detail .page-intro .page-tag {
+      padding: 0;
+      background: transparent;
+      color: var(--content-brand);
+      font-weight: 600;
+    }
+    .vitamin-app.purchase-flow.order-detail .page-heading {
+      margin-top: 6px;
+      font-size: 22px;
+      line-height: 30px;
+    }
+    .vitamin-app.purchase-flow.order-detail .page-section {
+      margin: 0;
+      padding: 16px;
+      border-top: 8px solid var(--background-alternative);
+      background: var(--container-neutral);
+    }
+    .vitamin-app.purchase-flow.order-detail .page-section-title {
+      margin: 0 0 10px;
+      padding: 0;
+      font-size: 16px;
+      line-height: 24px;
+    }
+    .order-detail :is(.order-detail-card, .order-store-card) {
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+    .vitamin-app.purchase-flow.order-detail .page-service {
+      align-items: flex-start;
+      gap: 12px;
+      padding: 0 0 12px;
+      margin: 0 0 4px;
+      border-bottom: 1px solid var(--page-line);
+    }
+    .order-detail .page-thumb { width: 72px; height: 72px; }
+    .order-detail .page-service-copy { min-width: 0; padding-top: 2px; }
+    .vitamin-app.order-detail .page-service-copy strong { font-size: 14px; line-height: 20px; }
+    .order-detail .page-service-copy small { display: block; margin-top: 6px; overflow-wrap: anywhere; }
+    .vitamin-app.purchase-flow.order-detail .page-row {
+      grid-template-columns: 70px minmax(0, 1fr);
+      padding: 8px 0;
+      border: 0;
+      line-height: 20px;
+    }
+    .vitamin-app.purchase-flow.order-detail .page-row strong { font-weight: 500; line-height: 20px; }
+    .order-detail .order-detail-card > .page-row:first-child { padding-top: 0; }
+    .order-detail .order-detail-card > .page-row:last-child { padding-bottom: 0; }
+    .vitamin-app.purchase-flow.order-detail .order-payment-total {
+      align-items: baseline;
+      margin-top: 4px;
+      padding-top: 12px;
+      border-top: 1px solid var(--page-line);
+    }
+    .vitamin-app.purchase-flow.order-detail #order-amount {
+      color: var(--content-brand);
+      font-size: 20px;
+      line-height: 28px;
+      font-weight: 700;
+    }
+    .order-detail .order-store-label { margin-bottom: 6px; font-size: 12px; line-height: 18px; }
+    .order-detail .order-store-head { align-items: flex-start; }
+    .order-detail .order-store-head > strong { font-size: 14px; line-height: 20px; }
+    .order-detail .order-store-address-row { align-items: flex-start; }
+    .order-detail .order-store-address { font-size: 12px; line-height: 18px; }
+    .order-detail .order-store-contact {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      margin-top: -8px;
+      border: 0;
+      padding: 0;
+      font-size: 12px;
+    }
+    .order-detail .order-store-appointment { align-items: flex-start; gap: 12px; }
+    .order-detail .order-store-appointment > span { flex: none; }
+    .order-detail .order-store-appointment > strong { min-width: 0; font-size: 14px; font-weight: 600; }
+    .order-detail .appointment-actions { gap: 8px; padding-top: 4px; }
+    .order-detail .appointment-actions :is(a, button) { font-size: 12px; }
+    .order-detail .ticket-code { padding-top: 20px; }
+    .order-detail .store-queue-result {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 4px 12px;
+      margin: 0;
+      padding: 16px;
+      border: 0;
+      border-top: 8px solid var(--background-alternative);
+      background: var(--container-neutral);
+      text-align: left;
+    }
+    .order-detail .store-queue-result h2 { margin: 0; font-size: 12px; line-height: 18px; color: var(--content-quiet); font-weight: 500; }
+    .order-detail .store-queue-number { grid-column: 1; grid-row: 2 / 4; align-self: center; font-size: 36px; line-height: 44px; }
+    .order-detail .store-queue-status { grid-column: 2; grid-row: 1; margin: 0; font-size: 12px; line-height: 18px; font-weight: 500; }
+    .order-detail .store-queue-wait { grid-column: 2; grid-row: 2 / 4; align-self: center; margin: 0; font-size: 14px; line-height: 22px; }
+    .order-detail .store-queue-note { grid-column: 1 / -1; margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--page-line); font-size: 11px; line-height: 18px; }
+    .order-detail .page-timeline { margin: 4px 0 0 5px; padding-left: 17px; border-color: var(--page-line); }
+    .order-detail .page-timeline-item { padding: 0 0 18px 6px; }
+    .order-detail .page-timeline-item:last-child { padding-bottom: 0; }
+    .order-detail .page-timeline-item strong { font-size: 14px; line-height: 20px; }
+    .order-detail .page-timeline-item p { margin-top: 4px; font-size: 12px; line-height: 18px; }
+  </style>
+  <script src="service-journey.js" defer></script>
+</head>
+<body class="order-detail">
+  <main class="page-presentation">
+    <article class="page-artboard" aria-label="服务单详情评审原型">
+      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
+      <header class="page-nav"><a class="page-back" href="my-orders.html" aria-label="返回我的订单">‹</a><span class="page-nav-title">订单详情</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <div class="page-body">
+        <header class="page-intro">
+          <span class="page-tag blue" id="order-status-tag">待预约</span>
+          <h1 class="page-heading" id="order-status-heading">已支付，待预约</h1>
+        </header>
+        <section class="store-queue-result" id="store-queue-result" aria-labelledby="store-queue-title" aria-live="polite" hidden>
+          <h2 id="store-queue-title">门店排队号</h2>
+          <strong class="store-queue-number" id="store-queue-number">A-023</strong>
+          <p class="store-queue-status">扫码成功 · 正在排队</p>
+          <p class="store-queue-wait" id="store-queue-wait">预计等待约 20 分钟</p>
+          <p class="store-queue-note">排队号和等待时间为原型示例，实际以门店系统为准。</p>
+        </section>
+        <section class="page-section order-store-details" id="order-store-details" aria-labelledby="order-booking-title" hidden>
+          <h2 class="page-section-title" id="order-booking-title">预约信息</h2>
+          <div class="order-store-card">
+            <p class="order-store-label">预约门店</p>
+            <div class="order-store-head">
+              <strong id="order-store-name"></strong>
+              <span class="order-store-distance" id="order-store-distance"></span>
+            </div>
+            <div class="order-store-address-row">
+              <p class="order-store-address"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span id="order-store-address"></span></p>
+              <button class="order-store-contact" type="button" data-open-dialog="store-contact-dialog">联系门店</button>
+            </div>
+            <div class="order-store-appointment">
+              <span>预约时间</span>
+              <strong id="order-store-appointment-time"></strong>
+            </div>
+            <div class="ticket-code" id="appointment-qr" hidden>
+              <div class="ticket-qr" role="img" aria-label="到店二维码示意，不可扫码核销">
+                <svg viewBox="0 0 120 120" aria-hidden="true">
+                  <g fill="none" stroke="currentColor" stroke-width="6">
+                    <path d="M9 9h30v30H9zM81 9h30v30H81zM9 81h30v30H9z"/>
+                    <path d="M51 9v18h12V9M51 39h18v18H51v18H9V51h18v12M81 51h30v18H93v18h18v24H81V93H63v18H51V87h18V69"/>
+                  </g>
+                  <path fill="currentColor" d="M18 18h12v12H18zM90 18h12v12H90zM18 90h12v12H18zM33 51h6v6h-6zM57 57h6v6h-6zM75 63h6v12h-6zM99 93h6v12h-6z"/>
+                </svg>
+                <span>示意码</span>
+              </div>
+              <strong>预约凭证示意</strong>
+              <p>不可用于实际签到或核销</p>
+            </div>
+            <div class="appointment-actions" id="cancel-appointment-action" hidden>
+              <a href="10-reschedule-review.html">更换预约时间</a>
+              <button type="button" data-open-dialog="cancel-dialog">取消本次预约</button>
+            </div>
+          </div>
+        </section>
+        <p class="page-status" id="cancel-feedback" role="status" hidden>本次预约已取消，服务订单保留。您可以重新选择门店和时间。</p>
+        <section class="page-section" id="order-service-details">
+          <h2 class="page-section-title">服务项目</h2>
+          <div class="order-detail-card">
+          <div class="page-service">
+            <div class="page-thumb" aria-label="服务封面待提供">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#616161" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8"/></g></svg>
+            </div>
+            <div class="page-service-copy"><strong>自行车标准保养套餐</strong><small>服务单 SO-2601024 · 评审示例</small></div>
+          </div>
+          <div class="page-row"><span>装备</span><strong id="order-equipment">未指定，到店时确认</strong></div>
+          <div class="page-row"><span>服务来源</span><strong id="order-source">线上购买</strong></div>
+          </div>
+        </section>
+        <section class="page-section">
+          <h2 class="page-section-title">费用与支付</h2>
+          <div class="order-detail-card">
+          <div class="page-row"><span>交易状态</span><strong id="order-transaction-status">已支付</strong></div>
+          <div class="page-row order-payment-total"><span id="order-amount-label">实付金额</span><strong id="order-amount">¥199.90</strong></div>
+          </div>
+        </section>
+        <section class="page-section" id="booking-summary">
+          <h2 class="page-section-title">预约信息</h2>
+          <div class="order-detail-card">
+          <div class="page-row"><span>预约状态</span><strong id="order-appointment-status">尚未创建</strong></div>
+          <div class="page-row"><span>门店 / 时间</span><strong id="order-appointment-location">选择后显示</strong></div>
+          </div>
+        </section>
+        <section class="page-section" id="order-fulfillment">
+          <h2 class="page-section-title">服务履约</h2>
+          <div class="order-detail-card">
+          <div class="page-timeline" id="order-timeline" aria-label="服务阶段">
+            <div class="page-timeline-item current"><strong>待预约</strong><p>选择服务门店和时间。</p></div>
+            <div class="page-timeline-item"><strong>已预约，待到店</strong><p>按预约时间前往服务门店。</p></div>
+            <div class="page-timeline-item"><strong>扫码成功，排队中</strong><p>门店扫码签到后查看排队号和预计等待时间。</p></div>
+            <div class="page-timeline-item"><strong>服务中</strong><p>门店正在处理服务项目。</p></div>
+            <div class="page-timeline-item"><strong>已完成</strong><p>查看本次服务记录。</p></div>
+          </div>
+          </div>
+        </section>
+        <section class="page-section" id="service-record" hidden>
+          <h2 class="page-section-title">服务记录</h2>
+          <div class="order-detail-card">
+          <div class="page-row"><span>服务项目</span><strong>自行车标准保养套餐</strong></div>
+          <div class="page-row"><span>服务结果</span><strong>服务已完成</strong></div>
+          <div class="page-row"><span>完成时间</span><strong>以门店服务记录为准</strong></div>
+          </div>
+        </section>
+      </div>
+      <div class="page-foot">
+        <div class="page-foot-actions single-action" id="order-foot-actions">
+          <button class="page-button secondary" id="order-cancel-action" type="button" data-open-dialog="cancel-order-dialog" hidden>取消订单</button>
+          <a class="page-button" id="order-primary-action" href="06-store-selection.html">选择门店与时段</a>
+        </div>
+      </div>
+    </article>
+    <aside class="page-annotation">
+      <p class="page-annotation-kicker">UX SPEC 12 · REQ-012</p>
+      <h1>订单详情</h1>
+      <p>排版沿用服务详情页：白色内容区之间以浅灰色间隔分区，不使用卡片描边；章节标题与信息区保留清晰层级。顶部浅品牌色突出当前订单状态，排队号与等待时间并列，金额使用品牌色强调；字段弱化为次要文字，保留底部固定操作区。</p>
+      <p>预约成功直接进入此订单。门店与时间统一归入预约信息：待到店、排队中置于服务项目上方，已完成置于服务项目下方，已取消置于服务履约下方。门店名称上方标注“预约门店”，联系门店位于地址右侧。到店后由门店工作人员扫描顾客二维码，签到成功后在订单内显示排队号和预计等待时间。</p>
+      <section class="arrival-flow" aria-labelledby="arrival-flow-title">
+        <h2 id="arrival-flow-title">预约到店流程</h2>
+        <ol>
+          <li><strong>完成预约</strong><span>订单显示门店与到店时间</span></li>
+          <li><strong>到店出示二维码</strong><span>由门店工作人员扫码签到</span></li>
+          <li><strong>扫码成功，进入排队</strong><span>查看排队号与预计等待时间</span></li>
+        </ol>
+      </section>
+      <section class="prototype-controls" aria-labelledby="order-state-heading">
+        <h2 id="order-state-heading">订单状态切换</h2>
+        <p>切换查看不同订单状态下的详情、预约信息与下一步操作。仅用于原型演示，不会变更真实订单。</p>
+        <div class="state-options" role="group" aria-label="订单状态">
+          <button class="state-option" type="button" data-order-state="unpaid" aria-pressed="false">待付款</button>
+          <button class="state-option" type="button" data-order-state="pending" aria-pressed="false">待预约</button>
+          <button class="state-option" type="button" data-order-state="booked" aria-pressed="false">待到店</button>
+          <button class="state-option" type="button" data-order-state="queued" aria-pressed="false">排队中</button>
+          <button class="state-option" type="button" data-order-state="booking-cancelled" aria-pressed="false">预约已取消</button>
+          <button class="state-option" type="button" data-order-state="active" aria-pressed="false">服务中</button>
+          <button class="state-option" type="button" data-order-state="completed" aria-pressed="false">已完成</button>
+          <button class="state-option" type="button" data-order-state="cancelled" aria-pressed="false">订单已取消</button>
+        </div>
+        <p class="control-feedback" id="order-state-feedback" role="status" aria-live="polite"></p>
+      </section>
+      <h2>内容边界</h2>
+      <ul><li>示例状态是已支付、待预约，不代表生产状态映射已确认。</li><li>服务图只帮助识别项目，不代替维修过程照片或检测报告。</li><li>无工单服务仍能查看服务单状态。</li></ul>
+      <p class="page-status warning">GAP-016 · 状态映射与同步异常未定；预计等待时间为示例，需由门店系统提供。</p>
+      <nav class="page-flow-nav" aria-label="页面原型导航">
+        <a href="10-reschedule-review.html">10 改约评审</a><a aria-current="page" href="12-service-order-detail.html">12 服务单</a>
+        <a href="13-service-cancel-review.html">13 取消服务单</a><a href="15-message-landing.html">15 消息落地</a>
+      </nav>
+    </aside>
+  </main>
+  <dialog class="page-modal" id="cancel-dialog" aria-labelledby="cancel-dialog-title">
+    <h2 id="cancel-dialog-title">取消本次预约？</h2>
+    <p>仅取消本次门店和时段安排，保留服务订单。此操作不申请退款。</p>
+    <div class="page-modal-actions">
+      <button class="page-button danger" type="button" data-cancel-appointment>确认取消预约</button>
+      <button class="page-button secondary" type="button" data-close-dialog autofocus>保留预约</button>
+    </div>
+  </dialog>
+  <dialog class="page-modal" id="cancel-order-dialog" aria-labelledby="cancel-order-dialog-title">
+    <h2 id="cancel-order-dialog-title">取消这笔订单？</h2>
+    <p>仅待支付的服务单可在此取消。支付成功后，预约建立且到店扫码前可取消本次预约；扫码签到后不再提供取消预约入口。</p>
+    <div class="page-modal-actions">
+      <button class="page-button danger" type="button" data-cancel-order>确认取消订单</button>
+      <button class="page-button secondary" type="button" data-close-dialog autofocus>暂不取消</button>
+    </div>
+  </dialog>
+  <dialog class="page-modal" id="store-navigation-dialog" aria-labelledby="store-navigation-dialog-title">
+    <h2 id="store-navigation-dialog-title">前往服务门店</h2>
+    <p id="store-navigation-address">请确认门店信息后打开地图导航。</p>
+    <div class="page-modal-actions">
+      <a class="page-button" id="wechat-navigation-link" href="#" target="_blank" rel="noopener noreferrer">在腾讯地图中搜索门店</a>
+      <button class="page-button secondary" type="button" data-close-dialog>暂不前往</button>
+    </div>
+  </dialog>
+  <dialog class="page-modal" id="store-contact-dialog" aria-labelledby="store-contact-dialog-title">
+    <h2 id="store-contact-dialog-title">联系服务门店</h2>
+    <p><strong id="store-contact-name"></strong><br>门店联系方式暂未接入，实际联系信息以门店系统为准。</p>
+    <div class="page-modal-actions">
+      <button class="page-button secondary" type="button" data-close-dialog autofocus>知道了</button>
+    </div>
+  </dialog>
+  <script src="remaining-pages.js"></script>
+</body>
+</html>

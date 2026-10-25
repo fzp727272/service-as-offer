@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Service as Offer 原型：服务结算页">
+  <title>05 · 下单 / 确认订单 · Service as Offer</title>
+  <style>
+    :root{color-scheme:light;--ink:#101010;--quiet:#616161;--line:#e1e0df;--soft:#f5f4f5;--brand:#3643ba;--brand-soft:#f0f1ff;--warning:#db6900}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Decathlon Text","Source Han Sans CN",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}body{background:#edeef3}
+    a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+    .presentation{min-height:100vh;display:grid;grid-template-columns:402px minmax(320px,360px);align-items:center;justify-content:center;gap:48px;padding:28px 24px}
+    .artboard{width:402px;height:874px;display:flex;flex-direction:column;overflow:hidden;background:#fff;box-shadow:0 18px 55px #10102426}
+    .statusbar{height:28px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;font-weight:650}
+    .status-icons{font-size:11px;letter-spacing:2px}
+    .nav{height:48px;flex:none;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:0 14px;border-bottom:1px solid var(--line)}
+    .back{display:flex;align-items:center;min-height:44px;font-size:26px;font-weight:300}
+    .nav-title{text-align:center;font-size:16px;font-weight:650}
+    .more{text-align:right;font-size:19px;letter-spacing:2px}
+    .body{flex:1;min-height:0;overflow:auto;padding:20px 16px 24px;scrollbar-width:thin}
+    .section{margin:0 0 16px;padding:16px;border:1px solid var(--line);border-radius:0;background:#fff}
+    .section-title{margin:0 0 16px;font-size:16px;line-height:24px;font-weight:700}
+    .service{display:flex;align-items:center;gap:12px;min-width:0}
+    .service-thumb{position:relative;width:56px;height:56px;flex:none;display:grid;place-items:center;overflow:hidden;border-radius:0;background:#ededed}
+    .service-thumb svg{width:38px;height:38px}
+    .thumb-caption{position:absolute;right:0;bottom:2px;left:0;background:#edededee;color:#616161;text-align:center;font-size:7px}
+    .service-info{min-width:0;flex:1}
+    .service-name{font-size:14px;font-weight:700;line-height:20px;overflow-wrap:anywhere}
+    .service-meta{margin-top:4px;color:var(--quiet);font-size:12px;line-height:18px}
+    .price{font-size:14px;font-weight:650;white-space:nowrap}
+    .related-products{margin:16px 0;padding:12px;background:var(--soft)}
+    .related-products h4{margin:0 0 8px;color:var(--quiet);font-size:12px;line-height:18px;font-weight:400}
+    .related-products ul{display:grid;gap:4px;margin:0;padding:0;list-style:none;font-size:14px;line-height:20px}
+    [hidden]{display:none!important}
+    .detail-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line);font-size:12px;line-height:18px}
+    .detail-row span:first-child{color:var(--quiet)}
+    .detail-row strong{text-align:right;font-weight:600}
+    .total-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:4px;padding-top:12px;border-top:1px solid var(--line)}
+    .total-row span{font-size:13px;font-weight:650}
+    .total-row strong{color:var(--brand);font-size:21px;line-height:1.2}
+    .payment-options{display:grid;gap:12px;margin:0;padding:0;border:0;min-width:0}
+    .payment-options legend{padding:0}
+    .payment-option{display:flex;align-items:center;gap:12px;min-height:56px;padding:12px;border:1px solid var(--line);cursor:pointer}
+    .payment-option:has(input:checked){border-color:var(--brand);background:var(--brand-soft)}
+    .payment-option input{width:20px;height:20px;margin:0;flex:none;accent-color:var(--brand)}
+    .payment-option input:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+    .payment-copy{flex:1;min-width:0}
+    .payment-copy strong{display:block;font-size:14px;line-height:20px;font-weight:700}
+    .payment-copy small{display:block;margin-top:4px;color:var(--quiet);font-size:12px;line-height:18px}
+    .payment-rule{margin:12px 0 0;color:var(--quiet);font-size:12px;line-height:18px}
+    .notice{margin:0;padding:12px;border-left:3px solid var(--brand);background:var(--brand-soft);color:var(--brand);font-size:12px;line-height:18px}
+    .foot{flex:none;padding:12px 16px max(16px,env(safe-area-inset-bottom));border-top:1px solid var(--line);background:#fff}
+    .foot-total{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:12px;line-height:18px;color:var(--quiet)}
+    .foot-total strong{color:var(--brand);font-size:18px}
+    .cta{width:100%;min-height:48px;display:grid;place-items:center;border:0;border-radius:0;background:var(--brand);color:#fff;font-size:16px;line-height:24px;font-weight:700}
+    .prototype-caption{margin:7px 0 0;text-align:center;color:var(--quiet);font-size:10px}
+    .annotation{position:sticky;top:28px;width:100%;max-width:360px;max-height:calc(100vh - 56px);overflow:auto;padding:24px;border:1px solid var(--line);background:#fff;box-shadow:0 12px 32px #1010100d}
+    .ann-kicker{margin:0;color:var(--brand);font-size:11px;font-weight:700;letter-spacing:.13em}
+    .annotation h1{margin:12px 0 9px;font-size:30px;line-height:1.22;letter-spacing:-.7px}
+    .ann-desc{margin:0 0 20px;color:#555;font-size:14px;line-height:1.7}
+    .ann-list{border-top:1px solid #c9c9ce}
+    .ann-row{padding:12px 0;border-bottom:1px solid #c9c9ce}
+    .ann-label{margin-bottom:4px;color:#777;font-size:11px}
+    .ann-value{font-size:13px;line-height:1.55}
+    .note{margin-top:15px;padding:12px;border-left:3px solid var(--warning);background:#fff7e8;color:#5e4a2a;font-size:12px;line-height:1.6}
+    .design-link{display:block;margin-top:14px;padding:11px 12px;background:var(--brand);color:#fff;text-align:center;font-size:13px;font-weight:650}
+    @media(max-width:960px){.presentation{grid-template-columns:402px;gap:24px;padding:24px 16px}.annotation{position:static;width:min(360px,100%);max-width:360px;max-height:none}}
+    @media(max-width:600px){html,body{width:100%;height:auto;min-height:100%;overflow:auto}body{background:#fff}.presentation{width:100%;min-height:100vh;height:auto;display:flex;flex-direction:column;gap:20px;padding:12px 0 24px}.artboard{width:min(402px,100vw);max-width:402px;height:874px;flex:none;margin:0 auto;box-shadow:none}.annotation{width:min(360px,calc(100vw - 24px));max-width:360px;margin:0 auto;padding:20px}.annotation h1{font-size:24px}}
+  </style>
+  <link rel="stylesheet" href="iphone17-presentation.css">
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body data-page="checkout">
+  <main class="presentation">
+    <article class="artboard" aria-label="服务结算页设计画板">
+      <div class="statusbar"><span>9:41</span><span class="status-icons" aria-hidden="true">● ▮ ▰</span></div>
+      <header class="nav">
+        <a class="back" href="02-service-detail.html" aria-label="返回服务详情">‹</a>
+        <span class="nav-title">确认订单</span>
+        <span class="more" aria-hidden="true">···</span>
+      </header>
+      <section class="body">
+        <section class="section" aria-labelledby="service-section-title">
+          <h3 class="section-title" id="service-section-title">本次服务</h3>
+          <div class="service">
+            <div class="service-thumb" aria-hidden="true">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#5e5e5e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8m-8 0-2-4m12 4 2-5h5"/></g></svg>
+            </div>
+            <div class="service-info">
+              <div class="service-name" id="service-name">自行车标准保养套餐</div>
+              <div class="service-meta" id="service-meta">自行车 · 到店服务</div>
+            </div>
+            <strong class="price" id="item-price">¥199.90</strong>
+          </div>
+          <div class="related-products" id="related-products">
+            <h4>服务装备</h4>
+            <ul aria-label="服务装备">
+              <li id="checkout-equipment">未指定，到店时确认</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <fieldset class="payment-options" aria-describedby="payment-rule">
+            <legend class="section-title">支付方式</legend>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="wechat" checked>
+              <span class="payment-copy"><strong>微信支付</strong><small id="wechat-amount">支付 ¥199.90</small></span>
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="points">
+              <span class="payment-copy"><strong>燃值抵扣</strong><small id="points-amount">需扣除 19,990 燃值</small></span>
+            </label>
+          </fieldset>
+          <p class="payment-rule" id="payment-rule">燃值为演示换算，未查询实际余额；实际可抵扣金额以结算为准。</p>
+        </section>
+
+        <p class="notice">支付完成后，选择服务门店与到店时间。本页不会锁定预约时段。</p>
+      </section>
+      <footer class="foot">
+        <div class="foot-total" aria-live="polite"><span id="footer-label">应付金额</span><strong id="footer-total">¥199.90</strong></div>
+        <a class="cta" id="payment-action" href="05-payment-result.html">模拟微信支付</a>
+        <p class="prototype-caption">原型演示，不会发起真实支付</p>
+      </footer>
+    </article>
+
+    <aside class="annotation">
+      <h1>结算</h1>
+      <p class="ann-desc">下单前核对服务、服务装备与费用，选择微信支付或燃值抵扣；支付后继续预约门店与时段。未传入装备时不展示未经确认的配件清单。</p>
+      <a class="design-link" href="05-payment-result.html">查看支付结果</a>
+    </aside>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const categories = { bike: "自行车", badminton: "羽毛球 / 网球", ski: "滑雪" };
+    const category = categories[params.get("category")] || categories.bike;
+    const name = params.get("name") || "自行车标准保养套餐";
+    const description = params.get("description");
+    const amount = Number(params.get("price"));
+    const price = Number.isFinite(amount) && amount > 0 ? amount : 199.9;
+    const formattedPrice = `¥${price.toFixed(2)}`;
+    document.querySelector("#service-name").textContent = name;
+    document.querySelector("#service-meta").textContent = `${category} · ${description || "到店服务"}`;
+    document.querySelector("#item-price").textContent = formattedPrice;
+    document.querySelector("#checkout-equipment").textContent = params.get("equipment") || "未指定，到店时确认";
+    const points = Math.round(price * 100).toLocaleString("zh-CN");
+    document.querySelector("#wechat-amount").textContent = `支付 ${formattedPrice}`;
+    document.querySelector("#points-amount").textContent = `需扣除 ${points} 燃值`;
+
+    const renderPayment = () => {
+      const usePoints = document.querySelector('input[name="payment"]:checked').value === "points";
+      document.querySelector("#footer-label").textContent = usePoints ? "需扣燃值" : "应付金额";
+      document.querySelector("#footer-total").textContent = usePoints ? `${points} 燃值` : formattedPrice;
+      document.querySelector("#payment-action").textContent = usePoints ? "确认燃值抵扣" : "确认支付";
+      const next = new URL("05-payment-result.html", location.href);
+      next.search = params;
+      next.searchParams.set("name", name);
+      next.searchParams.set("price", price.toFixed(2));
+      next.searchParams.set("order", params.get("order") || "SO-2601024");
+      next.searchParams.set("payment", usePoints ? "points" : "wechat");
+      next.searchParams.set("paymentState", "paid");
+      ["demoState", "serviceState", "checkin", "result", "reschedule", "oldDate", "oldTime", "oldCity", "oldStore"].forEach(key => next.searchParams.delete(key));
+      next.searchParams.set("booking", "none");
+      document.querySelector("#payment-action").href = next.href;
+    };
+    document.querySelector(`input[value="${params.get("payment") === "points" ? "points" : "wechat"}"]`).checked = true;
+    document.querySelector("#payment-action").href = `05-payment-result.html${location.search}`;
+    document.querySelectorAll('input[name="payment"]').forEach((input) => {
+      input.addEventListener("change", renderPayment);
+    });
+    renderPayment();
+  </script>
+</body>
+</html>

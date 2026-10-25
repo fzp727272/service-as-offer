@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>服务全流程 · Service as Offer</title>
+  <link rel="stylesheet" href="service-system.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    a { color: inherit; text-underline-offset: 4px; }
+    .workbench { max-width: 1200px; margin: auto; padding: 24px 40px 64px; }
+    .workbench-header { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border-quiet); }
+    .wordmark { color: var(--content-brand); font-size: 18px; font-weight: 700; text-decoration: none; }
+    .workbench-header nav { display: flex; gap: 24px; font-size: 14px; }
+    .workbench-intro { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin: 40px 0 32px; }
+    h1 { margin: 0; font-size: 32px; line-height: 48px; }
+    .workbench-intro p { max-width: 44em; margin: 8px 0 0; color: var(--content-quiet); font-size: 16px; line-height: 24px; }
+    .start { flex: none; display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 24px; background: var(--content-brand); color: white; font-size: 16px; font-weight: 700; text-decoration: none; }
+    .journey-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: white; border: 1px solid var(--border-quiet); }
+    .lane { min-width: 0; padding: 24px; }
+    .lane + .lane { border-left: 1px solid var(--border-quiet); }
+    .lane h2 { margin: -24px -24px 24px; padding: 16px 24px; background: var(--content-brand); color: white; font-size: 20px; line-height: 30px; }
+    .lane ol { margin: 0 0 0 7px; padding: 0 0 0 20px; border-left: 2px solid var(--border-quiet); list-style: none; }
+    .lane li { position: relative; padding-bottom: 24px; }
+    .lane li:last-child { padding-bottom: 0; }
+    .lane li::before { position: absolute; top: 9px; left: -26px; width: 10px; height: 10px; border: 2px solid var(--content-brand); border-radius: 50%; background: white; content: ""; }
+    .node { display: block; min-height: 32px; font-size: 16px; line-height: 24px; font-weight: 700; text-decoration: none; }
+    .node:hover { color: var(--content-brand); text-decoration: underline; }
+    .lane p { margin: 4px 0 0; color: var(--content-quiet); font-size: 14px; line-height: 20px; }
+    .lane .branch { margin-top: 12px; padding: 12px; background: var(--container-commercial-light); color: var(--content-brand); font-size: 12px; line-height: 18px; }
+    .branch a { display: inline-block; min-height: 28px; padding: 4px 0; font-weight: 700; }
+    .entry-paths { margin-top: 32px; }
+    .entry-paths h2, .handoff h2 { margin: 0 0 16px; font-size: 24px; line-height: 36px; }
+    .entry-path { display: grid; grid-template-columns: 144px 1fr; align-items: baseline; gap: 16px; padding: 16px 0; border-top: 1px solid var(--border-quiet); font-size: 14px; line-height: 24px; }
+    .entry-path h3 { margin: 0; font-size: 16px; line-height: 24px; }
+    .entry-path p { margin: 0; }
+    .path-link { display: inline-block; min-height: 32px; padding: 4px 0; color: var(--content-brand); }
+    .path-connector { padding: 0 12px; color: var(--content-quiet); }
+    .handoff { margin-top: 32px; padding: 24px; background: white; border: 1px solid var(--border-quiet); }
+    .handoff dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 0; font-size: 14px; line-height: 20px; }
+    .handoff dt { margin-bottom: 8px; font-weight: 700; }
+    .handoff dd { margin: 0; color: var(--content-quiet); }
+    .handoff details { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-quiet); font-size: 14px; line-height: 20px; }
+    .handoff summary { min-height: 32px; cursor: pointer; }
+    .handoff li { margin: 8px 0; }
+    footer { padding-top: 24px; color: var(--content-quiet); font-size: 12px; line-height: 18px; }
+    @media (max-width: 760px) {
+      .workbench { padding: 20px 16px 32px; }
+      .workbench-header { align-items: start; }
+      .workbench-header nav { flex-direction: column; gap: 8px; }
+      .workbench-intro { align-items: start; flex-direction: column; gap: 20px; margin: 24px 0; }
+      .journey-board, .handoff dl { grid-template-columns: 1fr; }
+      .lane + .lane { border-left: 0; border-top: 1px solid var(--border-quiet); }
+      .entry-path { grid-template-columns: 1fr; gap: 4px; }
+      .path-connector { padding: 0 4px; }
+    }
+  </style>
+</head>
+<body class="vitamin-app">
+  <main class="workbench">
+    <header class="workbench-header">
+      <a class="wordmark" href="01-service-entry.html">迪卡侬官方服务</a>
+      <nav aria-label="设计资料"><a href="../prd/service-as-offer-ux-spec.html#journey">需求与流程说明</a><a href="../design/design.md">Vitamin C 规范</a></nav>
+    </header>
+    <section class="workbench-intro">
+      <div><h1>服务全流程</h1><p>从选服务到预约、到店和服务完成。主线连续操作，权益、维修和取消分支在对应节点接入。</p></div>
+      <a class="start" href="01-service-entry.html?scenario=all">从服务首页开始</a>
+    </section>
+    <div class="journey-board" aria-label="购买至完成的主流程">
+      <section class="lane">
+        <h2>发现与购买</h2>
+        <ol>
+          <li><a class="node" href="01-service-entry.html?scenario=all">服务首页</a><p>先看进行中服务与装备权益，再浏览服务目录。</p></li>
+          <li><a class="node" href="02-service-detail.html?category=bike">服务详情</a><p>确认服务内容、关联商品与价格。</p><div class="branch">无法判断维修项目<br><a href="04-repair-request.html">描述维修需求</a></div></li>
+          <li><a class="node" href="05-order-checkout.html">确认订单</a><p>核对金额，选择微信支付或燃值抵扣。</p></li>
+          <li><a class="node" href="05-payment-result.html">支付结果</a><p>确认支付结果后，成功可立即预约。</p></li>
+        </ol>
+      </section>
+      <section class="lane">
+        <h2>预约服务</h2>
+        <ol>
+          <li><a class="node" href="06-store-selection.html">选择门店</a><p>按城市查看可承接当前服务的门店。</p></li>
+          <li><a class="node" href="07-date-time-selection.html">选择日期与时段</a><p>区分可约、约满和不可约。</p></li>
+          <li><a class="node" href="12-service-order-detail.html?booking=created">预约成功 / 订单详情</a><p>成功后直接进入订单，优先展示到店时间、门店与二维码。</p><div class="branch">预约变更与异常<br><a href="10-reschedule-review.html?booking=created">更换时间</a> / <a href="12-service-order-detail.html?booking=created">取消本次预约</a> / <a href="08-appointment-result.html?result=conflict">时段冲突</a></div></li>
+        </ol>
+      </section>
+      <section class="lane">
+        <h2>到店与完成</h2>
+        <ol>
+          <li><a class="node" href="12-service-order-detail.html?demoState=queued">服务单详情 · 扫码后排队</a><p>到店扫码成功后，在订单详情查看门店排队号。</p><div class="branch">其他订单状态<br><a href="12-service-order-detail.html?booking=created">查看预约信息</a> / <a href="13-service-cancel-review.html?paymentState=unpaid">取消待付款服务单</a></div></li>
+          <li><a class="node" href="12-service-order-detail.html?demoState=completed">服务完成与记录</a><p>在订单详情查看已完成的服务记录。</p></li>
+          <li><a class="node" href="my-orders.html">我的订单</a><p>查看历史记录或再次购买服务。</p></li>
+        </ol>
+      </section>
+    </div>
+    <section class="entry-paths" aria-labelledby="entry-title">
+      <h2 id="entry-title">其他入口，接回同一条主线</h2>
+      <div class="entry-path"><h3>装备附带权益</h3><p><a class="path-link" href="equipment-library.html">我的装备</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="03-benefit-detail.html">权益详情</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="06-store-selection.html?context=benefit&amp;benefit=inspection&amp;name=安全检查&amp;equipment=Rockrider%20ST%20530">选择门店与时间</a>，无需再次支付。</p></div>
+      <div class="entry-path"><h3>不确定维修项目</h3><p><a class="path-link" href="04-repair-request.html">描述维修需求</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="06-store-selection.html?name=自行车维修&amp;category=bike&amp;context=repair">查看服务门店</a>，项目与报价由门店确认。</p></div>
+      <div class="entry-path"><h3>继续已有服务</h3><p><a class="path-link" href="my-orders.html">我的订单</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="12-service-order-detail.html">对应服务单</a>，按当前状态继续付款、预约或查看进度。</p></div>
+      <div class="entry-path"><h3>从消息返回</h3><p><a class="path-link" href="15-message-landing.html">服务消息</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="12-service-order-detail.html">关联服务单</a>，保留原服务与预约上下文。</p></div>
+    </section>
+    <section class="handoff" aria-labelledby="handoff-title">
+      <h2 id="handoff-title">统一设计与交互约定</h2>
+      <dl>
+        <div><dt>同一套组件</dt><dd>Vitamin C 品牌蓝、直角容器、统一文字与间距。按钮、列表、表单、状态反馈和底栏由共享样式管理。</dd></div>
+        <div><dt>同一笔服务</dt><dd>跨页保留服务、费用、装备、服务单、门店与时间。取消预约后保留服务单，重新预约不再购买。</dd></div>
+        <div><dt>05–13 交互约定</dt><dd>更换日期或门店后重新选择时段；定位未授权仍可手动选城市。失败和待确认不展示支付或预约成功，待确认时禁止重复提交。改约保留原门店和时间，成功后才更新订单；09 入口继续合并到 12 订单详情。</dd></div>
+        <div><dt>界面与说明分离</dt><dd>手机内只保留业务信息和可操作的下一步。每页右侧提供同一套流程导航，设计说明与演示状态默认折叠。</dd></div>
+      </dl>
+      <details><summary>未确认的能力与演示边界</summary><ul>
+        <li>所有页面均为交互原型，不连接真实支付、订单、资格、预约、相机或门店系统。</li>
+        <li>改约演示采用新预约成功后替换原预约；失败时保留原预约。生产资源替换、同步和幂等仍待接入。</li>
+        <li>仅待付款服务单可取消；已支付订单仅在预约成功、扫码签到前取消本次预约，保留订单，不承诺退款。</li>
+        <li>二维码为到店签到示意，不可实际核销。扫码后排队仅通过演示状态查看，未连接门店系统。</li>
+        <li>日期固定为 2026 年 10 月的演示资源；门店为示例名称，无真实地址、距离或营业时间。支付金额与燃值换算为示例，未读取余额。</li>
+        <li>排队号仅在订单详情的“排队中”演示状态显示；示例号码和状态不代表真实门店结果。维修需求仅保存于当前页面，不表示已提交门店。</li>
+        <li>已有需求缺口与 Blocked 状态继续有效；本轮整合不代表业务规则获批或生产上线。</li>
+      </ul></details>
+    </section>
+    <footer>Service as Offer · 交互原型。品牌字体未安装时回退到系统中文字体，不视为等效字体还原。</footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Service as Offer UX Spec 02 · 服务详情原型"><title>02 · 服务详情 · Service as Offer</title>
+<style>
+:root{color-scheme:light;--ink:#171717;--mid:#666;--muted:#8a8a8a;--line:#dedede;--soft:#f2f2f2;--paper:#fff;--canvas:#e8e8e8;--black:#111;--safe:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--canvas)}button,input,textarea{font:inherit;color:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #555;outline-offset:2px}.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 20px 82px}.phone{width:390px;height:min(844px,calc(100vh - 112px));min-height:620px;padding:8px;border:2px solid #222;border-radius:38px;background:#171717;box-shadow:0 18px 50px #0002;overflow:hidden}.screen{height:100%;border-radius:29px;overflow:hidden;background:#fff;position:relative}.statusbar{height:28px;padding:7px 20px 0;display:flex;justify-content:space-between;align-items:flex-start;font-size:11px;font-weight:650;background:#fff}.status-icons{letter-spacing:2px}.app{height:calc(100% - 28px);display:flex;flex-direction:column}.nav{height:48px;flex:none;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:0 14px;border-bottom:1px solid #eee;background:#fff}.nav button{border:0;background:none;font-size:22px;padding:0;text-align:left}.nav-title{font-size:16px;font-weight:650;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nav-more{text-align:right!important;font-size:18px!important}.body-scroll{flex:1;overflow:auto;padding:18px 18px 12px;scrollbar-width:none}.body-scroll::-webkit-scrollbar{display:none}.page-heading{margin:0 0 18px}.page-heading h1{font-size:23px;line-height:1.3;letter-spacing:-.4px;margin:0 0 5px;font-weight:720}.page-heading p{font-size:13px;color:var(--mid);margin:0;line-height:1.55}.step-tag{font-size:11px;color:var(--muted);letter-spacing:.08em;margin:0 0 8px}.section{margin:0 0 16px;padding:15px;border:1px solid var(--line);border-radius:13px;background:#fff}.section-title{font-size:15px;font-weight:680;margin:0 0 12px}.section p{margin:0}.intro{background:var(--soft);border-color:var(--soft);padding:19px}.intro h2{margin:0 0 6px;font-size:19px}.subtle{color:var(--mid);font-size:13px;line-height:1.55}.hero{padding:0;overflow:hidden}.hero .placeholder{margin:0;border:0;border-radius:0}.hero-copy{padding:15px}.hero-copy h2{font-size:19px;margin:0 0 6px}.badge{display:inline-flex;padding:4px 8px;border:1px solid #cfcfcf;border-radius:4px;font-size:11px;color:#444;margin-bottom:8px}.placeholder{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;text-align:center;background:#e7e7e7;border:1px solid #d1d1d1;color:#666;font-size:12px;letter-spacing:.02em}.placeholder.r43{aspect-ratio:4/3}.placeholder.small{width:70px;flex:none;border-radius:7px;overflow:hidden}.placeholder.tiny{width:54px;flex:none;border-radius:6px}.item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #eee;min-width:0}.item:first-of-type{padding-top:0}.item:last-child{border-bottom:0;padding-bottom:0}.item-copy{min-width:0;flex:1}.item-copy strong{display:block;font-size:14px;line-height:1.45}.item-copy p{font-size:12px;color:var(--mid);margin:3px 0 0;line-height:1.45}.item-price{font-size:14px;font-weight:650;white-space:nowrap;margin-left:5px}.chev{font-size:18px;color:#999}.row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #eee;font-size:13px;line-height:1.45}.row:first-of-type{padding-top:0}.row:last-child{border-bottom:0;padding-bottom:0}.row span:first-child{color:var(--mid);flex:none}.row span:last-child{text-align:right}.steps-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.step-card .placeholder{border-radius:7px}.step-card strong{display:block;margin-top:7px;font-size:12px}.step-card p{font-size:11px;color:var(--mid);line-height:1.4;margin-top:3px}.chip-list{display:flex;flex-wrap:wrap;gap:8px}.chip{min-height:40px;padding:8px 14px;border:1px solid #d2d2d2;border-radius:20px;background:#fff;font-size:13px}.chip.selected,.slot.selected,.date.selected{background:#202020;color:white;border-color:#202020}.field{margin:12px 0 0}.field label{display:block;font-size:12px;color:#555;margin-bottom:7px}.field input,.field textarea{width:100%;border:1px solid #d6d6d6;border-radius:8px;padding:11px 12px;background:#fff;font-size:13px;outline:none}.field textarea{height:84px;resize:vertical}.upload{display:flex;gap:9px;align-items:center}.upload button{width:68px;height:68px;border:1px dashed #aaa;background:#f6f6f6;border-radius:8px;font-size:24px}.upload span{font-size:12px;color:var(--mid)}.location{display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:650}.store{padding:12px 0;border-bottom:1px solid #eee;display:flex;gap:12px}.store:last-child{padding-bottom:0;border-bottom:0}.store-info{flex:1;min-width:0}.store-info strong{font-size:14px}.store-info p{margin:4px 0;color:var(--mid);font-size:12px;line-height:1.45}.store-foot{display:flex;justify-content:space-between;font-size:11px;color:#666;margin-top:7px}.radio{width:20px;height:20px;border:1.5px solid #aaa;border-radius:50%;flex:none;margin-top:4px}.radio.selected{border:6px solid #222}.dates{display:flex;gap:7px;overflow:auto;padding-bottom:3px;scrollbar-width:none}.date{flex:0 0 57px;min-height:75px;border:1px solid #ddd;border-radius:9px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:#555}.date strong{font-size:17px;color:inherit}.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.slot{height:43px;background:#fff;border:1px solid #d5d5d5;border-radius:8px;font-size:12px}.slot.full{color:#aaa;background:#f5f5f5;text-decoration:line-through}.status-panel{padding:18px;background:#f2f2f2;border-radius:12px}.status-panel strong{display:block;font-size:20px;margin-bottom:5px}.status-panel p{font-size:13px;color:#555}.total{display:flex;justify-content:space-between;align-items:center;font-size:14px}.total strong{font-size:20px}.timeline{position:relative;padding-left:22px}.timeline:before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:1px;background:#ccc}.timeline-item{position:relative;padding:0 0 18px}.timeline-item:last-child{padding-bottom:0}.timeline-item:before{content:"";position:absolute;left:-20px;top:4px;width:8px;height:8px;border:1px solid #888;border-radius:50%;background:#fff}.timeline-item.active:before{background:#222;border-color:#222;box-shadow:0 0 0 3px #ddd}.timeline-item strong{font-size:13px}.timeline-item p{font-size:11px;color:#777;margin:4px 0 0}.queue{text-align:center;padding:17px 8px}.queue .number{font-size:54px;line-height:1;font-weight:750;letter-spacing:2px;margin:8px 0 12px}.queue p{font-size:12px;color:#555}.message{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid #eee}.message:last-child{border:0;padding-bottom:0}.message-icon{width:40px;height:40px;border-radius:50%;background:#eee;display:grid;place-items:center;color:#444;font-size:17px;flex:none}.message-copy{flex:1}.message-copy strong{font-size:14px}.message-copy p{font-size:12px;color:#555;margin:4px 0;line-height:1.45}.message-copy small{font-size:10px;color:#888}.actions{display:grid;gap:9px}.text-action{min-height:44px;border:1px solid #ccc;border-radius:8px;background:#fff;font-size:13px}.footer{flex:none;padding:11px 16px calc(11px + var(--safe));border-top:1px solid #eee;background:#fff}.footer-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:12px;color:#555}.primary{width:100%;height:48px;border:0;border-radius:9px;background:#171717;color:#fff;font-size:15px;font-weight:650}.secondary{background:white;color:#171717;border:1px solid #222}.toast{position:absolute;left:50%;bottom:92px;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#222;color:#fff;padding:10px 14px;border-radius:20px;font-size:12px;white-space:nowrap;transition:.2s;z-index:7}.toast.show{opacity:1;transform:translate(-50%,0)}.modal-backdrop{position:absolute;inset:0;background:#0006;display:none;align-items:flex-end;z-index:8}.modal-backdrop.open{display:flex}.modal{width:100%;padding:22px 18px calc(18px + var(--safe));background:#fff;border-radius:18px 18px 0 0}.modal h2{font-size:18px;margin:0 0 8px}.modal p{font-size:13px;color:#666;line-height:1.55;margin:0 0 18px}.modal-actions{display:flex;gap:9px}.modal-actions button{height:46px;flex:1;border:1px solid #ccc;border-radius:8px;background:#fff}.modal-actions .confirm{background:#171717;color:#fff;border-color:#171717}.switcher{position:fixed;z-index:20;left:50%;bottom:18px;transform:translateX(-50%);height:48px;padding:5px 8px;display:flex;align-items:center;gap:8px;border:1px solid #bbb;border-radius:28px;background:#fff;box-shadow:0 4px 18px #0002;color:#222}.switcher button{width:36px;height:36px;border:0;border-radius:50%;background:#f0f0f0;font-size:20px}.switch-label{min-width:95px;text-align:center;font-size:12px;font-weight:650}.layout-b .nav{height:42px;border:0}.layout-b .body-scroll{padding:12px 18px}.layout-b .page-heading{margin-bottom:12px}.layout-b .page-heading h1{font-size:21px}.layout-b .section{padding:12px 0;margin-bottom:4px;border:0;border-bottom:1px solid #ddd;border-radius:0}.layout-b .section-title{font-size:13px;margin-bottom:8px;color:#555}.layout-b .footer{display:flex;align-items:center;gap:12px;padding:9px 14px calc(9px + var(--safe))}.layout-b .footer-meta{margin:0;flex:1;display:block}.layout-b .primary{width:auto;min-width:138px;height:44px;padding:0 14px}.layout-c .body-scroll{padding:15px 16px}.layout-c .page-heading{padding:15px;background:#f0f0f0;border-radius:14px;margin-bottom:12px}.layout-c .page-heading h1{font-size:21px}.layout-c .step-tag{margin:0 0 6px}.layout-c .section{border-radius:9px;box-shadow:0 3px 12px #0000000a}.layout-c .section:first-of-type{border-color:#aaa}.layout-c .footer{padding:9px 14px calc(9px + var(--safe))}.layout-c .primary{height:52px;border-radius:26px}.layout-c .footer-meta{font-size:11px}.layout-c .status-panel{background:#fff;border:1px solid #bbb}.layout-c .status-panel strong{font-size:23px}.variant-name{display:none}
+@media(max-width:600px){html,body{background:#fff}.stage{display:block;padding:0;min-height:100dvh}.phone{width:100%;height:100dvh;min-height:0;padding:0;border:0;border-radius:0;box-shadow:none;background:#fff}.screen{height:100%;border-radius:0}.switcher{bottom:calc(10px + var(--safe));}.app{height:calc(100% - 28px)}.body-scroll{padding-bottom:25px}.app{padding-bottom:68px}.modal{padding-bottom:calc(78px + var(--safe))}}
+@media(max-height:700px) and (min-width:601px){.phone{height:calc(100vh - 98px);min-height:0}.stage{padding-top:15px}}
+</style>
+<style>
+:root{--ink:#101010;--mid:#616161;--muted:#949494;--line:#e1e0df;--soft:#f5f4f5;--canvas:#f8f8f8;--brand:#3643ba;--commercial:#ffcd4e}
+.page-heading{margin-bottom:20px}
+.page-heading .step-tag{color:var(--brand);font-size:12px;letter-spacing:0;margin-bottom:5px}
+.page-heading h1{font-size:24px;line-height:1.35;letter-spacing:0;margin-bottom:7px}
+.page-heading .badge{margin:0 0 8px;border:0;background:#f0f1ff;color:var(--brand)}
+.section{border-color:var(--line);border-radius:12px}
+.section-title{font-size:18px;line-height:26px;margin-bottom:10px}
+.hero{border:0;border-radius:0}
+.hero .placeholder{border-radius:10px}
+.hero-copy{padding:12px 0 0}
+.hero-copy h2{font-size:15px;margin-bottom:4px}
+.hero-copy .badge{margin-bottom:6px}
+.section-heading{margin-bottom:14px}
+.section-heading .section-title{position:relative;padding-left:12px;margin-bottom:7px}
+.section-heading .section-title:before{content:"";position:absolute;left:0;top:4px;bottom:4px;width:4px;border-radius:4px;background:var(--commercial)}
+.section-heading p{font-size:14px;line-height:22px}
+.section-heading .process-note{margin-top:5px;color:var(--muted);font-size:12px;line-height:18px}
+.process-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0 20px}
+.process-flow-step{position:relative;text-align:center;min-width:0}
+.process-flow-step:not(:last-child):after{content:"›";position:absolute;right:-8px;top:11px;color:#c5c5c5;font-size:24px;line-height:32px}
+.process-flow-icon{width:54px;height:54px;margin:0 auto 8px;display:grid;place-items:center;border-radius:12px;background:var(--soft);color:var(--brand);font-size:15px;font-weight:700}
+.process-flow-step strong{display:block;font-size:13px;line-height:19px}
+.process-flow-step p{margin:3px 0 0;color:var(--mid);font-size:11px;line-height:16px}
+.step-detail-heading{margin:0 0 10px;color:var(--mid);font-size:13px;font-weight:600}
+.step-detail-list{display:grid;gap:12px}
+.step-detail{overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff}
+.step-detail-media{position:relative}
+.step-detail-media .placeholder{border:0;border-radius:0;background:#f0f0f0}
+.step-detail-media .step-number{position:absolute;left:10px;top:10px;padding:4px 7px;background:var(--commercial);color:var(--ink);font-size:10px;font-weight:700;letter-spacing:.04em}
+.step-detail-copy{padding:12px}
+.step-detail-copy strong{display:block;font-size:15px;line-height:22px;margin-bottom:4px}
+.step-detail-copy p{color:var(--mid);font-size:13px;line-height:20px}
+.nav{position:relative;z-index:3;margin-bottom:-48px;grid-template-columns:44px 1fr 90px;padding:0 10px;border:0;background:transparent}
+.nav>button:first-child{width:36px;height:36px;display:grid;place-items:center;border-radius:50%;background:#ffffffeb;font-size:23px;line-height:1}
+.nav-title{visibility:hidden}
+.nav-more{width:90px;height:36px;display:flex;align-items:center;justify-content:space-evenly;border:1px solid #0000001a!important;border-radius:20px;background:#ffffffeb!important;font-size:17px!important;line-height:1}
+.nav-more i{width:1px;height:18px;background:#dedede}
+.nav-target{position:relative;width:16px;height:16px;border:2px solid var(--ink);border-radius:50%}
+.nav-target:after{content:"";position:absolute;inset:4px;border:1.5px solid var(--ink);border-radius:50%}
+.body-scroll{padding:0 18px 12px}
+.hero{margin:0 -18px 16px}
+.hero .placeholder{border-radius:0}
+.hero-copy{padding:14px 18px 18px}
+.hero-copy h1{font-size:20px;line-height:28px;margin:0 0 7px;font-weight:700}
+.hero-facts{display:grid;gap:6px;margin-top:10px}
+.hero-fact{display:flex;gap:8px;font-size:12px;line-height:18px}
+.hero-fact-label{flex:none;color:var(--mid)}
+.hero-fact-value{color:var(--ink)}
+.app{padding-bottom:0!important}
+.row{border-color:#ededed}
+.footer{border-color:var(--line)}
+.primary{background:var(--brand);color:#fff;border-radius:0;font-weight:650}
+@media(max-width:600px){.stage{background:#fff}.body-scroll{padding-top:0}.hero{padding:0}.hero .placeholder{border-radius:0}}
+.app,.app *,.app *:before,.app *:after{border-radius:0!important}
+.app .nav>button:first-child,.app .nav-more{border-radius:50%!important}
+.app .nav-more{border-radius:20px!important}
+.app .nav-target,.app .nav-target:after{border-radius:50%!important}
+.nav{position:relative;z-index:3;margin-bottom:0;grid-template-columns:44px 1fr 90px;padding:0 10px;border:0;border-bottom:1px solid #eee;background:#fff}
+.nav-title{visibility:visible}
+.app .nav>button:first-child{border-radius:0!important}
+</style>
+<style>
+.service-switcher{padding:0px;border:0px solid var(--line);background:#fff;margin:0 0 16px}
+.service-switcher h2,.supplemental-section h2{font-size:15px;margin:0 0 10px}
+.service-switcher-head{margin-bottom:12px}
+.service-switcher-head p{margin:0;color:var(--mid);font-size:12px;line-height:18px}
+.service-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.service-option{min-width:0;min-height:112px;display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:12px;border:1px solid #dedede;border-radius:10px;background:#fff;text-align:left;line-height:1.35}
+.service-option[aria-pressed="true"]{border-color:var(--brand);background:#f6f6ff;box-shadow:inset 0 0 0 1px var(--brand)}
+.service-option-note{margin:9px 0 0!important;color:var(--mid);font-size:11px;line-height:1.5}
+.service-summary{margin:7px 0 0!important;color:var(--mid);font-size:12px;line-height:1.5}
+.supplemental-section{padding:15px;border:1px solid var(--line);background:#fff;margin:0 0 16px}
+.product-guide{display:flex;align-items:center;gap:12px}
+.product-guide .placeholder{width:64px;flex:none}
+.product-guide-copy{flex:1;min-width:0}
+.product-guide-copy strong{display:block;font-size:14px}
+.product-guide-copy p,.store-summary,.store-contact{margin:4px 0 0!important;color:var(--mid);font-size:12px;line-height:1.5}
+.product-guide button{min-height:40px;padding:0 11px;border:1px solid #222;background:#222;color:#fff;font-size:12px;white-space:nowrap}
+.nearby-store{padding:12px 0 0;border-top:1px solid #eee}
+.nearby-store strong{font-size:14px}
+.store-details{margin-top:10px}
+.store-details summary{min-height:44px;display:flex;align-items:center;padding:0 10px;border:1px solid #d2d2d2;font-size:12px;cursor:pointer}
+.store-contact{padding:10px 0}
+.qr-placeholder{width:112px;height:112px;display:grid;place-items:center;margin-top:8px;border:1px dashed #999;background:repeating-linear-gradient(45deg,#f4f4f4,#f4f4f4 5px,#fff 5px,#fff 10px);color:#555;text-align:center;font-size:11px}
+.wechat-dialog{width:min(300px,calc(100% - 40px));margin:auto;padding:18px 16px 14px;border:0;background:#fff;color:var(--ink);text-align:center;box-shadow:0 18px 50px #0003}
+.wechat-dialog::backdrop{background:#10101088}
+.wechat-dialog h2{margin:0;font-size:18px;line-height:26px}
+.wechat-dialog-store{margin:5px 0 0;color:var(--mid);font-size:12px;line-height:18px}
+.wechat-qr-placeholder{width:152px;height:152px;display:grid;place-items:center;margin:12px auto 0;border:1px dashed #b8bcc8;background:#f7f8fa;color:var(--mid);font-size:12px;line-height:19px}
+.wechat-dialog-note{margin:8px 0 0;color:var(--mid);font-size:11px;line-height:17px}
+.wechat-phone-link{min-height:42px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding:0 10px;border:1px solid #e2e4e9;color:var(--brand);font-size:12px;text-decoration:none}
+.wechat-phone-link small{color:var(--mid);font-size:11px}
+.wechat-phone-link strong{font-size:13px}
+.wechat-dialog-close{min-height:38px;width:100%;margin-top:12px;border:0;background:var(--brand);color:#fff;font-size:14px;font-weight:650}
+.nearby-section{padding:0;border:0;background:transparent}
+.nearby-list{display:grid;gap:10px}
+.nearby-card{display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border:1px solid var(--line)}
+.store-thumb{position:relative;width:76px;height:76px;flex:none;overflow:hidden;background:linear-gradient(180deg,#dce8f1 0 47%,#f4f0e7 47% 100%)}
+.store-thumb:before{content:"";position:absolute;left:8px;right:8px;top:20px;height:48px;background:#fff;border:1px solid #d9d9d9;box-shadow:0 3px 0 #ddd}
+.store-thumb:after{content:"";position:absolute;left:15px;right:15px;top:28px;height:13px;background:repeating-linear-gradient(90deg,#3643ba 0 8px,#fff 8px 12px);border-bottom:2px solid #e7b842}
+.store-thumb span{position:absolute;left:20px;right:20px;bottom:8px;height:23px;background:linear-gradient(90deg,#e5edf0 0 42%,#bbb 42% 46%,#e5edf0 46% 100%);border:1px solid #ddd;z-index:1}
+.store-card-info{flex:1;min-width:0}
+.store-card-name{display:block;overflow:hidden;font-size:14px;line-height:20px;font-weight:650;text-overflow:ellipsis;white-space:nowrap}
+.store-card-meta{display:flex;align-items:center;gap:6px;margin-top:7px}
+.technician-badge{padding:2px 6px;background:#fff5d6;color:#8b6500;font-size:10px;line-height:16px;white-space:nowrap}
+.store-card-distance{margin-left:auto;color:var(--brand);font-size:12px;font-weight:650;white-space:nowrap}
+.store-more{width:100%;min-height:44px;margin-top:10px;border:1px solid var(--line);background:#fff;color:var(--brand);font-size:13px;font-weight:650}
+.store-sheet-backdrop{position:absolute;inset:0;z-index:8;display:flex;align-items:flex-end;background:#0006;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+.store-sheet-backdrop.open{opacity:1;visibility:visible}
+.store-sheet{width:100%;max-height:82%;display:flex;flex-direction:column;padding:6px 12px calc(12px + var(--safe));background:#f7f8fa;border-radius:0;transform:translateY(20px);transition:transform .2s}
+.store-sheet-backdrop.open .store-sheet{transform:translateY(0)}
+.compare-sheet-backdrop{position:absolute;inset:0;z-index:9;display:flex;align-items:flex-end;background:#0006;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+.compare-sheet-backdrop.open{opacity:1;visibility:visible}
+.compare-sheet{width:100%;max-height:88%;display:flex;flex-direction:column;padding:10px 0 calc(12px + var(--safe));overflow:hidden;border-radius:18px 18px 0 0;background:#fff;transform:translateY(0);transition:transform .2s}
+.compare-sheet-backdrop.open .compare-sheet{transform:translateY(0)}
+.compare-sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:0 16px 8px}
+.compare-sheet-title{margin:0;font-size:18px;line-height:26px}
+.compare-sheet-subtitle{margin:3px 0 0;color:var(--mid);font-size:12px;line-height:18px}
+.compare-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.compare-table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:12px;line-height:18px}
+.compare-table th,.compare-table td{width:132px;padding:12px 10px;border-right:1px solid #e8e8e8;border-bottom:1px solid #e8e8e8;vertical-align:middle}
+.compare-table thead th{position:sticky;top:0;z-index:3;background:#f7f8fa;text-align:center}
+.compare-table thead th:first-child{left:0;z-index:5;width:94px;text-align:left}
+.compare-table tbody th[scope="row"]{position:sticky;left:0;z-index:2;width:94px;background:#fff;color:var(--mid);font-weight:500;text-align:left}
+.compare-table tbody td{background:#fafbfc;text-align:center;overflow-wrap:anywhere}
+.compare-table [data-current="true"]{background:#f0f1ff;color:var(--brand)}
+.compare-table .compare-group th{position:static;width:auto;padding:8px 10px;background:#f2f3f5;color:var(--ink);font-size:12px;font-weight:650;text-align:left}
+.compare-package-name{display:block;color:var(--ink);font-size:12px;line-height:17px;font-weight:650}
+.compare-package-price{display:block;margin-top:5px;color:var(--brand);font-size:16px;line-height:20px;font-weight:700;white-space:nowrap}
+.compare-current-label{display:none;margin-top:5px;color:var(--brand);font-size:10px;line-height:14px}
+.compare-package[data-current="true"] .compare-current-label{display:block}
+.compare-sheet-note{margin:8px 16px 0;color:var(--mid);font-size:11px;line-height:16px}
+.compare-sheet-hint{margin:0 16px 7px;color:var(--muted);font-size:11px;line-height:16px}
+@media(max-width:600px){.compare-sheet-backdrop{position:fixed}}
+.sheet-handle{width:34px;height:4px;margin:0 auto 8px;border-radius:0;background:#d9d9d9}
+.store-sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.store-sheet-title{margin:0;font-size:18px;line-height:24px;font-weight:700}
+.sheet-close{width:32px;height:32px;border:0;background:transparent;font-size:24px;color:#666}
+.city-control{position:relative;margin-bottom:12px}
+.city-trigger{min-height:40px;display:inline-flex;align-items:center;justify-content:flex-start;gap:10px;padding:0;border:0;background:transparent;text-align:left;font-size:20px;font-weight:650}
+.city-chevron{width:10px;height:10px;margin:-5px 0 0 2px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(45deg)}
+.city-options{display:none;position:absolute;top:100%;left:0;z-index:5;min-width:150px;padding:5px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 20px #0002}
+.city-options.open{display:grid}
+.city-option{min-height:40px;padding:0 10px;border:0;background:#fff;text-align:left;font-size:13px}
+.city-option[aria-pressed="true"]{color:var(--brand);background:#f3f4ff;font-weight:650}
+.store-sheet-list{overflow:auto;display:grid;gap:6px;padding-bottom:6px}
+.sheet-store-card{display:grid;gap:6px;padding:9px 10px;border:1px solid #e7e8ed;border-radius:0;background:#fff;box-shadow:0 1px 3px #10102408}
+.sheet-store-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.sheet-store-card-head strong{min-width:0;font-size:15px;line-height:21px;font-weight:700}
+.sheet-store-distance{flex:none;padding:2px 6px;border-radius:0;background:#f0f1ff;color:var(--brand);font-size:10px;line-height:15px;font-weight:650;white-space:nowrap}
+.sheet-store-address{display:flex;align-items:flex-start;gap:6px;margin:0;color:var(--mid);font-size:12px;line-height:18px}
+.sheet-store-address-icon{flex:none;color:var(--brand)}
+.sheet-store-hours{display:flex;align-items:center;gap:10px;color:var(--mid);font-size:11px;line-height:17px}
+.sheet-store-hours strong{color:var(--ink);font-weight:550}
+.store-contact-button{min-height:32px;display:inline-flex;align-items:center;justify-content:center;padding:0 9px;border:1px solid var(--line);background:#fff;color:var(--brand);font-size:11px;line-height:16px;text-decoration:none;white-space:nowrap;cursor:pointer}
+.store-sheet .store-contact-button{min-height:30px;padding:0 10px;border:1px solid #d9ddf5;border-radius:0;background:#f7f8ff;color:var(--brand);font-size:11px;font-weight:650}
+@media(max-width:600px){.store-sheet{max-height:84%;padding-bottom:calc(18px + var(--safe))}}
+</style>
+<style>
+.service-switcher{padding:0px;margin:0 0 12px;border:0px solid var(--line);background:#fff}
+.service-switcher h2,.store-selection h2{margin:0 0 12px;font-size:16px;line-height:24px}
+.service-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.service-option{min-height:94px;padding:10px;text-align:left;display:flex;flex-direction:column;justify-content:space-between}
+.service-option[aria-pressed="true"]{border-color:var(--brand);background:#f0f1ff;color:var(--ink)}
+.service-option-name{font-size:13px;line-height:18px;font-weight:650}
+.service-option-price{color:var(--brand);font-size:20px;line-height:24px;font-weight:700}
+.service-option-price small{margin-right:1px;font-size:12px;font-weight:500}
+.service-option-blurb{color:var(--mid);font-size:11px;line-height:16px}
+.service-option[aria-pressed="true"] .service-option-blurb{color:var(--mid)}
+.service-option-note{margin:10px 0 0!important}
+.service-selected-detail{margin-top:12px}
+.service-selected-detail strong{font-size:14px;line-height:20px}
+.service-selected-detail p{margin:4px 0 0;color:var(--mid);font-size:12px;line-height:18px}
+.compare-toggle{    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* margin-top: 11px; */
+    padding: 0 13px;
+    border: 0;
+    border-radius: 9px;
+    background: #fff;
+    color: var(--brand);
+    font-size: 13px;
+    font-weight: 650;
+    text-align: left;}
+.compare-chevron{width:16px;height:16px;flex:none;transform:rotate(90deg);transition:transform .2s}
+.compare-toggle[aria-expanded="true"] .compare-chevron{transform:rotate(-90deg)}
+.store-selection{margin:0 0 16px;padding:0;border:0;background:transparent}
+.store-summary-copy{display:grid;gap:2px;min-width:0}
+.store-summary-name{overflow:hidden;font-size:14px;line-height:20px;font-weight:650;text-overflow:ellipsis;white-space:nowrap}
+.store-summary-distance{color:var(--brand);font-size:12px;line-height:18px;font-weight:650}
+.maintenance-guide{margin:0 0 16px}
+.maintenance-heading{margin:0;padding:8px 0;font-size:16px;line-height:24px;font-weight:700}
+.maintenance-card{padding:16px;border:1px solid #ededed;background:#fff}
+.maintenance-reasons{display:grid;gap:8px}
+.maintenance-reason{display:flex;align-items:flex-start;gap:12px;padding:16px;border:1px solid #ededed;background:#fff}
+.maintenance-icon{width:36px;height:36px;flex:none;display:grid;place-items:center;padding:8px;background:#e1e3f5}
+.maintenance-icon img{width:18px;height:18px;object-fit:contain}
+.maintenance-reason-copy{min-width:0}
+.maintenance-reason-copy strong{display:block;font-size:14px;line-height:20px}
+.maintenance-reason-copy p{margin:4px 0 0;color:var(--mid);font-size:12px;line-height:18px}
+.maintenance-system{padding:10px 0}
+.maintenance-system:first-child{padding-top:0}
+.maintenance-system:last-of-type{padding-bottom:4px}
+.maintenance-system-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.maintenance-system-head img{width:18px;height:18px;object-fit:contain}
+.maintenance-system-head strong{font-size:16px;line-height:24px}
+.maintenance-system ul{display:grid;gap:4px;margin:0;padding:0 0 0 26px;color:var(--mid);font-size:14px;line-height:20px;list-style:none}
+.maintenance-system li:before{content:"•";margin-right:5px}
+.maintenance-divider{height:1px;margin:0;background:#ededed}
+.maintenance-full-list{width:100%;min-height:40px;display:flex;align-items:center;justify-content:center;gap:4px;margin-top:6px;padding:0;border:0;background:#fff;color:var(--brand);font-size:14px;font-weight:700}
+.maintenance-full-list img{width:16px;height:16px}
+.maintenance-outcomes{margin-top:16px}
+.maintenance-outcomes .maintenance-heading{padding:8px 0}
+.maintenance-outcome-list{display:grid;gap:12px;padding:16px;border:1px solid #ededed;background:#fff}
+.maintenance-outcome{display:flex;align-items:flex-start;gap:8px;font-size:14px;line-height:20px}
+.maintenance-outcome img{width:16px;height:16px;flex:none;margin-top:2px}
+.maintenance-notice{margin-top:16px;padding:16px;border:1px solid #ededed;background:#eef1ff}
+.maintenance-notice-title{display:flex;align-items:center;gap:6px;margin-bottom:8px;color:var(--brand);font-size:14px;line-height:20px;font-weight:700}
+.maintenance-notice-title img{width:16px;height:16px}
+.maintenance-notice p{margin:0;font-size:14px;line-height:20px}
+.maintenance-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.maintenance-tags span{padding:4px 8px;border:1px solid #ededed;background:#fff;color:var(--mid);font-size:10px;line-height:14px}
+.maintenance-notice small{display:block;margin-top:8px;color:var(--mid);font-size:10px;line-height:14px}
+.process-section{margin-top:0;border:none;padding: 0;}
+.footer-meta strong{color:var(--brand)}
+@media(max-width:360px){.service-option{padding:8px}}
+</style>
+<link rel="stylesheet" href="iphone17-presentation.css">
+<style>
+.app .nav-title{font-size:16px;line-height:24px}
+.app .hero-copy h1{margin:0;font-size:20px;line-height:28px;letter-spacing:0;font-weight:700}
+.app .service-hero-price{display:block;margin:6px 0 8px;color:var(--brand);font-size:22px;line-height:28px;font-weight:700}
+.app .service-summary{margin-top:0!important;font-size:13px;line-height:20px}
+.app .hero-fact{font-size:13px;line-height:20px}
+.app .section-title,.app .service-switcher h2,.app .store-selection h2,.app .maintenance-heading{font-size:16px;line-height:24px;font-weight:700}
+.app .service-switcher-head p{font-size:13px;line-height:20px}
+.app .service-option-name,.app .item-copy strong,.app .store-summary-name,.app .maintenance-reason-copy strong,.app .maintenance-system-head strong{font-size:14px;line-height:20px}
+.app .service-option-price{font-size:18px;line-height:24px}
+.app .service-option-blurb,.app .maintenance-reason-copy p{font-size:12px;line-height:18px}
+.app .maintenance-system ul,.app .maintenance-outcome,.app .maintenance-notice p{font-size:13px;line-height:20px}
+.app .primary{display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;line-height:22px;font-weight:650}
+.app .purchase-price{font-size:16px;line-height:24px;font-weight:700}
+.app .store-selection{margin:0 0 16px;padding:0;border:0;background:transparent}
+.app .store-summary-info{position:relative;width:100%;display:grid;grid-template-columns:minmax(0,1fr) 20px;align-items:center;gap:4px 10px;padding:10px 0;border:0;background:transparent;text-align:left}
+.app .store-summary-name{overflow:hidden;font-size:14px;line-height:20px;font-weight:550;text-overflow:ellipsis;white-space:nowrap}
+.app .store-summary-address{grid-column:1;color:var(--mid);font-size:12px;line-height:18px}
+.app .store-summary-meta{grid-column:1;display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--mid);font-size:12px;line-height:18px}
+.app .store-summary-chevron{grid-column:2;grid-row:1/4;color:var(--ink);font-size:24px;line-height:24px;text-align:center}
+.app .store-summary-actions{display:flex;align-items:center;gap:10px;margin-top:4px}
+.app .store-summary-actions .store-contact-button{min-height:36px;padding:0 12px;border-radius:0!important;font-size:12px;font-weight:650}
+.app .store-selection{display:grid;gap:8px;border-bottom: 1px solid var(--border-quiet);}
+.app .store-summary-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.app .store-summary-heading h2{margin:0;font-size:16px;line-height:20px;font-weight:700}
+.app .store-summary-more{min-height:32px;display:inline-flex;align-items:center;gap:4px;padding:0;border:0;background:transparent;color:var(--brand);font-size:12px;line-height:18px;white-space:nowrap}
+.app .store-summary-more img{width:16px;height:16px}
+.app .store-summary-card{min-width:0;min-height:60px;display:flex;align-items:center;gap:8px;}
+.app .store-summary-copy{min-width:0;flex:1;display:grid;gap:4px}
+.app .store-summary-title{min-width:0;display:flex;align-items:center;gap:4px}
+.app .store-summary-name{min-width:0;overflow:hidden;font-size:14px;line-height:20px;font-weight:700;text-overflow:ellipsis;white-space:nowrap}
+.app .technician-badge{flex:none;padding:2px 4px;background:linear-gradient(100deg,#ffc039 2%,#eebc47 49%,#eeb335 96%);color:var(--ink);font-size:10px;line-height:10px;white-space:nowrap}
+.app .store-summary-address{margin:0!important;overflow:hidden;color:var(--mid);font-size:14px;line-height:20px;text-overflow:ellipsis;white-space:nowrap}
+.app .store-summary-card .store-contact-button{min-width:80px;min-height:28px;flex:none;padding:0 12px;border:1px solid var(--brand);border-radius:0!important;background:transparent;color:var(--brand);font-size:14px;line-height:20px;font-weight:500}
+.app .store-more{min-height:40px;margin:0;padding:0;border:0;background:transparent;text-align:left}
+.app .store-more:hover{text-decoration:underline}
+.app .store-sheet{padding:6px 12px calc(10px + var(--safe));border-radius:0!important;background:#f7f8fa}
+.app .store-sheet .city-control{margin:0 0 12px}
+.app .store-sheet-list{flex:1;min-height:0;gap:6px;padding-bottom:6px;overscroll-behavior:contain}
+.app .sheet-store-card{display:grid;gap:5px;padding:8px 9px;border:1px solid #e7e8ed;border-radius:0!important;background:#fff;box-shadow:0 1px 3px #10102408;transition:border-color .15s,background .15s}
+.app .sheet-store-card[data-selected="true"]{border-color:var(--brand);background:#f7f8ff;box-shadow:0 0 0 1px #3643ba18}
+.app .sheet-store-select{width:100%;display:grid;gap:4px;padding:0;border:0;background:transparent;text-align:left}
+.app .sheet-store-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.app .sheet-store-card-head strong{min-width:0;font-size:14px;line-height:19px;font-weight:700}
+.app .sheet-store-selected{flex:none;color:var(--brand);font-size:11px;line-height:16px;font-weight:650}
+.app .sheet-store-distance{flex:none;padding:1px 5px;border-radius:0!important;background:#f0f1ff;color:var(--brand);font-size:10px;line-height:14px;font-weight:650;white-space:nowrap}
+.app .sheet-store-address{display:flex;align-items:flex-start;gap:5px;margin:0;color:var(--mid);font-size:11px;line-height:16px}
+.app .sheet-store-address-icon{flex:none;display:flex;color:var(--brand)}
+.app .sheet-store-address-icon svg{display:block;width:14px;height:14px}
+.service-detail .app .sheet-store-map{min-height:44px;display:flex;align-items:center;gap:7px;margin:4px 0 0;color:var(--mid);text-decoration:none}
+.service-detail .app .sheet-store-map-label{flex:1;min-width:0}
+.service-detail .app .sheet-store-map .sheet-store-distance{padding:0;background:transparent;color:var(--mid);font-size:11px;font-weight:500}
+.service-detail .app .sheet-store-map-chevron{width:7px;height:7px;flex:none;margin-right:3px;border-top:1.5px solid #888;border-right:1.5px solid #888;transform:rotate(45deg)}
+.service-detail .app .sheet-store-map:hover .sheet-store-map-label{text-decoration:underline}
+.service-detail .app .sheet-store-card{cursor:pointer}
+.service-detail .app .store-sheet-actions{flex:none;padding:12px 0 0}
+.service-detail .app .store-sheet-actions .primary{height:48px}
+.app .sheet-store-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:3px}
+.app .sheet-store-hours{display:flex;align-items:center;gap:10px;color:var(--mid);font-size:11px;line-height:16px}
+.app .sheet-store-hours strong{color:var(--ink);font-weight:550}
+.app .store-sheet .store-contact-button{min-height:28px;padding:0 9px;border:1px solid #d9ddf5;border-radius:0!important;background:#f7f8ff;color:var(--brand);font-size:11px;font-weight:650}
+.app .wechat-dialog,.app .wechat-qr-placeholder,.app .wechat-dialog-close{border-radius:0!important}
+</style>
+  <link rel="stylesheet" href="service-system.css">
+<style>
+.service-detail .app{height:100%;font-family:"Decathlon Text","Source Han Sans CN","PingFang SC","Microsoft YaHei",sans-serif}
+.service-detail .app .body-scroll{padding:0 0 24px;scroll-behavior:smooth;overscroll-behavior:contain}
+.service-detail .app .nav{grid-template-columns:90px 1fr 90px;padding:0 16px}
+.service-detail .app .nav>button:first-child{width:44px;height:44px;text-align:left}
+.service-detail .app .hero{margin:0;border:0;background:#fff}
+.service-detail .service-cover{position:relative;height:240px;overflow:hidden;background:var(--soft)}
+.service-detail .service-cover img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 56%}
+.service-detail .service-cover.is-illustration img{object-fit:contain}
+.service-detail .service-cover span{position:absolute;right:12px;bottom:10px;padding:3px 7px;background:#ffffffed;color:var(--mid);font-size:10px;line-height:16px}
+.service-detail .app .hero-copy{padding:18px 20px 20px}
+.service-detail .app .hero-copy h1{font-size:20px;line-height:28px;margin:0 0 8px}
+.service-detail .app .service-summary{font-size:14px;line-height:22px;color:var(--mid)}
+.service-detail .service-attributes{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;color:var(--mid);font-size:12px;line-height:20px}
+.service-detail .service-attributes span{display:inline-flex;align-items:center;gap:5px}
+.service-detail .service-attributes img{width:15px;height:15px}
+.service-detail .app :is(.service-switcher,.store-selection,.process-section,.maintenance-guide,.arrival-notes,.service-help){margin:0;padding:20px;border:0;border-top:8px solid var(--background-alternative);background:#fff}
+.service-detail .app :is(.service-switcher h2,.store-selection h2,.section-title,.maintenance-heading){margin:0;font-size:16px;line-height:24px;font-weight:700}
+.service-detail .app .service-switcher-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.service-detail .service-switcher-head>span{color:var(--mid);font-size:12px;white-space:nowrap}
+.service-detail .app .service-options{gap:10px}
+.service-detail .app .service-option{position:relative;min-height:104px;gap:6px;padding:12px;border:1px solid var(--line);box-shadow:none;background:#fff}
+.service-detail .app .service-option[aria-pressed="true"]{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand);background:var(--container-commercial-light)}
+.service-detail .service-option[aria-pressed="true"]:after{content:"✓";position:absolute;right:0;bottom:0;width:18px;height:18px;background:var(--brand);color:#fff;font-size:12px;text-align:center;line-height:18px}
+.service-detail .app .service-option-name{font-size:14px;line-height:20px;font-weight:700}
+.service-detail .app .service-option-price{font-size:20px;line-height:24px;color:var(--ink);font-variant-numeric:tabular-nums}
+.service-detail .app .service-option[aria-pressed="true"] .service-option-price{color:var(--brand)}
+.service-detail .app .service-option-blurb{font-size:12px;line-height:18px;padding-right:4px}
+.service-detail .app .compare-toggle{min-height:44px;justify-content:space-between;padding:0;margin-top:8px;font-size:13px}
+.service-detail .app .compare-chevron{transform:none}
+.service-detail .app .store-selection{gap:12px}
+.service-detail .app .store-summary-more{min-height:32px;font-size:13px}
+.service-detail .app .store-summary-card{display:block;min-height:0}
+.service-detail .app .store-summary-title{display:block}
+.service-detail .app .store-summary-name{display:block;white-space:normal;font-size:14px;line-height:22px}
+.service-detail .app .store-summary-address{white-space:normal;overflow:visible;font-size:12px;line-height:20px}
+.service-detail .store-summary-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.service-detail .store-summary-bottom>span{color:var(--mid);font-size:12px;line-height:20px}
+.service-detail .app .store-summary-card .store-contact-button{min-height:36px;padding:0 14px;font-size:13px}
+.service-detail .app .section-heading{margin:0 0 16px}
+.service-detail .app .section-heading .section-title{padding:0}
+.service-detail .app .section-heading .section-title:before{display:none}
+.service-detail .app .section-heading p{margin-top:6px;font-size:12px;line-height:20px;color:var(--mid)}
+.service-detail .service-content-summary{margin:12px 0 16px!important;padding:12px;background:var(--container-commercial-light);font-size:14px;line-height:22px}
+.service-detail .service-step-list{list-style:none;margin:0;padding:0;counter-reset:service-step}
+.service-detail .service-step-list li{position:relative;padding:0 0 20px 38px;counter-increment:service-step}
+.service-detail .service-step-list li:before{content:counter(service-step);position:absolute;left:0;top:0;width:24px;height:24px;background:var(--container-commercial-light);color:var(--brand);text-align:center;font-size:12px;line-height:24px;font-weight:700}
+.service-detail .service-step-list li:not(:last-child):after{content:"";position:absolute;left:11px;top:30px;bottom:6px;width:1px;background:var(--line)}
+.service-detail .service-step-list li:last-child{padding-bottom:0}
+.service-detail .service-step-list strong{font-size:14px;line-height:24px}
+.service-detail .service-step-list p{margin:4px 0 0;color:var(--mid);font-size:12px;line-height:20px}
+.service-detail .app .maintenance-guide{padding-top:8px;padding-bottom:8px}
+.service-detail .service-disclosure{border-bottom:1px solid var(--border-quiet)}
+.service-detail .service-disclosure:last-of-type{border-bottom:0}
+.service-detail .service-disclosure summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:56px;list-style:none;cursor:pointer;font-size:14px;line-height:22px;font-weight:700}
+.service-detail .service-disclosure summary::-webkit-details-marker{display:none}
+.service-detail .service-disclosure summary:after{content:"+";font-size:20px;font-weight:400;color:var(--mid)}
+.service-detail .service-disclosure[open] summary:after{content:"−"}
+.service-detail .app .maintenance-reasons{gap:16px;padding:4px 0 20px}
+.service-detail .app .maintenance-reason{padding:0;border:0}
+.service-detail .app .maintenance-icon{width:32px;height:32px;padding:7px;background:var(--container-commercial-light)}
+.service-detail .app .maintenance-card{padding:0 0 16px;border:0}
+.service-detail .app .maintenance-system-head strong{font-size:14px;line-height:22px}
+.service-detail .app .maintenance-system ul{font-size:12px;line-height:20px}
+.service-detail .app .maintenance-outcome-list{padding:0 0 16px;border:0;gap:12px}
+.service-detail .app .maintenance-outcome{font-size:13px;line-height:20px}
+.service-detail .app .maintenance-notice{padding:14px;margin:8px 0 12px;border:0;background:var(--background-alternative)}
+.service-detail .app .maintenance-notice p{font-size:12px;line-height:20px;color:var(--mid)}
+.service-detail .app .maintenance-notice-title{font-size:13px;line-height:20px;color:var(--ink)}
+.service-detail .app .arrival-notes .section-title{margin-bottom:16px}
+.service-detail .app .arrival-notes .row{font-size:13px;line-height:22px}
+.service-detail .service-help>a{display:flex;align-items:center;justify-content:space-between;min-height:48px;border:0;color:var(--brand);font-size:14px}
+.service-detail .app .supplemental-section{margin:12px 0 0;padding:12px 0 0;border:0;border-top:1px solid var(--line)}
+.service-detail .app .supplemental-section .product-guide{margin:12px 0}
+.service-detail .app .supplemental-section .text-action{width:100%;min-height:44px}
+.service-detail .app .footer{display:flex;align-items:center;gap:16px;padding:12px 20px max(16px,var(--safe));border-top:1px solid var(--line);box-shadow:0 -4px 16px #10101006}
+.service-detail .purchase-summary{flex:1;min-width:0;display:grid;gap:2px}
+.service-detail .purchase-summary small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mid);font-size:11px;line-height:18px}
+.service-detail .purchase-summary strong{color:var(--brand);font-size:24px;line-height:28px;font-variant-numeric:tabular-nums}
+.service-detail .app .footer .primary{width:160px;flex:none;min-height:48px;display:grid;place-content:center;gap:2px;font-size:15px;line-height:22px}
+.service-detail .app .footer .primary small{font-size:10px;line-height:14px;font-weight:400}
+.service-detail .app .footer .primary.benefit-purchase{width:100%;font-size:14px}
+.service-detail .app .sheet-close{width:44px;height:44px;flex:none}
+.service-detail .app :is(.store-sheet-backdrop,.compare-sheet-backdrop){transition:opacity .2s}
+.service-detail .app .store-sheet{padding:12px 20px max(20px,var(--safe))}
+.service-detail .app .sheet-store-card{padding:14px;gap:0px;box-shadow:none}
+.service-detail .app .sheet-store-card-head{flex-wrap:wrap}
+.service-detail .app .sheet-store-card-head strong{flex:1 1 180px;font-size:14px;line-height:22px}
+.service-detail .app .sheet-store-address{font-size:12px;line-height:20px}
+.service-detail .app .store-sheet .store-contact-button{min-height:36px;font-size:12px}
+.service-detail .app .sheet-store-hours{font-size:12px;line-height:20px}
+.service-detail .app .sheet-store-selected{font-size:12px}
+.service-detail .app .compare-sheet-note{padding:10px 12px;margin:0 20px 12px;background:var(--background-alternative);font-size:12px;line-height:18px}
+.service-detail .app .compare-sheet-hint{color:var(--mid);margin:0 20px 12px}
+.service-detail .app .compare-sheet-head{padding:0 20px 12px}
+.service-detail .app .compare-table th,.service-detail .app .compare-table td{width:140px;padding:12px}
+.service-detail .app .compare-package-name{font-size:13px;line-height:20px}
+.service-detail .app .wechat-dialog-close{min-height:44px}
+.service-detail .app .wechat-phone-unavailable{margin:12px 0 0;padding:12px;background:var(--background-alternative);font-size:12px;line-height:20px;color:var(--mid)}
+.service-detail .app :is(button,a,summary,[tabindex]):focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+@media(max-width:600px){
+ .service-detail .stage{display:block;padding:0;min-height:100dvh}
+ .service-detail .phone{width:100%;max-width:none;height:100dvh;min-height:0;box-shadow:none}
+ .service-detail .design-panel{display:none}
+ .service-detail .app .compare-sheet-backdrop{position:absolute}
+}
+@media(max-width:360px){
+ .service-detail .app :is(.hero-copy,.service-switcher,.store-selection,.process-section,.maintenance-guide,.arrival-notes,.service-help){padding-left:16px;padding-right:16px}
+ .service-detail .app .service-option{padding:10px}
+ .service-detail .app .service-option-name{font-size:13px}
+ .service-detail .app .footer{padding-left:16px;padding-right:16px;gap:10px}
+ .service-detail .app .footer .primary{width:144px}
+}
+@media(prefers-reduced-motion:reduce){
+ .service-detail .app .body-scroll{scroll-behavior:auto}
+ .service-detail .app *{transition:none!important}
+}
+</style>
+  <script src="service-journey.js" defer></script>
+</head>
+<body class="service-detail">
+<div class="stage">
+  <div class="phone"><div class="screen"><div class="app"></div></div></div>
+  <aside class="design-panel" aria-labelledby="detail-design-title">
+    <p class="design-kicker">UX SPEC 02 / SERVICE AS OFFER</p>
+    <h1 id="detail-design-title">服务详情</h1>
+    <p>先了解服务，再比较套餐。用真实场景图、清晰的选择状态和持续可见的价格，帮助用户确认适合自己的服务。</p>
+    <div class="design-facts">
+      <div class="design-fact"><strong>信息层级</strong><span>服务概要 → 套餐选择 → 门店 → 所选套餐内容。保养建议按需展开，减少重复阅读。</span></div>
+      <div class="design-fact"><strong>主要动作</strong><span>底部同步所选套餐与价格；购买服务先进入结算核对，不直接扣款。附近门店仅供了解，预约时确认服务门店。</span></div>
+      <div class="design-fact"><strong>画板与交互</strong><span>桌面保留 402 × 874 评审画板；手机适配实际视口。弹层支持键盘焦点约束、Esc 关闭与焦点返回。</span></div>
+    </div>
+    <div class="design-note">服务内容、价格、门店电话及企业微信码均为评审示意或待接入；生产服务规则与资源需由正式数据确认。</div>
+    <a class="design-link" href="05-order-checkout.html">查看结算页设计稿</a>
+  </aside>
+</div>
+<script>
+const D={"file": "02-service-detail.html", "num": "02", "title": "服务详情", "mode": "了解服务", "sub": "先确认适用范围、包含内容和服务方式，再决定是否购买。", "cta": "购买", "next": "05-order-checkout.html", "sections": [{"type": "hero", "image": "服务主图", "ratio": "4/3", "title": "自行车标准保养套餐", "facts": [["适用装备", "自行车"], ["服务方式", "到店服务"], ["包含内容", "见下方服务清单"], ["额外项目", "先确认方案与费用，再处理"]]}, {"type": "steps", "title": "服务流程说明", "items": [{"image": "服务步骤", "title": "基础清洁", "detail": "按确认的范围清洁装备"}, {"image": "服务步骤", "title": "安全检查", "detail": "检查主要部件与安全状态"}, {"image": "服务步骤", "title": "基础调试", "detail": "按检查结果进行基础调试"}]}, {"type": "rows", "title": "到店与时间说明", "items": [["服务时长", "以服务项目与门店安排为准"], ["到店准备", "请携带需要服务的装备"]]}]};
+const stepDescriptions=["按确认的范围清洁装备。","检查主要部件与安全状态。","按检查结果进行基础调试。"];
+const serviceOptions=[
+ {id:"inspection",title:"安全检查",legacyTitles:["安全检查","自行车安全检查"],price:69.9,blurb:"日常安全状态检查",summary:"适用于自行车日常状态检查。",comparison:"主要部件、安全紧固件与刹车状态检查",steps:[{title:"主要部件检查",detail:"示例检查项；具体检查范围以正式 Offer 和门店确认为准。"},{title:"紧固件检查",detail:"检查项仅为示意，实际执行内容以门店确认为准。"},{title:"链条润滑",detail:"示例保养项；具体材料与作业范围以门店确认为准。"}]},
+ {id:"basic",title:"标准保养套餐",legacyTitles:["基础保养","标准保养套餐"],price:199.9,blurb:"检查、清洁与基础调试",summary:"检查、清洁与基础调试，具体范围以门店确认为准。",comparison:"含安全检查、基础清洁、传动润滑与必要调试",steps:[{title:"基础清洁",detail:"示例清洁环节；实际清洁部位与方式以门店确认为准。"},{title:"安全检查",detail:"示例检查环节；具体检查项目以门店确认为准。"},{title:"基础调试",detail:"示例调试环节；实际调整项目与范围以门店确认为准。"}]},
+ {id:"full",title:"全面保养套餐",legacyTitles:["全面保养","全面保养套餐"],price:299.9,blurb:"标准保养并增加轮组养护",summary:"在标准保养基础上增加轮组检查和部件调节，具体范围以正式服务清单为准。",comparison:"含标准保养，并增加轮组检查、校正与更多部件调节",steps:[{title:"整车检查",detail:"示例检查环节；具体部件与检查项目以门店确认为准。"},{title:"部件调节",detail:"示例调节环节；实际调整范围以正式 Offer 和门店确认为准。"},{title:"轮组与轴承养护",detail:"示例保养环节；是否包含相关作业以正式 Offer 为准。"}]},
+ {id:"deep",title:"深度保养套餐",legacyTitles:["深度保养","深度保养套餐"],price:499.9,blurb:"全面保养并增加深度清洁",summary:"在全面保养基础上增加整车清洁与关键部位深度养护，具体范围以正式服务清单为准。",comparison:"含全面保养，并增加整车清洁和关键部位深度养护",steps:[{title:"整车深度清洁",detail:"示意深度清洁环节；清洁范围及耗材以门店确认为准。"},{title:"核心部件养护",detail:"示意养护环节；实际拆装与维护范围以正式 Offer 为准。"},{title:"全面检查与调试",detail:"示意检查调试环节；最终项目以服务清单和门店确认为准。"}]}
+];
+const comparisonGroups=[
+ {title:"服务内容",items:[
+  ["适合场景",["日常安全状态确认","常规周期保养","想做更全面检查与调试","长时间未保养，想做深度养护"]],
+  ["检查范围",["主要部件、紧固件与刹车","含安全检查及基础保养项目","含标准保养并增加轮组检查","含全面保养与关键部位检查"]],
+  ["清洁服务",["—","基础清洁","基础清洁","整车深度清洁（示例）"]],
+  ["调试服务",["—","基础调试","增加部件调节","全面检查与调试"]],
+  ["轮组养护",["—","—","轮组检查与校正","关键部位养护（示例）"]]
+ ]},
+ {title:"参考信息",items:[
+  ["服务时长（示例）",["约 20 分钟","约 60 分钟","约 90 分钟","约 120 分钟"]],
+  ["价格",serviceOptions.map(service=>`¥${service.price.toFixed(1)}`)]
+ ]}
+];
+const query=new URLSearchParams(location.search);
+const isBenefitContext=query.get("context")==="benefit";
+const benefitReturnParams=new URLSearchParams({benefit:query.get("benefit")||"inspection",variant:query.get("variant")||"A",state:query.get("state")||"available"});
+["equipment","order"].forEach(key=>{if(query.has(key))benefitReturnParams.set(key,query.get(key))});
+const benefitReturnUrl=`03-benefit-detail.html?${benefitReturnParams.toString()}`;
+const categoryLabels={bike:"自行车",badminton:"羽毛球/网球",ski:"滑雪"};
+const catalogCategory=query.get("category")||"bike";
+const catalogName=query.get("name");
+const catalogDescription=query.get("description")||"";
+const catalogPrice=Number(query.get("price"));
+const isCatalogService=Boolean(catalogName);
+const categoryLabel=Object.hasOwn(categoryLabels,catalogCategory)?categoryLabels[catalogCategory]:"运动装备";
+const matchedService=serviceOptions.find(service=>service.legacyTitles.includes(catalogName));
+let selectedServiceId=matchedService?.id||(isCatalogService?"":"basic");
+const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+const activeService=()=>{
+ const selected=serviceOptions.find(service=>service.id===selectedServiceId);
+ if(catalogCategory==="bike"&&selected&&(!isCatalogService||matchedService||selectedServiceId))return matchedService?.id===selected.id&&catalogDescription?{...selected,title:catalogName,summary:catalogDescription}:selected;
+ if(!isCatalogService)return selected;
+ return {
+  title:catalogName,
+  summary:catalogDescription||"服务范围、适用条件与门店承接情况以正式服务说明为准。",
+  steps:[
+   {title:"服务前确认",detail:"确认装备状态、服务范围与门店承接情况。"},
+   {title:"专业服务",detail:"具体项目与操作方式以正式服务说明和门店确认为准。"},
+   {title:"完成验收",detail:"服务完成后与门店确认结果及后续建议。"}
+  ]
+ };
+};
+const checkoutUrl=()=>{const offer=activeService();const checkoutParams=new URLSearchParams({category:catalogCategory,name:offer.title,description:offer.summary});["equipment","order"].forEach(key=>{if(query.has(key))checkoutParams.set(key,query.get(key))});const checkoutPrice=offer.price??catalogPrice;if(Number.isFinite(checkoutPrice)&&checkoutPrice>0)checkoutParams.set("price",checkoutPrice.toFixed(2));return `05-order-checkout.html?${checkoutParams.toString()}`};
+const $=s=>document.querySelector(s);
+const itemImage=(label,small=true,ratio='')=>`<div class="placeholder ${small?'small':''} ${ratio==='4/3'?'r43':''}" aria-label="${label}">${label}</div>`;
+function maintenanceGuideMarkup(){
+ const reasons=[
+  ["calendar-check.svg","骑行约 6–12 个月","经过一段时间骑行后，建议对常用部件进行周期检查和调整。"],
+  ["attention.svg","骑行状态开始变差","变速不够顺畅、刹车手感下降，或开始出现轻微异响。"],
+  ["maintain-repair.svg","长时间没有保养","长期使用或存放后，建议重新检查车辆整体状态。"]
+ ];
+ const systems=[
+  ["service-system.svg","刹车系统",["检查刹车整体安全与刹车片磨损情况","调整线管行程与刹车把手舒适手感","排除卡滞，保障关键安全指标"]],
+  ["service-system.svg","变速系统",["检查前后变速定位拨动与张力弹簧","精细调整微调螺丝，确保变速精准顺畅","清理并检查链条、飞轮与牙盘状态"]],
+  ["maintain-repair.svg","轮组与轮胎",["检查外胎开裂、老化、胎面杂物磨损","补充胎压至合理区间，检查轮毂松动","确认快拆及桶轴紧固锁定无异常"]],
+  ["insurance.svg","整车常规安全",["检查把立、坐管、脚踏等部件扭矩紧固","传动部件基础加注高品质润滑油","全车松动检查与关键结构安全确证"]]
+ ];
+ const outcomes=["刹车和变速精准完成检查与必要精细调整","关键安全紧固部件完成标准扭矩工具检查","链条、传动等日常核心部件完成基础润滑保养","专业技师反馈深入评估与后期维护建议报告"];
+ return `<section class="maintenance-guide" aria-label="自行车保养服务说明">
+  <details class="service-disclosure"><summary>什么时候适合做保养？</summary><div class="maintenance-reasons">${reasons.map(([icon,title,text])=>`<article class="maintenance-reason"><span class="maintenance-icon"><img src="assets/figma/${icon}" alt=""></span><div class="maintenance-reason-copy"><strong>${title}</strong><p>${text}</p></div></article>`).join('')}</div></details>
+  ${selectedServiceId==="basic"?`<details class="service-disclosure"><summary>标准保养项目参考</summary><div class="maintenance-card"><p class="subtle">以下为示例项目，具体范围以正式服务清单和门店确认为准。</p>${systems.map(([icon,title,items],index)=>`${index?'<div class="maintenance-divider"></div>':''}<section class="maintenance-system"><div class="maintenance-system-head"><img src="assets/figma/${icon}" alt=""><strong>${title}</strong></div><ul>${items.map(item=>`<li>${item}</li>`).join('')}</ul></section>`).join('')}</div></details><details class="service-disclosure"><summary>保养完成后可确认什么？</summary><div class="maintenance-outcome-list">${outcomes.map(item=>`<div class="maintenance-outcome"><img src="assets/figma/success.svg" alt=""><span>${item}</span></div>`).join('')}</div></details>`:''}
+  <aside class="maintenance-notice"><div class="maintenance-notice-title"><img src="assets/figma/info.svg" alt=""><span>额外项目，先确认再处理</span></div><p>如需更换配件、故障维修或超出套餐范围的保养，技师会先与你确认方案和费用。</p></aside>
+ </section>`;
+}
+function render(s){
+ const t=s.title?`<h2 class="section-title">${s.title}</h2>`:'';
+ if(s.type==='intro') return `<section class="section intro">${s.title?`<h2>${s.title}</h2>`:''}<p class="subtle">${s.text}</p></section>`;
+ if(s.type==='hero'){
+  const cover=catalogCategory==="bike"?"assets/figma/order-bike-repair.png":catalogCategory==="ski"?"assets/service-ski.svg":catalogCategory==="badminton"?"assets/service-badminton.svg":null;
+  const title=activeService().title;
+  return `<section class="section hero">${cover?`<div class="service-cover ${catalogCategory==="bike"?'':'is-illustration'}"><img src="${cover}" alt="${escapeHtml(categoryLabel)}服务场景示意"><span>服务场景示意</span></div>`:''}<div class="hero-copy"><h1>${title.startsWith(categoryLabel)?'':escapeHtml(categoryLabel)}${escapeHtml(title)}</h1><p class="service-summary">${escapeHtml(activeService().summary)}</p><div class="service-attributes"><span><img src="assets/figma/maintain-repair.svg" alt="">到店服务</span><span><img src="assets/figma/insurance.svg" alt="">额外费用先确认</span></div></div></section>`;
+ }
+ if(s.type==='items') return `<section class="section">${t}${s.items.map(x=>`<div class="item">${itemImage(x.image,true)}<div class="item-copy"><strong>${x.title}</strong><p>${x.detail||''}</p>${x.meta?`<p>${x.meta}</p>`:''}</div>${x.price?`<span class="item-price">${x.price}</span>`:''}<span class="chev">›</span></div>`).join('')}</section>`;
+ if(s.type==='rows') return `<section class="section arrival-notes">${t}${s.items.map(x=>`<div class="row"><span>${x[0]}</span><span>${x[0]==='到店准备'&&isCatalogService?`请携带需服务的${escapeHtml(categoryLabel)}装备（示例）`:x[1]}</span></div>`).join('')}</section>`;
+ if(s.type==='steps') return `<section class="section process-section" data-process-section><div class="section-heading"><h2 class="section-title">服务内容与流程</h2><p>${escapeHtml(activeService().title)} · 以下为示例，实际范围以门店确认为准。</p></div>${activeService().comparison?`<p class="service-content-summary">${escapeHtml(activeService().comparison)}</p>`:''}<ol class="service-step-list">${activeService().steps.map(step=>`<li><strong>${escapeHtml(step.title)}</strong><p>${escapeHtml(step.detail)}</p></li>`).join('')}</ol></section>${catalogCategory==="bike"?maintenanceGuideMarkup():''}`;
+ if(s.type==='serviceSwitcher') return `<section class="service-switcher" aria-labelledby="service-switcher-title"><header class="service-switcher-head"><h2 id="service-switcher-title">选择服务套餐</h2><span>共 ${serviceOptions.length} 种可选</span></header><div class="service-options" role="group" aria-label="选择自行车服务套餐">${serviceOptions.map(service=>`<button type="button" class="service-option" data-service-id="${service.id}" aria-pressed="${service.id===selectedServiceId}"><span class="service-option-name">${escapeHtml(service.title)}</span><span class="service-option-price"><small>¥</small>${service.price.toFixed(1)}</span><span class="service-option-blurb">${escapeHtml(service.blurb)}</span></button>`).join('')}</div><button type="button" class="compare-toggle" data-toggle-compare aria-haspopup="dialog" aria-expanded="false"><span>不确定怎么选？对比套餐内容</span><img class="compare-chevron" src="assets/figma/chevron.svg" alt=""></button></section>`;
+ if(s.type==='chips') return `<section class="section">${t}<div class="chip-list">${s.items.map((x,i)=>`<button class="chip ${i===(s.selected??0)?'selected':''}" aria-pressed="${i===(s.selected??0)}">${x}</button>`).join('')}</div></section>`;
+ if(s.type==='form') return `<section class="section">${t}${s.fields.map(f=>`<div class="field"><label>${f.label}</label>${f.area?`<textarea placeholder="${f.placeholder}"></textarea>`:`<input placeholder="${f.placeholder}" readonly></div>`}</div>`).join('')}</section>`;
+ if(s.type==='upload') return `<section class="section">${t}<div class="upload"><button aria-label="添加照片">＋</button><span>${s.text}</span></div></section>`;
+ if(s.type==='location') return `<section class="section location"><span>⌖　${s.title}</span><span class="chev">切换　›</span></section>`;
+ if(s.type==='stores') return `<section class="section">${t}${s.items.map((x,i)=>`<div class="store"><div class="radio ${i===(s.selected??0)?'selected':''}" role="radio" aria-checked="${i===0}" tabindex="0"></div>${itemImage(x.image,true,'4/3')}<div class="store-info"><strong>${x.name}</strong><p>${x.address}</p><div class="store-foot"><span>${x.hours}</span><span>${x.distance}</span></div></div></div>`).join('')}</section>`;
+ if(s.type==='dates') return `<section class="section">${t}<div class="dates">${s.items.map((x,i)=>`<button class="date ${i===(s.selected??0)?'selected':''}" aria-pressed="${i===(s.selected??0)}"><span>${x[0]}</span><strong>${x[1]}</strong><span>${x[2]}</span></button>`).join('')}</div></section>`;
+ if(s.type==='slots') return `<section class="section">${t}<div class="slots">${s.items.map((x,i)=>`<button class="slot ${typeof x==='object'&&x.status?'full ':''}${i===(s.selected??0)?'selected':''}" ${typeof x==='object'&&x.status?'disabled':''} aria-pressed="${i===(s.selected??0)}">${typeof x==='string'?x:x.label}${typeof x==='object'&&x.status?' · '+x.status:''}</button>`).join('')}</div></section>`;
+ if(s.type==='status') return `<section class="section status-panel"><strong>${s.title}</strong><p>${s.text}</p></section>`;
+ if(s.type==='notice') return `<section class="section"><h2 class="section-title">${s.title}</h2><p class="subtle">${s.text}</p></section>`;
+ if(s.type==='total') return `<section class="section total"><span>${s.title}</span><strong>${s.amount}</strong></section>`;
+ if(s.type==='timeline') return `<section class="section">${t}<div class="timeline">${s.items.map((x,i)=>`<div class="timeline-item ${i===3?'active':''}"><strong>${x[0]} <span class="subtle">· ${x[2]}</span></strong><p>${x[1]}</p></div>`).join('')}</div></section>`;
+ if(s.type==='queue') return `<section class="section queue"><h2 class="section-title">${s.title}</h2><div class="number">${s.number}</div><p>${s.text}</p></section>`;
+ if(s.type==='actions') return `<section class="section"><h2 class="section-title">${s.title}</h2><div class="actions">${s.items.map(x=>x.action?`<button class="text-action" data-action="${x.action}">${x.label}</button>`:`<a class="text-action" href="${x.href}" style="display:grid;place-items:center;text-decoration:none">${x.label}</a>`).join('')}</div></section>`;
+ if(s.type==='messages') return `<section class="section">${t}${s.items.map((x,i)=>`<a class="message" href="12-service-order-detail.html" style="text-decoration:none;color:inherit"><div class="message-icon">${i===0?'✓':i===1?'•':'↗'}</div><div class="message-copy"><strong>${x.title}</strong><p>${x.text}</p><small>${x.time}</small></div><span class="chev">›</span></a>`).join('')}</section>`;
+ return '';
+}
+const app=$('.app');
+const mainContent=()=>`${isBenefitContext?'<p class="subtle" style="padding:12px 20px;margin:0;background:var(--container-commercial-light)">使用装备权益，无需再次支付。</p>':''}${D.sections.map((section,index)=>`${render(section)}${index===0&&catalogCategory==="bike"?(isBenefitContext?'':render({type:'serviceSwitcher'}))+storeSummaryMarkup():''}`).join('')}${isBenefitContext?'':`<section class="service-help"><a class="text-action" href="04-repair-request.html">不确定维修项目？描述维修需求<span aria-hidden="true">›</span></a><details class="service-disclosure"><summary>想了解线上商品？</summary>${onlinePurchaseMarkup()}</details></section>`}`;
+const main=()=>`<div class="body-scroll">${mainContent()}</div>`;
+function onlinePurchaseMarkup(){return `<section class="supplemental-section" aria-labelledby="online-purchase-title"><h2 id="online-purchase-title">线上购买，线下体验</h2><div class="product-guide">${itemImage("同型号商品",true)}<div class="product-guide-copy"><strong>同型号商品</strong><p>可先线上购买，再到门店体验或提货。商品库存及提货条件请与门店确认。</p></div></div><button type="button" class="text-action" data-action="online-buy">查看线上商品</button></section>`}
+const storeCities=[
+ {name:"上海市",stores:[
+  {id:"sh-yangpu",name:"迪卡侬上海五角场店",address:"上海市杨浦区淞沪路161号",hours:"10:00–22:00",distance:2.3,phone:"021-5555-0186"},
+  {id:"sh-xuhui",name:"迪卡侬上海徐汇店",address:"上海市徐汇区漕溪北路",hours:"10:00–22:00",distance:4.8,phone:null},
+  {id:"sh-pudong",name:"迪卡侬上海浦东店",address:"上海市浦东新区陆家嘴",hours:"10:00–22:00",distance:7.6,phone:null}
+ ]},
+ {name:"北京市",stores:[
+  {id:"bj-datun",name:"迪卡侬北京大屯路店",address:"北京市朝阳区大屯路",hours:"10:00–22:00",distance:3.1,phone:null},
+  {id:"bj-shuangjing",name:"迪卡侬北京双井店",address:"北京市朝阳区广渠路",hours:"10:00–22:00",distance:5.4,phone:null},
+  {id:"bj-wukesong",name:"迪卡侬北京五棵松店",address:"北京市海淀区复兴路",hours:"10:00–22:00",distance:8.2,phone:null}
+ ]},
+ {name:"杭州市",stores:[
+  {id:"hz-binjiang",name:"迪卡侬杭州滨江店",address:"杭州市滨江区江南大道",hours:"10:00–22:00",distance:1.8,phone:null},
+  {id:"hz-west",name:"迪卡侬杭州城西店",address:"杭州市西湖区古墩路",hours:"10:00–22:00",distance:4.2,phone:null},
+  {id:"hz-xiasha",name:"迪卡侬杭州下沙店",address:"杭州市钱塘区金沙大道",hours:"10:00–22:00",distance:9.1,phone:null}
+ ]}
+];
+let selectedCity=storeCities[0];
+const sortedStores=(city=selectedCity)=>[...city.stores].sort((a,b)=>a.distance-b.distance);
+let selectedStoreId=sortedStores()[0].id;
+let pendingCity=selectedCity;
+let pendingStoreId=selectedStoreId;
+const selectedStore=()=>selectedCity.stores.find(store=>store.id===selectedStoreId)||sortedStores()[0];
+function storeMapUrl(store){return `https://map.qq.com/?q=${encodeURIComponent(`${store.name} ${store.address}`)}`}
+function cityControlMarkup(){return `<div class="city-control"><button type="button" class="city-trigger" data-toggle-cities aria-expanded="false"><span>${escapeHtml(pendingCity.name.replace(/市$/,""))}</span><span class="city-chevron" aria-hidden="true"></span></button><div class="city-options" data-city-options role="group" aria-label="选择城市">${storeCities.map(city=>`<button type="button" class="city-option" data-city="${escapeHtml(city.name)}" aria-pressed="${city.name===pendingCity.name}">${escapeHtml(city.name)}</button>`).join('')}</div></div>`}
+function storeContactMarkup(store){return `<button type="button" class="store-contact-button" data-store-wechat="${store.id}" data-store-name="${escapeHtml(store.name)}" data-store-phone="${escapeHtml(store.phone||"")}">联系门店</button>`}
+function storePhoneMarkup(store){return store.phone?`<a class="wechat-phone-link" href="tel:${escapeHtml(store.phone.replace(/[^0-9+]/g,""))}"><small>拨打电话</small><strong>${escapeHtml(store.phone)}</strong></a>`:'<p class="wechat-phone-unavailable">门店电话暂未接入，当前无法拨打。</p>'}
+function storeSummaryMarkup(){const store=selectedStore();return `<section class="store-selection" aria-labelledby="nearby-store-title"><header class="store-summary-heading"><h2 id="nearby-store-title">附近门店</h2><button type="button" class="store-summary-more" data-open-store-sheet aria-label="查看更多门店" aria-haspopup="dialog" aria-expanded="false">查看更多<img src="assets/figma/chevron.svg" alt=""></button></header><div class="store-summary-card"><div class="store-summary-copy"><div class="store-summary-title"><strong class="store-summary-name">${escapeHtml(store.name)}</strong></div></div><div class="store-summary-bottom"><span>${escapeHtml(store.address)}｜${store.distance.toFixed(1)} km（示例）<br>营业时间 ${escapeHtml(store.hours)}</span>${storeContactMarkup(store)}</div></div></section>`}
+function storeSheetMarkup(){const stores=sortedStores(pendingCity);return `<div class="store-sheet-backdrop" data-store-backdrop><section class="store-sheet" role="dialog" aria-modal="true" aria-labelledby="store-sheet-title"><div class="sheet-handle" aria-hidden="true"></div><header class="store-sheet-head"><h2 class="store-sheet-title" id="store-sheet-title">选择服务门店</h2><button type="button" class="sheet-close" aria-label="关闭门店列表" data-close-store-sheet>×</button></header>${cityControlMarkup()}<div class="store-sheet-list" aria-label="服务门店列表">${stores.map(store=>`<article class="sheet-store-card" data-selected="${store.id===pendingStoreId}"><button type="button" class="sheet-store-select" data-store-id="${store.id}" aria-pressed="${store.id===pendingStoreId}" aria-label="${escapeHtml(store.name)}${store.id===pendingStoreId?"，已选门店":"，选择此门店"}"><span class="sheet-store-card-head"><strong>${escapeHtml(store.name)}</strong><span class="sheet-store-selected" ${store.id===pendingStoreId?"":"hidden"}>✓ 已选门店</span></span></button><a class="sheet-store-address sheet-store-map" href="${storeMapUrl(store)}" target="_blank" rel="noopener noreferrer" aria-label="在微信地图中查看${escapeHtml(store.name)}"><span class="sheet-store-address-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span class="sheet-store-map-label">${escapeHtml(store.address)}</span><span class="sheet-store-distance">${store.distance.toFixed(1)} km</span><span class="sheet-store-map-chevron" aria-hidden="true"></span></a><div class="sheet-store-bottom"><span class="sheet-store-hours"><strong>${escapeHtml(store.hours)}</strong></span>${storeContactMarkup(store)}</div></article>`).join('')}</div><div class="store-sheet-actions"><button type="button" class="primary" data-confirm-store>确定</button></div></section></div>`}
+function wechatDialogMarkup(){return `<dialog class="wechat-dialog" data-wechat-dialog aria-labelledby="wechat-dialog-title"><h2 id="wechat-dialog-title">联系门店</h2><p class="wechat-dialog-store" data-wechat-store-name></p><div data-wechat-phone>${storePhoneMarkup(selectedStore())}</div><div class="wechat-qr-placeholder" role="img" aria-label="企业微信二维码待门店提供">企业微信二维码<br>待门店提供</div><p class="wechat-dialog-note">点击长按添加门店服务人员微信</p><button type="button" class="wechat-dialog-close" data-close-wechat>关闭</button></dialog>`}
+function comparisonSheetMarkup(){return `<div class="compare-sheet-backdrop" data-compare-backdrop aria-hidden="true"><section class="compare-sheet" role="dialog" aria-modal="true" aria-labelledby="compare-sheet-title"><div class="sheet-handle" aria-hidden="true"></div><header class="compare-sheet-head"><div><h2 class="compare-sheet-title" id="compare-sheet-title">套餐详情对比</h2><p class="compare-sheet-subtitle">横向查看各套餐服务范围与价格</p></div><button type="button" class="sheet-close" aria-label="关闭套餐对比" data-close-compare-sheet>×</button></header><p class="compare-sheet-note">示例信息仅用于展示对比方式；服务项目、时长及价格以正式服务 Offer 和门店确认为准。</p><p class="compare-sheet-hint">左右滑动查看更多套餐</p><div class="compare-scroll" role="region" aria-label="套餐参数对比表，可横向滑动" tabindex="0"><table class="compare-table"><thead><tr><th scope="col">对比项目</th>${serviceOptions.map(service=>`<th class="compare-package" scope="col" data-package-id="${service.id}" data-current="${service.id===selectedServiceId}"><span class="compare-package-name">${escapeHtml(service.title)}</span><span class="compare-package-price">¥${service.price.toFixed(1)}</span><span class="compare-current-label">当前选择</span></th>`).join('')}</tr></thead><tbody>${comparisonGroups.map(group=>`<tr class="compare-group"><th scope="colgroup" colspan="${serviceOptions.length+1}">${escapeHtml(group.title)}</th></tr>${group.items.map(([label,values])=>`<tr><th scope="row">${escapeHtml(label)}</th>${values.map((value,index)=>`<td data-package-id="${serviceOptions[index].id}" data-current="${serviceOptions[index].id===selectedServiceId}">${escapeHtml(value)}</td>`).join('')}</tr>`).join('')}`).join('')}</tbody></table></div></section></div>`}
+function renderStoreSheet(isOpen){
+ $('[data-store-backdrop]').outerHTML=storeSheetMarkup();
+ const backdrop=$('[data-store-backdrop]');
+ backdrop.classList.toggle('open',isOpen);
+ backdrop.setAttribute('aria-hidden',String(!isOpen));
+ $('[data-open-store-sheet]')?.setAttribute('aria-expanded',String(isOpen));
+}
+function setSheetOpen(kind,isOpen){
+ if(kind==='store'&&isOpen){pendingCity=selectedCity;pendingStoreId=selectedStoreId;renderStoreSheet(false)}
+ const backdrop=$(`[data-${kind}-backdrop]`);
+ const trigger=$(kind==='compare'?'[data-toggle-compare]':'[data-open-store-sheet]');
+ backdrop.classList.toggle('open',isOpen);
+ backdrop.setAttribute('aria-hidden',String(!isOpen));
+ trigger?.setAttribute('aria-expanded',String(isOpen));
+ document.querySelectorAll('.body-scroll,.footer,.nav').forEach(element=>{element.inert=isOpen});
+ if(isOpen){
+  $(`[data-close-${kind}-sheet]`).focus({preventScroll:true});
+  if(kind==='compare'){
+   const packages=[...document.querySelectorAll('.compare-package')];
+   const currentIndex=packages.findIndex(cell=>cell.dataset.packageId===selectedServiceId);
+   const left=packages.slice(0,Math.max(0,currentIndex)).reduce((width,cell)=>width+cell.offsetWidth,0);
+   $('.compare-scroll').scrollTo({top:0,left,behavior:'instant'});
+  }
+ }
+ else trigger?.focus({preventScroll:true});
+}
+function updatePendingStore(storeId){
+ pendingStoreId=storeId;
+ document.querySelectorAll('.sheet-store-card').forEach(card=>{
+  const button=card.querySelector('.sheet-store-select');
+  const selected=button.dataset.storeId===pendingStoreId;
+  card.dataset.selected=String(selected);
+  button.setAttribute('aria-pressed',String(selected));
+  button.setAttribute('aria-label',`${button.querySelector('strong').textContent}${selected?'，已选门店':'，选择此门店'}`);
+  card.querySelector('.sheet-store-selected').hidden=!selected;
+ });
+}
+function setCompareSheetOpen(isOpen){setSheetOpen('compare',isOpen)}
+function updateCompareSelection(){document.querySelectorAll('[data-package-id]').forEach(cell=>{cell.dataset.current=String(cell.dataset.packageId===selectedServiceId)})}
+const priceLabel=()=>{const price=activeService().price;if(Number.isFinite(price)&&price>0)return `¥${price.toFixed(1)}`;if(Number.isFinite(catalogPrice)&&catalogPrice>0)return `¥${catalogPrice.toFixed(2)}`;return "价格待确认"};
+const footer=`<footer class="footer">${isBenefitContext?'':`<div class="purchase-summary" aria-live="polite" aria-atomic="true"><small id="purchase-service">${escapeHtml(activeService().title)}</small><strong id="purchase-price">${priceLabel()}</strong></div>`}<button class="primary ${isBenefitContext?'benefit-purchase':''}" type="button" data-purchase>${isBenefitContext?'<span>返回权益详情 · 使用权益兑换</span>':'<span>购买服务</span>'}</button></footer>`;
+app.className='app layout-a';
+app.innerHTML=`<div class="statusbar"><span>9:41</span><span class="status-icons">● ▮ ▰</span></div><header class="nav" aria-label="小程序导航"><button type="button" aria-label="返回" onclick="history.length>1?history.back():location.href='01-service-entry.html'">‹</button><div class="nav-title" aria-hidden="true">${D.nav||D.title}</div><button class="nav-more" type="button" aria-label="小程序菜单">···<i aria-hidden="true"></i><span class="nav-target" aria-hidden="true"></span></button></header>${main()}${footer}<div class="toast" role="status"></div><div class="modal-backdrop"><div class="modal"><h2>确认取消预约？</h2><p>取消预约后，已选时段将释放。服务单仍保留。</p><div class="modal-actions"><button data-close>暂不取消</button><button class="confirm" data-confirm>确认取消</button></div></div></div>${storeSheetMarkup()}${wechatDialogMarkup()}${comparisonSheetMarkup()}`;
+document.addEventListener('click',e=>{
+ const serviceChoice=e.target.closest('[data-service-id]');if(serviceChoice){const scrollTop=$('.body-scroll').scrollTop;selectedServiceId=serviceChoice.dataset.serviceId;$('.body-scroll').innerHTML=mainContent();$('#purchase-price').textContent=priceLabel();$('#purchase-service').textContent=activeService().title;updateCompareSelection();document.querySelector(`[data-service-id="${selectedServiceId}"]`).focus({preventScroll:true});$('.body-scroll').scrollTo({top:scrollTop,behavior:'instant'});return}
+ if(e.target.closest('[data-toggle-compare]')){setCompareSheetOpen(true);return}
+ if(e.target.closest('[data-close-compare-sheet]')||e.target.matches('[data-compare-backdrop]')){setCompareSheetOpen(false);return}
+ if(e.target.closest('[data-scroll-to-process]')){$('[data-process-section]')?.scrollIntoView({behavior:'smooth',block:'start'});return}
+ if(e.target.closest('[data-open-store-sheet]')){setSheetOpen('store',true);return}
+ if(e.target.closest('[data-close-store-sheet]')||e.target.matches('[data-store-backdrop]')){setSheetOpen('store',false);return}
+ if(e.target.closest('[data-confirm-store]')){selectedCity=pendingCity;selectedStoreId=pendingStoreId;$('.store-selection').outerHTML=storeSummaryMarkup();setSheetOpen('store',false);return}
+ const cityToggle=e.target.closest('[data-toggle-cities]');if(cityToggle){const options=cityToggle.closest('.city-control').querySelector('[data-city-options]');const isOpen=options.classList.toggle('open');cityToggle.setAttribute('aria-expanded',String(isOpen));return}
+ const cityChoice=e.target.closest('[data-city]');if(cityChoice){pendingCity=storeCities.find(city=>city.name===cityChoice.dataset.city);pendingStoreId=sortedStores(pendingCity)[0].id;renderStoreSheet(true);$('[data-toggle-cities]').focus({preventScroll:true});return}
+ const storeChoice=e.target.closest('[data-store-id]');
+ const storeCard=e.target.closest('.sheet-store-card');
+ if(storeChoice||(storeCard&&!e.target.closest('.sheet-store-map,.store-contact-button'))){updatePendingStore(storeChoice?.dataset.storeId||storeCard.querySelector('[data-store-id]').dataset.storeId);return}
+ const wechatChoice=e.target.closest('[data-store-wechat]');if(wechatChoice){$('[data-wechat-store-name]').textContent=wechatChoice.dataset.storeName;$('[data-wechat-phone]').innerHTML=storePhoneMarkup({phone:wechatChoice.dataset.storePhone});$('[data-wechat-dialog]').showModal();return}
+ if(e.target.closest('[data-close-wechat]')){$('[data-wechat-dialog]').close();return}
+ const choice=e.target.closest('.chip,.date,.slot');if(choice&&!choice.disabled){const siblings=choice.parentElement.querySelectorAll('.chip,.date,.slot');siblings.forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')});choice.classList.add('selected');choice.setAttribute('aria-pressed','true')}
+ const radio=e.target.closest('.radio');if(radio){document.querySelectorAll('.radio').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-checked','false')});radio.classList.add('selected');radio.setAttribute('aria-checked','true')}
+ if(e.target.closest('[data-action="cancel"]'))$('.modal-backdrop').classList.add('open');
+ if(e.target.closest('[data-close]'))$('.modal-backdrop').classList.remove('open');
+ if(e.target.closest('[data-confirm]')){$('.modal-backdrop').classList.remove('open');const t=$('.toast');t.textContent='预约已取消';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+ if(e.target.closest('[data-action="online-buy"]')){const t=$('.toast');t.textContent='商品信息暂不可用，请到店咨询。';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+ if(e.target.closest('[data-purchase]'))window.location.href=isBenefitContext?benefitReturnUrl:checkoutUrl();
+});
+$('.wechat-dialog').addEventListener('click',e=>{if(e.target.matches('[data-wechat-dialog]'))e.target.close()});
+document.addEventListener('keydown',e=>{
+ if($('[data-wechat-dialog]').open){
+  if(e.key==='Escape'){e.preventDefault();$('[data-wechat-dialog]').close()}
+  return;
+ }
+ const kind=$('[data-compare-backdrop].open')?'compare':$('[data-store-backdrop].open')?'store':null;
+ if(!kind)return;
+ if(e.key==='Escape'){e.preventDefault();setSheetOpen(kind,false);return}
+ if(e.key==='Tab'){
+  const focusable=[...$(`[data-${kind}-backdrop]`).querySelectorAll('button,a[href],[tabindex="0"]')].filter(element=>!element.disabled&&element.getClientRects().length);
+  const first=focusable[0],last=focusable.at(-1);
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus({preventScroll:true})}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus({preventScroll:true})}
+ }
+});
+const menu=$('.nav-more');menu.addEventListener('click',()=>{const t=$('.toast');t.textContent='更多服务';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)});
+</script>
+</body>
+</html>

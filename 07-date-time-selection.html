@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Service as Offer 购后预约流程设计稿 03：选择日期和时段">
+  <title>07 · 选择日期和时段 · Service as Offer</title>
+  <style>
+    :root{color-scheme:light;--ink:#101010;--quiet:#616161;--tertiary:#949494;--brand:#3643ba;--lime:#7affa6;--paper:#f8f8f8;--line:#e1e0df;--soft:#f5f4f5;--positive:#149b65;--warning:#db6900}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}body{background:#ececef}.presentation{min-height:100vh;display:grid;grid-template-columns:375px 310px;align-content:center;justify-content:center;align-items:center;gap:72px;padding:36px}.artboard{width:375px;height:812px;background:#fff;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 64px #10102424}.statusbar{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:14px;font-weight:650}.status-icons{display:flex;align-items:center;gap:6px;font-size:11px}.signal{font-size:13px;letter-spacing:-3px}.battery{width:19px;height:10px;border:1.4px solid #101010;border-radius:3px;position:relative}.battery:after{content:"";position:absolute;right:-3px;top:2px;width:2px;height:4px;background:#101010}.battery:before{content:"";position:absolute;inset:2px 4px 2px 2px;background:#101010;border-radius:1px}.nav{height:44px;flex:none;display:grid;grid-template-columns:52px 1fr 52px;align-items:center;border-bottom:1px solid var(--line);padding:0 12px}.back{font-size:25px;line-height:1;font-weight:300}.nav-title{text-align:center;font-size:16px;font-weight:650}.more{text-align:right;font-size:20px;letter-spacing:2px}.body{flex:1;overflow:hidden;padding:17px 18px 10px;background:#fff}.step{display:flex;align-items:center;gap:7px;margin-bottom:12px;color:var(--quiet);font-size:11px}.step b{color:var(--brand);font-weight:700}.step-line{height:1px;width:22px;background:#d5d5d9}.heading{font-size:22px;line-height:1.35;margin:0;font-weight:700;letter-spacing:-.3px}.subheading{font-size:12px;line-height:1.5;color:var(--quiet);margin:4px 0 12px}.store-summary{display:flex;align-items:center;justify-content:space-between;padding:10px 11px;background:var(--soft);border-radius:8px;margin-bottom:13px}.store-summary strong{font-size:12px;display:block}.store-summary span{font-size:10px;color:var(--quiet);display:block;margin-top:3px}.change{font-size:11px;color:var(--brand);font-weight:600}.calendar-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.calendar-title strong{font-size:13px}.calendar-title span{font-size:10px;color:var(--quiet)}.dates{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.date{height:64px;border:1px solid var(--line);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#555;background:#fff}.date small{font-size:9px}.date strong{font-size:16px;line-height:1}.date.selected{background:var(--brand);border-color:var(--brand);color:#fff}.date.selected small{color:#e1e3f5}.date.disabled{background:#f5f5f5;color:#b2b2b2}.legend{display:flex;align-items:center;gap:12px;margin:10px 0 13px;font-size:10px;color:var(--quiet)}.legend-item{display:flex;align-items:center;gap:4px}.legend-dot{width:7px;height:7px;border-radius:50%;background:var(--positive)}.legend-dot.full{background:#aaa}.legend-dot.unavailable{background:#dedede}.section-title{font-size:13px;font-weight:700;margin:0 0 8px}.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.slot{height:40px;border:1px solid #d5d5d5;border-radius:7px;background:#fff;display:grid;place-items:center;font-size:12px;font-weight:550;color:#333}.slot.selected{border:1.5px solid var(--brand);background:#f0f1ff;color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}.slot.full,.slot.unavailable{background:#f5f5f5;color:#999;border-color:#e6e6e6}.slot.full span{text-decoration:line-through}.slot.unavailable{font-size:10px}.duration-note{font-size:10px;color:var(--quiet);line-height:1.45;margin:10px 0 0}.sample-tag{font-size:9px;color:#744a08;background:#fff3db;border-radius:3px;padding:3px 5px;font-weight:600;margin-left:5px}.foot{flex:none;padding:10px 18px 17px;border-top:1px solid var(--line);background:#fff}.foot-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:11px}.foot-meta span{color:var(--quiet)}.foot-meta strong{font-size:12px}.cta{height:47px;border-radius:5px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:650}.annotation{max-width:310px}.ann-kicker{font-size:11px;letter-spacing:.13em;color:var(--brand);font-weight:700}.annotation h1{font-size:30px;line-height:1.22;margin:12px 0 9px;letter-spacing:-.7px}.ann-desc{font-size:14px;line-height:1.7;color:#555;margin:0 0 25px}.ann-list{border-top:1px solid #c9c9ce}.ann-row{padding:13px 0;border-bottom:1px solid #c9c9ce}.ann-label{font-size:11px;color:#777;margin-bottom:4px}.ann-value{font-size:13px;line-height:1.55}.note{margin-top:18px;padding:13px 14px;background:#fff7e8;border-left:3px solid var(--warning);font-size:12px;line-height:1.55;color:#5e4a2a}.sequence{font-size:11px;color:#777;margin-top:17px;letter-spacing:.04em}
+    .back,.cta,.change{text-decoration:none}.back{color:var(--ink);display:flex;align-items:center}
+    @media(max-width:800px){body{background:#fff}.presentation{display:block;padding:0}.artboard{margin:0 auto;box-shadow:none}.annotation{max-width:375px;margin:24px auto;padding:0 20px 28px}.annotation h1{font-size:24px}}
+    .artboard .slot.selected{color:var(--brand)}
+  </style>
+  <link rel="stylesheet" href="post-purchase-flow.css">
+  <link rel="stylesheet" href="iphone17-presentation.css">
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body data-page="schedule">
+  <main class="presentation">
+    <article class="artboard" aria-label="小程序设计画板：选择日期和时段">
+      <div class="statusbar"><span>9:41</span><div class="status-icons"><span class="signal">▂▄▆</span><span>⌁</span><span class="battery"></span></div></div>
+      <header class="nav"><a class="back" href="06-store-selection.html" aria-label="返回选择门店">‹</a><span class="nav-title">选择服务时间</span><span class="more" aria-hidden="true">···</span></header>
+      <section class="body">
+        <div class="step" aria-label="预约进度"><span>1 选择门店</span><span class="step-line"></span><span aria-current="step">2 选择时间</span><span class="step-line"></span><span>3 预约完成</span></div>
+        <h2 class="heading" id="schedule-heading">选择日期和时段</h2>
+        <p class="subheading" id="schedule-description">可约窗口以门店实时服务资源为准。</p>
+        <p class="state-message" id="reschedule-guidance" hidden></p>
+        <div class="store-summary"><div><strong id="selected-store-name">上海门店 01</strong></div><a class="change" href="06-store-selection.html">更换门店</a></div>
+        <div class="calendar-title"><strong>2026 年 10 月</strong><span>演示可约日期</span></div>
+        <div class="dates" aria-label="可选日期">
+          <button type="button" class="date" data-date="2026-10-23" data-date-label="周五 · 10 月 23 日" aria-pressed="false"><small>周五</small><strong>23</strong></button>
+          <button type="button" class="date selected" data-date="2026-10-24" data-date-label="周六 · 10 月 24 日" aria-pressed="true"><small>周六</small><strong>24</strong></button>
+          <button type="button" class="date" data-date="2026-10-25" data-date-label="周日 · 10 月 25 日" aria-pressed="false"><small>周日</small><strong>25</strong></button>
+          <button type="button" class="date" data-date="2026-10-26" data-date-label="周一 · 10 月 26 日" aria-pressed="false"><small>周一</small><strong>26</strong></button>
+          <button type="button" class="date disabled" data-date="2026-10-27" data-date-label="周二 · 10 月 27 日" aria-pressed="false" disabled><small>周二</small><strong>27</strong></button>
+        </div>
+        <div class="legend"><span class="legend-item"><i class="legend-dot"></i>可约</span><span class="legend-item"><i class="legend-dot full"></i>约满</span><span class="legend-item"><i class="legend-dot unavailable"></i>不可约</span></div>
+        <h3 class="section-title" id="selected-date-label">周六 · 10 月 24 日　可选时段</h3>
+        <div class="slots" aria-label="可选时段">
+          <button type="button" class="slot" data-time="09:00" aria-pressed="false">09:00</button><button type="button" class="slot full" data-time="09:30" aria-pressed="false" disabled><span>09:30</span></button><button type="button" class="slot unavailable" data-time="10:00" aria-pressed="false" disabled>10:00 不可约</button>
+          <button type="button" class="slot" data-time="10:30" aria-pressed="false">10:30</button><button type="button" class="slot selected" data-time="11:00" aria-pressed="true">11:00　✓</button><button type="button" class="slot" data-time="11:30" aria-pressed="false">11:30</button>
+          <button type="button" class="slot" data-time="13:00" aria-pressed="false">13:00</button><button type="button" class="slot full" data-time="13:30" aria-pressed="false" disabled><span>13:30</span></button><button type="button" class="slot" data-time="14:00" aria-pressed="false">14:00</button>
+        </div>
+        <div class="state-message" id="schedule-message" role="status" hidden></div>
+        <p class="duration-note">请选择到店时间，服务时长以项目和门店安排为准。</p>
+      </section>
+      <footer class="foot"><div class="foot-meta"><span>当前选择</span><strong id="selected-slot-label">10 月 24 日　11:00</strong></div><button class="cta" id="primary-action" type="button">确认预约</button></footer>
+    </article>
+    <aside class="annotation">
+      <h1>选择日期<br>和时段</h1>
+      <section class="prototype-controls" aria-labelledby="state-heading">
+        <h2 id="state-heading">状态切换</h2>
+        <p>切换时段状态，查看可选与不可选的处理方式；改约时新时段成功前保留原预约。</p>
+        <div class="state-options" role="group" aria-label="预约时段状态">
+          <button type="button" class="state-option" data-schedule-state="available" aria-pressed="true">有可约时段</button>
+          <button type="button" class="state-option" data-schedule-state="empty" aria-pressed="false">当前无可约时段</button>
+          <button type="button" class="state-option" data-schedule-state="conflict" aria-pressed="false">提交时段冲突</button>
+        </div>
+        <p class="control-feedback" id="state-description" role="status">选择一个可约时段后可以继续。</p>
+      </section>
+      <nav class="flow-nav" aria-label="购后流程页面">
+        <h2>流程导航</h2>
+        <div class="flow-links">
+          <a class="flow-link" href="05-payment-result.html">05 · 支付结果</a>
+          <a class="flow-link" href="06-store-selection.html">06 · 选择门店</a>
+          <a class="flow-link" href="07-date-time-selection.html" aria-current="step">07 · 选择时间</a>
+          <a class="flow-link" href="12-service-order-detail.html?booking=created">08 · 预约成功后查看服务单</a>
+        </div>
+      </nav>
+    </aside>
+  </main>
+  <script src="post-purchase-flow.js"></script>
+</body>
+</html>

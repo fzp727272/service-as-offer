@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>01 · 服务入口 / 列表 · A 方案原型</title>
+  <style>
+    :root {
+      color-scheme: light;
+      /* Brand fonts use local availability; system fonts are prototype fallbacks. */
+      font-family: "Decathlon Text", "Source Han Sans CN", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", sans-serif;
+      color: #101010;
+      background: #e1e3f5;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      --ink: #101010;
+      --muted: #616161;
+      --line: #e1e0df;
+      --soft: #f5f4f5;
+      --surface: #fff;
+      --accent: #3643ba;
+      --accent-soft: #f0f1ff;
+      --on-brand: #7affa6;
+      --on-brand-quiet: #e1e3f5;
+      --background: #f8f8f8;
+      --space-xs: 8px;
+      --space-s: 12px;
+      --space-m: 16px;
+      --radius-regular: 0;
+    }
+    * { box-sizing: border-box; }
+    html { min-width: 320px; }
+    body { margin: 0; background: linear-gradient(145deg, #f0f1ff, #ededed 65%); line-height: 1.5; }
+    button { color: inherit; font: inherit; }
+    button:focus-visible, a:focus-visible, [tabindex="0"]:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    .preview {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 28px 20px;
+    }
+    .scenario-panel { position: sticky; top: 28px; width: 232px; flex-shrink: 0; padding: 20px; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 12px 32px #1010100d; }
+    .scenario-panel h2 { margin: 0; font-size: 16px; }
+    .scenario-panel > p { margin: 6px 0 16px; color: var(--muted); font-size: 12px; }
+    .scenario-options { display: grid; gap: 8px; }
+    .scenario-option { width: 100%; padding: 12px; border: 1px solid var(--line); background: var(--surface); text-align: left; cursor: pointer; }
+    .scenario-option strong { display: block; font-size: 13px; font-weight: 600; }
+    .scenario-option small { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .scenario-option[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+    .scenario-option:hover { border-color: var(--accent); }
+    .device {
+      width: 418px;
+      flex-shrink: 0;
+      height: min(840px, calc(100vh - 56px));
+      min-height: 650px;
+      padding: 13px;
+      border: 1px solid #292929;
+      border-radius: 42px;
+      background: #222;
+      box-shadow: 0 18px 55px #0002;
+    }
+    .screen {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      overscroll-behavior: contain;
+      border-radius: 30px;
+      background: var(--surface);
+      scrollbar-width: none;
+      scrollbar-color: #c7c7c7 transparent;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+    .app {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 0 var(--space-m) 32px;
+      background: var(--background);
+    }
+    .system-bar {
+      height: 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: .02em;
+    }
+    .system-right { display: flex; gap: 5px; align-items: center; }
+    .signal { display: inline-flex; gap: 2px; align-items: end; height: 12px; }
+    .signal i { display: block; width: 3px; border-radius: 2px; background: currentColor; }
+    .signal i:nth-child(1) { height: 4px; }
+    .signal i:nth-child(2) { height: 6px; }
+    .signal i:nth-child(3) { height: 8px; }
+    .signal i:nth-child(4) { height: 10px; }
+    .battery { width: 18px; height: 9px; border: 1px solid currentColor; border-radius: 3px; padding: 1px; position: relative; }
+    .battery::after { content: ""; position: absolute; right: -3px; top: 2px; width: 2px; height: 4px; background: currentColor; border-radius: 0 2px 2px 0; }
+    .battery i { display: block; width: 70%; height: 100%; border-radius: 1px; background: currentColor; }
+    .hero-banner {
+      position: relative;
+      overflow: hidden;
+      margin: 0 -16px;
+      padding: 0 var(--space-m) 40px;
+      background: var(--accent);
+      color: var(--surface);
+    }
+    .hero-banner::before { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 52%, #ffffff08 52%, #ffffff08 72%, transparent 72%); pointer-events: none; }
+    .hero-banner > * { position: relative; }
+    .mini-nav { position: relative; z-index: 1; min-height: 44px; display: grid; grid-template-columns: 88px minmax(0, 1fr) 88px; align-items: center; margin: 0 -16px; padding: 0 16px; background: transparent; color: var(--surface); }
+    .mini-nav-title { grid-column: 2; text-align: center; font-size: 14px; font-weight: 700; }
+    .mini-capsule { position: relative; display: flex; border: 1px solid #bdbdbd; border-radius: 999px; background: rgba(255, 255, 255, 0.2); color: var(--ink); }
+    .mini-capsule::before { display: none; }
+    .mini-capsule::after { content: ""; position: absolute; left: 50%; top: 9px; height: 24px; border-left: 1px solid #dedede; }
+    .mini-capsule button { width: 43px; height: 36px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; }
+    .mini-capsule button:focus-visible { outline-color: var(--accent); }
+    .mini-capsule svg { width: 20px; height: 20px; }
+    .hero-copy { padding: 16px 0 8px; isolation: isolate; }
+    .hero-kicker { margin: 0 0 10px; color: var(--on-brand); font-size: 10px; line-height: 14px; letter-spacing: .12em; }
+    .hero-banner h1 { margin: 0; font-size: 28px; line-height: 38px; font-weight: 700; letter-spacing: -.03em; }
+    .hero-art { position: absolute; z-index: -1; right: -22px; top: 16px; width: 160px; height: 140px; pointer-events: none; }
+    .hero-assurance { width:60%;display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+    .hero-assurance button { min-width: 0; display: flex; align-items: center; gap: 7px; padding: 0; border: 0; background: transparent; color: var(--on-brand-quiet); text-align: left; font-size: 11px; line-height: 16px; white-space: nowrap; cursor: pointer; }
+    .hero-assurance svg { width: 18px; height: 18px; color: var(--on-brand); fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .hero-assurance button svg { flex: 0 0 18px; color: inherit; }
+    .hero-assurance button:active { opacity: .72; }
+    .personal-services { position: relative; z-index: 1; display: grid; gap: var(--space-s); margin-top: -24px; }
+    .personal-section { min-width: 0; padding: var(--space-m); border: 1px solid var(--line); border-radius: var(--radius-regular); background: var(--surface); }
+    .order-section { border-top: 3px solid var(--on-brand); }
+    .personal-section-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-m); }
+    .personal-section-heading h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 16px; }
+    .personal-section-heading span { color: var(--muted); font-size: 12px; }
+    .equipment-product { width: 100%; display: grid; grid-template-columns: 50px minmax(0, 1fr) 14px; align-items: center; gap: 10px; padding: 8px; border: 0; background: var(--accent-soft); text-align: left; cursor: pointer; }
+    .equipment-product img { width: 50px; height: 50px; background: #fff; object-fit: cover; }
+    .equipment-product-copy { min-width: 0; }
+    .equipment-product-copy strong { display: block; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+    .equipment-product-copy small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .equipment-product-arrow { color: var(--muted); font-size: 22px; }
+    .personal-order { margin-top: var(--space-s); padding-top: var(--space-s); border-top: 1px solid var(--line); }
+    .order-service-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+    .order-service-name { margin: 0; font-size: 14px; font-weight: 600; }
+    .order-meta-list { display: grid; gap: 4px; }
+    .order-meta-row { display: grid; grid-template-columns: 56px minmax(0, 1fr); align-items: center; gap: 8px; font-size: 12px; line-height: 1.5; }
+    .order-meta-row > span { color: var(--muted); }
+    .order-meta-row > strong { font-weight: 600; }
+    .store-row { grid-template-columns: 56px minmax(0, 1fr) auto; }
+    .store-button { min-height: 30px; padding: 0 9px; border: 1px solid var(--accent); background:var(--accent); color: #fff; font-size: 11px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+    .order-status { display: inline-flex; padding: 2px 8px; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 500; white-space: nowrap; }
+    .benefit-row button { min-height: 32px; padding: 0 10px; border: 1px solid var(--accent); border-radius: var(--radius-regular); background: var(--surface); color: var(--accent); font-size: 11px; font-weight: 600; cursor: pointer; }
+    .benefit-list { display: grid; margin-top: var(--space-s); border-top: 1px solid var(--line); }
+    .benefit-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-xs); padding: var(--space-s) 0; border-bottom: 1px solid var(--line); }
+    .benefit-row:last-child { padding-bottom: 0; border-bottom: 0; }
+    .benefit-row strong { display: block; font-size: 14px; line-height: 1.5; }
+    .benefit-row small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; line-height: 18px; }
+    .recommendation-section {  padding: 16px; }
+    .recommendation-card { padding: 0; }
+    .recommendation-card h3 { margin: 0; font-size: 16px; line-height: 24px; }
+    .recommendation-card h3 em { color: var(--accent); font-style: normal; }
+    .recommendation-advice { margin: 4px 0 10px; color: var(--muted); font-size: 12px; line-height: 18px; }
+    .recommendation-plan { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; margin-top: 10px; padding:8px 12px; border: 1px solid var(--on-brand-quiet); background: var(--surface); }
+    .recommendation-plan p { margin: 0 0 4px; color: var(--accent); font-size: 12px; }
+    .recommendation-plan h4 { margin: 0; font-size: 16px; line-height: 24px; }
+    .recommendation-plan small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .recommendation-plan button { min-height: 36px; padding: 0 12px; border: 1px solid var(--accent); background: var(--accent); color: #fff; font-size: 12px; white-space: nowrap; cursor: pointer; }
+    .recommendation-plan button:hover { background: var(--ink); }
+    .app-tabbar { flex: 0 0 auto; z-index: 4; display: grid; grid-template-columns: repeat(2, 1fr); margin: 0 -16px; padding: 8px 16px max(8px, env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: #fffffff2; backdrop-filter: blur(12px); }
+    .app-tab { display: grid; justify-items: center; gap: 2px; min-height: 42px; padding: 3px; border: 0; background: transparent; color: var(--muted); font-size: 11px; cursor: pointer; }
+    .app-tab svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .app-tab[aria-current="page"] { color: var(--accent); font-weight: 700; }
+    .page-nav { position: sticky; top: 0; z-index: 5; margin: 0 -16px; padding: 0 16px; background: #fff; }
+    .page-nav .system-bar { height: 44px; }
+    .page-nav-row { position: relative; height: 48px; display: grid; grid-template-columns: 40px 1fr 88px; align-items: center; }
+    .page-nav-back { width: 36px; height: 40px; display: grid; place-items: center; padding: 0; border: 0; background: transparent; cursor: pointer; }
+    .page-nav-back svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .page-nav-title { grid-column: 2; margin: 0; text-align: center; font-size: 18px; font-weight: 700; line-height: 26px; }
+    .page-nav .mini-capsule { grid-column: 3; justify-self: end; width: 87px; height: 32px; background: #fff; }
+    .page-nav .mini-capsule button { width: 42px; height: 30px; }
+    .equipment-source { padding: 3px 6px; background: #ebf2fe; color: var(--accent); font-size: 10px; white-space: nowrap; }
+    .section { margin-top: 24px; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: var(--space-xs); margin-bottom: var(--space-xs); }
+    .section-heading h2 { margin: 0; font-size: 20px; line-height: 30px; }
+    .section-heading span { color: var(--muted); font-size: 12px; }
+    .directory-navigation { position: sticky; top: 0; z-index: 3; margin: 0 -16px; padding: 0 var(--space-m); background: #fff; border-bottom: 1px solid var(--line); }
+    .directory-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; }
+    .directory-tab { position: relative; min-height: 56px; padding: 8px 0; border: 0; background: transparent; color: var(--muted); font-size: 14px; cursor: pointer; }
+    .directory-tab small { display: block; margin-top: 4px; font-size: 10px; font-weight: 400; }
+    .directory-tab[aria-current="location"] { color: var(--accent); font-weight: 700; }
+    .directory-tab[aria-current="location"]::after { content: ""; position: absolute; bottom: 0; left: 28%; right: 28%; height: 3px; background: var(--accent); }
+    .directory-tab:disabled { color: #aaa; cursor: not-allowed; }
+    .directory-groups { display: grid; gap: var(--space-s); }
+    .directory-group { margin-top: 24px; }
+    .directory-group:last-child { min-height: var(--category-viewport, 0px); }
+    .directory-group-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
+    .directory-group-heading h3 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 16px; }
+    .directory-group-heading span { color: var(--muted); font-size: 11px; }
+    .directory-service { width: 100%; display: flex; align-items: flex-start; gap: var(--space-s); padding: var(--space-s); border: 1px solid var(--line); border-radius: var(--radius-regular); background: #fff; text-align: left; cursor: pointer; transition: border-color .15s, background .15s; }
+    .service-image { position: relative; flex: 0 0 80px; overflow: hidden; background: var(--soft); }
+    .service-image img { display: block; width: 80px; height: 96px; object-fit: cover; }
+    .image-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 3px 0; background: #fffffff2; color: var(--muted); text-align: center; font-size: 10px; }
+    .directory-service-copy { flex: 1; min-width: 0; }
+    .service-title { display: block; font-size: 14px; font-weight: 700; line-height: 20px; }
+    .service-description { display: block; margin: 4px 0 8px; color: var(--muted); font-size: 12px; line-height: 18px; }
+    .service-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .service-tag { padding: 2px 4px; background: var(--soft); color: var(--muted); font-size: 10px; line-height: 14px; }
+    .service-tag.recommended { color: var(--accent); background: var(--accent-soft); }
+    .service-bottom { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 12px; }
+    .service-price { color: var(--ink); font-family: "Decathlon Display", "Decathlon Text", sans-serif; font-size: 18px; line-height: 18px; font-weight: 600; white-space: nowrap; }
+    .service-price small { margin-right: 2px; font-size: 12px; }
+    .service-price .price-suffix { margin: 0 0 0 3px; }
+    .price-label { color: var(--muted); font-size: 11px; }
+    .directory-note { margin: 14px 0 0; color: var(--muted); font-size: 11px; line-height: 1.7; }
+    .footer-note { padding-top: 24px; color: var(--muted); font-size: 11px; line-height: 1.7; text-align: center; }
+    .directory-service:active { background: var(--accent-soft); }
+    .benefit-row button:active { background: var(--accent); color: #fff; }
+    .mini-capsule button:active { background: #0000000d; }
+    @media (hover: hover) {
+      .directory-service:hover { border-color: var(--accent); background: var(--accent-soft); }
+      .benefit-row button:hover { background: var(--accent); color: #fff; }
+    }
+    .toast {
+      position: sticky; bottom: 12px; z-index: 4; width: fit-content; max-width: 100%;
+      margin: 12px auto 0; padding: 10px 14px; border: 1px solid #555; border-radius: 12px;
+      background: #222; color: #fff; font-size: 13px; line-height: 1.6;
+    }
+    .live-region { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 760px) {
+      .preview { flex-direction: column; align-items: center; gap: 12px; }
+      .scenario-panel { position: relative; top: auto; order: -1; width: 418px; padding: 12px; }
+      .scenario-panel h2 { font-size: 12px; margin-bottom: 8px; }
+      .scenario-panel > p, .scenario-option small { display: none; }
+      .scenario-options { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+      .scenario-option { padding: 8px 4px; text-align: center; }
+      .scenario-option strong { font-size: 11px; }
+    }
+    @media (max-width: 600px) {
+      html, body { width: 100%; height: 100%; overflow: clip; }
+      body { background: #fff; }
+      .preview { width: 100%; height: 100dvh; min-height: 0; gap: 8px; padding: 8px 0 0; }
+      .scenario-panel { width: calc(100% - 16px); padding: 8px; }
+      .device { flex: 1; width: 100%; height: auto; min-height: 0; padding: 0; border: 0; border-radius: 0; background: #fff; box-shadow: none; }
+      .screen { min-height: 0; height: 100%; overflow: hidden; border-radius: 0; }
+      .app { padding: 0 var(--space-m) max(24px, env(safe-area-inset-bottom)); }
+    }
+    @media (max-width: 360px) {
+      .personal-section, .directory-service { padding: 12px; }
+      .directory-tab { font-size: 12px; }
+      .service-image { flex-basis: 52px; }
+      .service-image img { width: 52px; height: 68px; }
+      .image-caption { font-size: 9px; }
+      .hero-art { width: 128px; right: -16px; top: 26px; opacity: .7; }
+      .hero-banner h1 { font-size: 24px; line-height: 34px; }
+    }
+  </style>
+  <link rel="stylesheet" href="iphone17-presentation.css">
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body>
+  <main class="preview">
+    <div class="device" aria-label="小程序首页画板">
+      <div class="screen" id="screen">
+        <div class="app" id="app"></div>
+      </div>
+    </div>
+    <aside class="scenario-panel" aria-labelledby="scenario-title">
+      <h2 id="scenario-title">首页场景预览</h2>
+      <p>仅切换示例数据，不影响真实业务</p>
+      <div class="scenario-options" role="group" aria-label="切换首页场景">
+        <button type="button" class="scenario-option" data-scenario="all" aria-pressed="true"><strong>重叠场景</strong><small>先展示服务订单，再展示独立权益订单</small></button>
+        <button type="button" class="scenario-option" data-scenario="orders" aria-pressed="false"><strong>只有订单</strong><small>只展示进行中的服务订单</small></button>
+        <button type="button" class="scenario-option" data-scenario="benefits" aria-pressed="false"><strong>只有权益订单</strong><small>服务订单不可用时，仍单独展示商品权益</small></button>
+        <button type="button" class="scenario-option" data-scenario="recommendations" aria-pressed="false"><strong>无订单 / 权益</strong><small>展示基于装备使用情况的推荐</small></button>
+      </div>
+      <section class="design-facts" aria-labelledby="home-design-title">
+        <p class="design-kicker">UX SPEC 01 / SERVICE AS OFFER</p>
+        <h3 id="home-design-title">首页设计说明</h3>
+        <div class="design-fact"><strong>页面定位</strong><span>服务入口与订单概览；先呈现进行中的服务订单，再展示独立权益和装备推荐。</span></div>
+        <div class="design-fact"><strong>场景切换</strong><span>上方按钮切换首页内容，示例数据仅供评审，不代表真实订单或服务资格。</span></div>
+        <div class="design-fact"><strong>画板规格</strong><span>按 iPhone 17 画板展示：402 × 874 CSS px；无手机外框，保留画板阴影。</span></div>
+      </section>
+      <a class="design-link" href="02-service-detail.html">查看服务详情设计稿</a>
+      <a class="design-link" href="my-orders.html">查看我的订单设计稿</a>
+    </aside>
+  </main>
+  <div class="live-region" id="live" aria-live="polite"></div>
+  <script>
+    const baseScenario = {
+      orders: ["待预约"],
+      benefits: true,
+      recommendations: true,
+      equipment: "公路自行车 · 订单示意 810263",
+      orderStatus: "进行中",
+      appointmentTime: "10月24日 周六 14:00",
+      storeName: "上海徐汇店",
+      purchasedProduct: {
+        name: "公路自行车",
+        detail: "商品订单 810263 · 权益归属示例",
+        benefits: [
+          { title: "新车安全检查", detail: "购车关联权益 · 不可转让" },
+          { title: "6 个月免费安全检查", detail: "购车关联权益示例" }
+        ]
+      }
+    };
+    const categories = [
+      { id: "all", title: "全部", subtitle: "15 项服务", heading: "运动装备，一站养护", detail: "检查、保养、穿线、打蜡，按你的装备选服务" },
+      { id: "bike", title: "自行车", subtitle: "检查 / 保养", heading: "从安全检查，到深度保养", detail: "按骑行需求选择养护方案，深度保养限指定门店" },
+      { id: "badminton", title: "羽毛球/网球", subtitle: "球拍穿线", heading: "为下一场挥拍做好准备", detail: "按取拍时效、球拍和球线购买渠道选择方案" },
+      { id: "ski", title: "滑雪", subtitle: "打蜡 / 保养", heading: "上雪前养护，雪季后收纳", detail: "单板、双板养护与季末打蜡，按使用场景选择" }
+    ];
+    const services = [
+      { category: "bike", title: "安全检查", detail: "检查主要部件、紧固件并润滑链条", price: 69.9, tags: ["基础检查", "链条润滑"] },
+      { category: "bike", title: "标准保养", detail: "安全检查基础上，增加部件调节与线管润滑", price: 199.9, tags: ["检查 + 调节", "日常养护"] },
+      { category: "bike", title: "全面保养", detail: "标准保养基础上，增加轮组矫正与轴承养护", price: 299.9, tags: ["轮圈矫正", "轴承养护"] },
+      { category: "bike", title: "深度保养", detail: "增加传动、轮组、车架及避震转点清洁", price: 499.9, tags: ["深度清洁", "指定门店"] },
+      { category: "badminton", title: "2 小时快速穿线", detail: "不区分球拍及球线的购买渠道", price: 60, tags: ["快速穿线", "购买渠道不限"] },
+      { category: "badminton", title: "48 小时取 · 自带球拍球线", detail: "非迪卡侬球拍 + 非迪卡侬球线", price: 40, tags: ["羽毛球拍", "常规穿线"] },
+      { category: "badminton", title: "48 小时取 · 单项购于迪卡侬", detail: "球拍或球线购于迪卡侬，二者满足其一", price: 30, tags: ["羽毛球拍", "购买条件适用"] },
+      { category: "badminton", title: "48 小时取 · 球拍球线均购于迪卡侬", detail: "迪卡侬球拍 + 迪卡侬球线", price: 20, tags: ["羽毛球拍", "购买条件适用"] },
+      { category: "badminton", title: "网球 · 2 小时快速穿线", detail: "不区分球拍及球线的购买渠道", price: 80, tags: ["网球拍", "快速穿线", "购买渠道不限"] },
+      { category: "badminton", title: "网球 · 48 小时取 · 自带球线", detail: "非迪卡侬球线；球拍购买渠道不限", price: 60, tags: ["网球拍", "常规穿线"] },
+      { category: "badminton", title: "网球 · 48 小时取 · 迪卡侬球线", detail: "迪卡侬球线；球拍购买渠道不限", price: 40, tags: ["网球拍", "购买条件适用"] },
+      { category: "ski", title: "手工打蜡（单层）", detail: "检查板底与板刃，完成打蜡及抛光", price: 149.9, tags: ["板底养护", "手工打蜡"] },
+      { category: "ski", title: "手工季末打蜡", detail: "雪季后长期存放保护；开季配套服务待确认", price: 149.9, tags: ["季末存放", "不刮蜡"] },
+      { category: "ski", title: "单板手工保养", detail: "单板手工磨刃 + 手工打蜡", price: 199.9, tags: ["单板适用", "磨刃 + 打蜡"] },
+      { category: "ski", title: "双板手工保养", detail: "双板手工磨刃 + 手工打蜡", price: 249.9, tags: ["双板适用", "磨刃 + 打蜡"] }
+    ];
+    const scenarioOptions = {
+      all: { title: "重叠场景", orders: true, benefits: true },
+      orders: { title: "只有订单场景", orders: true, benefits: false },
+      benefits: { title: "只有权益场景", orders: false, benefits: true },
+      recommendations: { title: "无订单、无权益场景", orders: false, benefits: false }
+    };
+    let activeScenario = "all";
+    let scenario = baseScenario;
+    const directoryState = { category: "all" };
+    let activeTab = "services";
+    const app = document.getElementById("app");
+    const screen = document.getElementById("screen");
+    const live = document.getElementById("live");
+    let toastTimer;
+
+    const esc = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+    function orderProductMarkup() {
+      return `<button type="button" class="equipment-product" data-action="equipment-entry" aria-label="查看我的设备：Rockrider ST 530 山地自行车">
+        <img src="assets/service-bike.svg" alt="" width="50" height="50">
+        <span class="equipment-product-copy"><strong>Rockrider ST 530 山地自行车</strong><small>商品订单 810263</small></span>
+        <span class="equipment-product-arrow" aria-hidden="true">›</span>
+      </button>`;
+    }
+    function benefitRowsMarkup(scenario) {
+      return `<div class="benefit-list">${scenario.purchasedProduct.benefits.map((benefit, index) => `<div class="benefit-row">
+        <div><strong>${esc(benefit.title)}</strong><small>${esc(benefit.detail)}</small></div>
+        <button type="button" data-action="benefit" data-benefit-index="${index}">去预约</button>
+      </div>`).join("")}</div>`;
+    }
+    function orderMarkup(scenario) {
+      if (!scenario.orders.length) return "";
+      return `<section class="personal-section order-section" id="my-orders" aria-label="进行中的订单">
+        ${orderProductMarkup()}
+        <div class="personal-order">
+          <div class="order-service-row"><strong class="order-service-name">自行车基础保养</strong><span class="order-status">${esc(scenario.orderStatus)}</span></div>
+          <div class="order-meta-list">
+            <div class="order-meta-row"><span>预约时间</span><strong>${esc(scenario.appointmentTime)}</strong></div>
+            <div class="order-meta-row store-row"><span>门店名称</span><strong>${esc(scenario.storeName)}</strong><button type="button" class="store-button" data-action="store">去门店</button></div>
+          </div>
+          ${scenario.benefits ? benefitRowsMarkup(scenario) : ""}
+        </div>
+      </section>`;
+    }
+    function benefitMarkup(scenario) {
+      if (!scenario.benefits || scenario.orders.length) return "";
+      return `<section class="personal-section benefit-section" id="my-benefits" aria-label="权益">
+        ${orderProductMarkup()}
+        ${benefitRowsMarkup(scenario)}
+      </section>`;
+    }
+    function recommendationItems(scenario) {
+      if (!scenario.recommendations) return [];
+      return [
+        { title: "安全检查", category: "自行车" },
+        { title: "标准保养", category: "自行车" }
+      ];
+    }
+    function recommendationMarkup(scenario) {
+      if (scenario.orders.length || scenario.benefits || !scenario.recommendations) return "";
+      const service = services.find(item => item.category === "bike" && item.title === "标准保养");
+      return `<section class="personal-section recommendation-section" aria-labelledby="recommendation-title">
+        <div class="recommendation-card">
+          <h3 id="recommendation-title">您的自行车已使用约<em>6个月</em></h3>
+          <p class="recommendation-advice">建议做一次周期基础保养</p>
+          <button type="button" class="equipment-product" data-action="equipment-entry" aria-label="查看我的设备：Rockrider ST 530 山地自行车">
+            <img src="assets/service-bike.svg" alt="" width="50" height="50">
+            <span class="equipment-product-copy"><strong>Rockrider ST 530 山地自行车</strong><small>公路自行车 · 购买于 2026年4月</small></span>
+            <span class="equipment-product-arrow" aria-hidden="true">›</span>
+          </button>
+          <div class="recommendation-plan">
+            <div><p>推荐方案</p><h4>${esc(service.title)}</h4><small>¥${service.price.toFixed(2)} 起</small></div>
+            <button type="button" data-action="catalog" data-service-category="bike" data-service-name="${esc(service.title)}" data-service-detail="${esc(service.detail)}" data-price="${service.price}" data-title="自行车 · ${esc(service.title)}">查看服务</button>
+          </div>
+        </div>
+      </section>`;
+    }
+    function serviceDirectoryMarkup() {
+      return `<section class="section category-section" id="service-directory" aria-labelledby="directory-title">
+        <div class="section-heading"><h2 id="directory-title">全部服务</h2><span>一期精选 · 15 项服务</span></div>
+        <div class="directory-navigation">
+          <nav class="directory-tabs" aria-label="服务分类">${categories.map((category, index) => `<button type="button" class="directory-tab" id="tab-${category.id}" data-category="${category.id}" ${index === 0 ? 'aria-current="location"' : ""} aria-controls="${category.id === "all" ? "directory-results" : `category-${category.id}`}">${category.title}<small>${category.subtitle}</small></button>`).join("")}</nav>
+        </div>
+        <div id="directory-results"></div>
+        <p class="directory-note">服务价格与完成时间以门店确认为准。</p>
+      </section>`;
+    }
+    function pageNavMarkup(title, backAction) {
+      return `<header class="page-nav" aria-label="${esc(title)}导航">
+        <div class="system-bar" aria-hidden="true"><span>9:41</span><span class="system-right"><span class="signal"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"><i></i></span></span></div>
+        <div class="page-nav-row">
+          <button type="button" class="page-nav-back" data-action="${backAction}" aria-label="返回"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6M9 12h12"/></svg></button>
+          <h1 class="page-nav-title">${esc(title)}</h1>
+          <div class="mini-capsule" aria-hidden="true"><button type="button" tabindex="-1"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="2.4"/><circle cx="19" cy="12" r="1.8"/></svg></button><button type="button" tabindex="-1"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></button></div>
+        </div>
+      </header>`;
+    }
+    function tabbarMarkup() {
+      return `<nav class="app-tabbar" aria-label="主导航">
+        <button type="button" class="app-tab" data-tab="services" ${activeTab === "services" ? 'aria-current="page"' : ""}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-6 8 6v11h-6v-7h-4v7Z"/></svg><span>官方服务</span>
+        </button>
+        <button type="button" class="app-tab" data-tab="orders" ${activeTab === "orders" ? 'aria-current="page"' : ""}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM14 4h6v7h-6zM4 14h7v6H4zM14 14h6v6h-6z"/></svg><span>我的订单</span>
+        </button>
+      </nav>`;
+    }
+    function renderDirectoryResults() {
+      const filtered = services;
+      const recommendedKeys = new Set(recommendationItems(scenario).map(item => `${item.category}:${item.title}`));
+      const results = document.getElementById("directory-results");
+      results.innerHTML = categories.slice(1).map(category => {
+          const items = filtered.filter(service => service.category === category.id);
+          const tab = document.getElementById(`tab-${category.id}`);
+          tab.disabled = items.length === 0;
+          tab.title = items.length ? `滚动到${category.title}服务` : "没有匹配服务";
+          if (!items.length) return "";
+              return `<section class="directory-group" id="category-${category.id}" data-group="${category.id}" aria-labelledby="heading-${category.id}">
+            <div class="directory-group-heading"><h3 id="heading-${category.id}">${category.title}</h3><span>${items.length} 项服务</span></div>
+            <div class="directory-groups">${items.map(service => {
+              const recommended = recommendedKeys.has(`${category.title}:${service.title}`);
+              const name = `${category.title} · ${service.title}`;
+              return `<button type="button" class="directory-service" data-price="${service.price}" data-service-category="${service.category}" data-service-name="${esc(service.title)}" data-service-detail="${esc(service.detail)}" data-action="catalog" data-title="${esc(name)}" aria-label="${esc(name)}，参考价格 ${service.price.toFixed(2)} 元起">
+                <span class="service-image"><img src="assets/service-${service.category}.svg" alt="" width="74" height="80"><span class="image-caption">装备示意图</span></span>
+                <span class="directory-service-copy"><strong class="service-title">${esc(service.title)}</strong>
+                  <span class="service-description">${esc(service.detail)}</span>
+                  <span class="service-tags">${recommended ? '<span class="service-tag recommended">为你推荐</span>' : ""}${service.tags.map(tag => `<span class="service-tag">${esc(tag)}</span>`).join("")}</span>
+                  <span class="service-bottom"><span class="price-label">参考价</span><span class="service-price"><small>¥</small>${service.price.toFixed(2)}<small class="price-suffix">起</small></span></span>
+                </span>
+              </button>`;
+            }).join("")}</div>
+          </section>`;
+        }).join("");
+      updateCategoryViewport();
+      syncCategoryFromScroll();
+      live.textContent = `共 ${filtered.length} 项服务。`;
+    }
+    function markCategory(id) {
+      directoryState.category = id;
+      app.querySelectorAll(".directory-tab").forEach(tab => {
+        const selected = tab.dataset.category === id;
+        if (selected) tab.setAttribute("aria-current", "location");
+        else tab.removeAttribute("aria-current");
+      });
+    }
+    function updateCategoryViewport() {
+      const navigation = app.querySelector(".directory-navigation");
+      const results = document.getElementById("directory-results");
+      if (!navigation || !results) return;
+      results.style.setProperty("--category-viewport", `${Math.max(0, app.clientHeight - navigation.offsetHeight)}px`);
+    }
+    function syncCategoryFromScroll() {
+      const navigation = app.querySelector(".directory-navigation");
+      if (!navigation) return;
+      const boundary = app.getBoundingClientRect().top + navigation.offsetHeight + 2;
+      let current = "all";
+      for (const group of app.querySelectorAll("[data-group]")) {
+        if (group.getBoundingClientRect().top > boundary) break;
+        current = group.dataset.group;
+      }
+      if (current !== directoryState.category) markCategory(current);
+    }
+    function selectCategory(id) {
+      const navigation = app.querySelector(".directory-navigation");
+      const target = document.getElementById(id === "all" ? "service-directory" : `category-${id}`);
+      if (!target || !navigation) return;
+      markCategory(id);
+      app.scrollTop += target.getBoundingClientRect().top - app.getBoundingClientRect().top - (id === "all" ? 0 : navigation.offsetHeight);
+      syncCategoryFromScroll();
+      live.textContent = id === "all" ? "已回到全部服务列表顶部。" : `已滚动到${categories.find(category => category.id === id).title}服务。`;
+    }
+    function switchTab(id) {
+      if (!["services", "orders"].includes(id)) throw new Error(`未知首页标签：${id}`);
+      if (id === "orders") {
+        location.assign("my-orders.html");
+        return;
+      }
+      const routeChanged = activeTab !== id;
+      activeTab = "services";
+      directoryState.category = "all";
+      app.scrollTop = 0;
+      render();
+      const url = new URL(location.href);
+      if (id === "orders") url.searchParams.set("tab", id);
+      else url.searchParams.delete("tab");
+      if (routeChanged) history.pushState(null, "", url);
+      else history.replaceState(null, "", url);
+      live.textContent = id === "orders" ? "已进入我的订单。" : "已进入官方服务。";
+    }
+    function openEquipmentLibrary() {
+      const url = new URL("equipment-library.html", location.href);
+      url.searchParams.set("return", location.href);
+      location.assign(url);
+    }
+    function render() {
+      app.innerHTML = `
+        <header class="hero-banner" aria-labelledby="home-title">
+            <div class="system-bar" aria-hidden="true"><span>9:41</span><span class="system-right"><span class="signal"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"><i></i></span></span></div>
+            <div class="mini-nav" aria-label="小程序导航">
+              <span class="mini-nav-title">运动服务</span>
+              <div class="mini-capsule">
+                <button type="button" data-action="help" aria-label="小程序更多操作"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="2.4"/><circle cx="19" cy="12" r="1.8"/></svg></button>
+                <button type="button" data-action="close-mini-app" aria-label="关闭小程序"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></button>
+              </div>
+            </div>
+            <div class="hero-copy">
+              <h1 id="home-title">装备养护，<br>为下一次出发</h1>
+              <svg class="hero-art" viewBox="0 0 180 160" fill="none" aria-hidden="true">
+                <circle cx="100" cy="76" r="65" stroke="#ffffff" stroke-opacity=".14"/>
+                <circle cx="100" cy="76" r="49" stroke="#ffffff" stroke-opacity=".12"/>
+                <path d="m20 132 138-24M42 144l113-20" stroke="#ffffff" stroke-opacity=".2"/>
+                <g stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-10 90 90)">
+                  <circle cx="42" cy="98" r="28"/><circle cx="137" cy="98" r="28"/>
+                  <path d="m42 98 30-47 26 47H42l76-47 19 47M72 51h46m-46 0-5-14m-10 0h22m39 14-4-20h17l6 8"/>
+                  <circle cx="98" cy="98" r="7"/><path d="m98 98 10 12h10"/>
+                </g>
+                <path d="m145 20 3 9 9 3-9 3-3 9-3-9-9-3 9-3Z" fill="#7affa6"/>
+                <circle cx="30" cy="47" r="3" fill="#7affa6"/>
+              </svg>
+            </div>
+            <ul class="hero-assurance" aria-label="服务保障">
+              <li><button type="button" data-action="assurance" data-title="官方专业服务"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 5v7c0 4-4 7-9 10-5-3-9-6-9-10V5Z"/><path d="m7.5 11.5 3 3 6-6"/></svg><span>官方专业服务</span></button></li>
+              <li><button type="button" data-action="assurance" data-title="专业技师"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3a6 6 0 0 0-7.6 7.6l-4 4a3.5 3.5 0 0 0 5 5l4-4A6 6 0 0 0 19 8l-4 3-3-3Z"/><path d="m5 18 1-1M18 2a7 7 0 0 1 4 6"/></svg><span>专业技师</span></button></li>
+              <li><button type="button" data-action="assurance" data-title="透明收费"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3.5"/></svg><span>透明收费</span></button></li>
+              <li><button type="button" data-action="assurance" data-title="服务记录"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9a9 9 0 1 1 0 6M3 3v6h6"/><path d="M12 7v5l4 3"/></svg><span>服务记录</span></button></li>
+            </ul>
+          </header>
+          <div class="personal-services">${orderMarkup(scenario)}${benefitMarkup(scenario)}${recommendationMarkup(scenario)}</div>
+          ${serviceDirectoryMarkup()}
+      `;
+      if (activeTab === "services") renderDirectoryResults();
+      screen.querySelector(".app-tabbar")?.remove();
+      screen.insertAdjacentHTML("beforeend", tabbarMarkup());
+    }
+    function showToast(message) {
+      let toast = app.querySelector(".toast");
+      if (!toast) {
+        toast = document.createElement("div");
+        toast.className = "toast";
+        toast.setAttribute("role", "status");
+        app.append(toast);
+      }
+      toast.textContent = message;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.remove(), 2600);
+    }
+    function openServiceDetail(action) {
+      const url = new URL("02-service-detail.html", location.href);
+      url.searchParams.set("category", action.dataset.serviceCategory || "bike");
+      url.searchParams.set("name", action.dataset.serviceName || action.dataset.title || "服务详情");
+      if (action.dataset.serviceDetail) url.searchParams.set("description", action.dataset.serviceDetail);
+      if (action.dataset.price) url.searchParams.set("price", action.dataset.price);
+      location.assign(url);
+    }
+    screen.addEventListener("click", event => {
+      const tabButton = event.target.closest("[data-tab]");
+      if (tabButton) {
+        switchTab(tabButton.dataset.tab);
+        return;
+      }
+      const anchor = event.target.closest('a[href^="#"]');
+      if (anchor) {
+        event.preventDefault();
+        const target = document.getElementById(anchor.getAttribute("href").slice(1));
+        if (!target) return;
+        app.scrollTop += target.getBoundingClientRect().top - app.getBoundingClientRect().top;
+        return;
+      }
+      const tab = event.target.closest("[data-category]");
+      if (tab) {
+        selectCategory(tab.dataset.category);
+        return;
+      }
+      const action = event.target.closest("[data-action]");
+      if (!action) return;
+      if (action.dataset.action === "equipment-entry") {
+        openEquipmentLibrary();
+        return;
+      }
+      if (action.dataset.action === "catalog") {
+        openServiceDetail(action);
+        return;
+      }
+      if (action.dataset.action === "benefit") {
+        const url = new URL("03-benefit-detail.html", location.href);
+        url.searchParams.set("benefit", Number(action.dataset.benefitIndex) === 1 ? "six-month" : "inspection");
+        location.assign(url);
+        return;
+      }
+      if (action.dataset.action === "store") {
+        const url = new URL("09-appointment-detail-cancel.html", location.href);
+        url.search = new URLSearchParams({ booking: "created", date: "2026-10-24", time: "14:00", category: "bike", equipment: "Rockrider ST 530", order: "SO-2601024" });
+        location.assign(url);
+        return;
+      }
+      const messages = {
+        store: `原型跳转占位：${scenario.storeName}门店地图尚未连接。`,
+        assurance: `服务保障：${action.dataset.title}。`,
+        help: "这是首页 A 方案评审原型；业务规则仍以已确认 Spec 为准。",
+        "close-mini-app": "原型演示：正式小程序由微信关闭，当前预览不会退出。"
+      };
+      if (!messages[action.dataset.action]) throw new Error(`未知页面操作：${action.dataset.action}`);
+      showToast(messages[action.dataset.action]);
+    });
+    app.addEventListener("keydown", event => {
+      const tab = event.target.closest(".directory-tab");
+      if (!tab || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const tabs = [...app.querySelectorAll(".directory-tab:not(:disabled)")];
+      const index = tabs.indexOf(tab);
+      const next = event.key === "Home" ? 0 : event.key === "End" ? tabs.length - 1
+        : (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+      tabs[next].focus({ preventScroll: true });
+      selectCategory(tabs[next].dataset.category);
+    });
+    function switchScenario(id) {
+      if (!Object.hasOwn(scenarioOptions, id)) throw new Error(`未知首页场景：${id}`);
+      activeScenario = id;
+      const selected = scenarioOptions[id];
+      scenario = { ...baseScenario, orders: selected.orders ? baseScenario.orders : [], benefits: selected.benefits };
+      clearTimeout(toastTimer);
+      directoryState.category = "all";
+      app.scrollTop = 0;
+      render();
+      document.querySelectorAll("[data-scenario]").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.scenario === id));
+      });
+      live.textContent = `已切换至${selected.title}，共 ${services.length} 项服务。`;
+    }
+    document.querySelector(".scenario-options").addEventListener("click", event => {
+      const button = event.target.closest("[data-scenario]");
+      if (button) switchScenario(button.dataset.scenario);
+    });
+    const requestedScenario = new URLSearchParams(location.search).get("scenario");
+    if (requestedScenario && !Object.hasOwn(scenarioOptions, requestedScenario)) {
+      console.warn(`未知首页场景“${requestedScenario}”，已切换至重叠场景。`);
+    }
+    const requestedTab = new URLSearchParams(location.search).get("tab");
+    if (requestedTab && !["services", "orders"].includes(requestedTab)) {
+      console.warn(`未知首页标签“${requestedTab}”，已显示官方服务。`);
+    }
+    if (requestedTab === "orders") location.replace("my-orders.html");
+    else history.replaceState(null, "", `${location.pathname}${location.hash}`);
+    activeTab = "services";
+    switchScenario(Object.hasOwn(scenarioOptions, requestedScenario) ? requestedScenario : "all");
+    window.addEventListener("popstate", () => {
+      const params = new URLSearchParams(location.search);
+      const tab = params.get("tab");
+      if (tab === "orders") {
+        location.replace("my-orders.html");
+        return;
+      }
+      activeTab = "services";
+      app.scrollTop = 0;
+      render();
+    });
+    let scrollFrame = 0;
+    screen.addEventListener("scroll", () => {
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(() => {
+        scrollFrame = 0;
+        syncCategoryFromScroll();
+      });
+    }, { passive: true });
+    new ResizeObserver(() => {
+      updateCategoryViewport();
+      syncCategoryFromScroll();
+    }).observe(screen);
+  </script>
+</body>
+</html>

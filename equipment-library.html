@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>我的装备设计稿 · Service as Offer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Decathlon Text", "Source Han Sans CN", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", sans-serif;
+      color: #101010;
+      background: #e1e3f5;
+      --ink: #101010;
+      --muted: #616161;
+      --line: #e1e0df;
+      --soft: #f5f4f5;
+      --surface: #fff;
+      --accent: #3643ba;
+      --accent-soft: #f0f1ff;
+      --background: #f8f8f8;
+      --safe: env(safe-area-inset-bottom, 0px);
+    }
+    * { box-sizing: border-box; }
+    body { min-width: 320px; min-height: 100vh; margin: 0; background: linear-gradient(145deg, #f0f1ff, #ededed 65%); line-height: 1.5; }
+    button { color: inherit; font: inherit; cursor: pointer; }
+    button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .stage { min-height: 100vh; display: flex; justify-content: center; padding: 28px 20px; }
+    .phone { width: 418px; height: min(840px, calc(100vh - 56px)); min-height: 620px; padding: 13px; border: 1px solid #292929; border-radius: 42px; background: #222; box-shadow: 0 18px 55px #0002; }
+    .screen { height: 100%; overflow: hidden; border-radius: 30px; background: var(--surface); }
+    .scroll-area { height: 100%; overflow: auto; overscroll-behavior: contain; scrollbar-width: none; background: var(--background); }
+    .scroll-area::-webkit-scrollbar { display: none; }
+    .system-bar { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; font-size: 11px; font-weight: 650; }
+    .system-right { display: flex; align-items: center; gap: 5px; }
+    .signal { display: inline-flex; height: 12px; align-items: end; gap: 2px; }
+    .signal i { display: block; width: 3px; border-radius: 2px; background: currentColor; }
+    .signal i:nth-child(1) { height: 4px; }
+    .signal i:nth-child(2) { height: 6px; }
+    .signal i:nth-child(3) { height: 8px; }
+    .signal i:nth-child(4) { height: 10px; }
+    .battery { position: relative; width: 18px; height: 9px; padding: 1px; border: 1px solid currentColor; border-radius: 3px; }
+    .battery::after { position: absolute; top: 2px; right: -3px; width: 2px; height: 4px; border-radius: 0 2px 2px 0; background: currentColor; content: ""; }
+    .battery i { display: block; width: 70%; height: 100%; border-radius: 1px; background: currentColor; }
+    .page-nav { position: sticky; top: 0; z-index: 5; background: #fff; }
+    .page-nav-row { position: relative; height: 48px; display: grid; grid-template-columns: 40px 1fr 88px; align-items: center; padding: 0 16px; border-bottom: 1px solid #eee; }
+    .page-nav-back { width: 36px; height: 40px; display: grid; place-items: center; padding: 0; border: 0; background: transparent; }
+    .page-nav-back svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .page-nav-title { grid-column: 2; margin: 0; text-align: center; font-size: 18px; font-weight: 700; }
+    .mini-capsule { grid-column: 3; justify-self: end; width: 87px; height: 32px; display: flex; border: 1px solid #bdbdbd; border-radius: 999px; background: #fff; }
+    .mini-capsule button { width: 42px; height: 30px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 999px; background: transparent; }
+    .mini-capsule svg { width: 20px; height: 20px; }
+    .equipment-page { padding: 12px 0 max(24px, var(--safe)); background: #f7f8fa; }
+    .equipment-summary { display: grid; gap: 8px; margin: 0 16px; padding: 12px; border: 1px solid #ededed; background: #fff; }
+    .equipment-summary-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .equipment-summary-title { margin: 0; font-size: 18px; line-height: 26px; }
+    .equipment-summary-note { margin: 2px 0 0; color: #949494; font-size: 10px; line-height: 15px; }
+    .equipment-count { color: var(--accent); font-size: 28px; font-weight: 700; line-height: 32px; white-space: nowrap; }
+    .equipment-count small { font-size: 12px; }
+    .equipment-add-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px; background: var(--background); color: var(--muted); font-size: 10px; }
+    .equipment-add-button { min-height: 24px; padding: 0 8px; border: 1px solid #949494; background: #fff; color: var(--accent); font-size: 10px; white-space: nowrap; }
+    .equipment-tabs { position: sticky; top: 92px; z-index: 4; display: flex; overflow-x: auto; margin-top: 12px; padding: 0 4px; border-bottom: 1px solid var(--line); background: #fff; scrollbar-width: none; }
+    .equipment-tabs::-webkit-scrollbar { display: none; }
+    .equipment-tab { position: relative; flex: 0 0 auto; min-width: 65px; height: 48px; padding: 0 9px; border: 0; background: #fff; font-size: 12px; white-space: nowrap; }
+    .equipment-tab[aria-selected="true"] { color: var(--accent); font-weight: 700; }
+    .equipment-tab[aria-selected="true"]::after { position: absolute; right: 14px; bottom: 0; left: 14px; height: 3px; background: var(--accent); content: ""; }
+    .equipment-list { display: grid; gap: 16px; padding: 12px; }
+    .equipment-group { display: grid; gap: 8px; scroll-margin-top: 148px; }
+    .equipment-group-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin: 0 4px 2px; }
+    .equipment-group-heading h2 { margin: 0; font-size: 14px; }
+    .equipment-group-heading span { color: var(--muted); font-size: 10px; }
+    .equipment-card { display: grid; gap: 10px; padding: 12px; border: 1px solid #ededed; background: #fff; }
+    .equipment-card-main { display: grid; grid-template-columns: 58px minmax(0, 1fr); align-items: center; gap: 10px; }
+    .equipment-card-main img { width: 58px; height: 58px; object-fit: cover; background: var(--soft); }
+    .equipment-card-copy { min-width: 0; }
+    .equipment-source { display: inline-block; margin-bottom: 3px; padding: 2px 5px; background: #ebf2fe; color: var(--accent); font-size: 10px; }
+    .equipment-source.other { background: var(--soft); color: var(--muted); }
+    .equipment-card-copy h3 { overflow: hidden; margin: 0; font-size: 13px; line-height: 18px; text-overflow: ellipsis; white-space: nowrap; }
+    .equipment-card-copy p { margin: 2px 0 0; color: var(--muted); font-size: 10px; line-height: 15px; }
+    .equipment-card-copy small { display: block; margin-top: 2px; color: #949494; font-size: 9px; line-height: 13px; }
+    .equipment-status { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 8px; background: var(--accent-soft); color: var(--accent); font-size: 10px; line-height: 15px; }
+    .equipment-status.positive { background: #edf8f2; color: #149b65; }
+    .equipment-status.warning { background: #fff6ec; color: #db6900; }
+    .equipment-status.neutral { background: var(--soft); color: var(--muted); }
+    .equipment-status-copy { min-width: 0; }
+    .equipment-status-copy strong { display: block; font-size: 11px; }
+    .equipment-status-copy small { display: block; margin-top: 1px; color: var(--muted); font-size: 9px; }
+    .equipment-status button { flex: 0 0 auto; padding: 0; border: 0; background: transparent; color: var(--accent); font: inherit; font-weight: 700; white-space: nowrap; }
+    .live-region { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .toast { position: fixed; right: 20px; bottom: max(20px, var(--safe)); left: 20px; z-index: 10; width: fit-content; max-width: calc(100% - 40px); margin: auto; padding: 10px 14px; border: 1px solid #555; background: #222; color: #fff; font-size: 13px; }
+    @media (max-width: 600px) {
+      body { background: #fff; }
+      .stage { min-height: 100dvh; padding: 0; }
+      .phone { width: 100%; height: 100dvh; min-height: 0; padding: 0; border: 0; border-radius: 0; background: #fff; box-shadow: none; }
+      .screen { border-radius: 0; }
+      .toast { bottom: max(20px, var(--safe)); }
+    }
+  </style>
+  <link rel="stylesheet" href="iphone17-presentation.css">
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body>
+  <main class="stage">
+    <div class="phone" aria-label="小程序装备库画板">
+      <div class="screen">
+        <div class="scroll-area" id="scroll-area">
+          <header class="page-nav" aria-label="装备库导航">
+            <div class="system-bar" aria-hidden="true"><span>9:41</span><span class="system-right"><span class="signal"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"><i></i></span></span></div>
+            <div class="page-nav-row">
+              <button type="button" class="page-nav-back" id="back" aria-label="返回上一页"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h12"/></svg></button>
+              <h1 class="page-nav-title">我的装备</h1>
+              <div class="mini-capsule" aria-hidden="true"><button type="button" tabindex="-1"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="2.4"/><circle cx="19" cy="12" r="1.8"/></svg></button><button type="button" tabindex="-1"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></button></div>
+            </div>
+          </header>
+          <div class="equipment-summary">
+            <div class="equipment-summary-top">
+              <div><h2 class="equipment-summary-title">我的运动装备</h2><p class="equipment-summary-note"><strong>4</strong> 件迪卡侬设备 · <strong>1</strong> 件其他品牌</p></div>
+              <strong class="equipment-count">5<small>件</small></strong>
+            </div>
+            <div class="equipment-add-row"><span>添加其他品牌或未自动同步的装备</span><button type="button" class="equipment-add-button" data-action="equipment-add">+添加装备</button></div>
+          </div>
+          <nav class="equipment-tabs" role="tablist" aria-label="装备分类" id="equipment-tabs"></nav>
+          <section class="equipment-page" aria-label="装备库">
+            <div class="equipment-list" id="equipment-list" role="tabpanel"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <aside class="design-panel" aria-labelledby="equipment-design-title">
+      <p class="design-kicker">SERVICE AS OFFER / PROTOTYPE</p>
+      <h1 id="equipment-design-title">我的装备</h1>
+      <p>集中查看账号同步与手动添加的装备，并根据装备类别浏览相关服务提醒。</p>
+      <div class="design-facts">
+        <div class="design-fact"><strong>信息层级</strong><span>装备总览 → 品类筛选 → 装备卡片 → 状态提示与服务入口。</span></div>
+        <div class="design-fact"><strong>主要交互</strong><span>品类标签定位装备分组；添加装备和查看服务入口仅展示原型反馈。</span></div>
+        <div class="design-fact"><strong>画板规格</strong><span>iPhone 17：402 × 874 CSS px；无手机边框，保留画板阴影。</span></div>
+      </div>
+      <div class="design-note">装备信息、保养周期、提醒和服务适配均为评审示例，不代表真实数据、权益资格或生产规则。</div>
+      <a class="design-link" href="my-orders.html">查看我的订单设计稿</a>
+      <a class="design-link" href="01-service-entry.html?scenario=all">返回服务首页设计稿</a>
+    </aside>
+  </main>
+  <div class="live-region" id="live" aria-live="polite"></div>
+  <script>
+    const equipmentItems = [
+      { category: "bike", source: "迪卡侬设备", name: "Rockrider 山地自行车", detail: "ST 530 / 灰色", date: "2026.03 购买 · ✓ 账号自动同步", image: "device-rockrider.png", status: "建议进行基础保养", note: "已使用约 6 个月", action: "查看推荐服务", tone: "brand" },
+      { category: "bike", source: "迪卡侬设备", name: "Riverside Touring 自行车", detail: "经典旅行系列 / 蓝色", date: "2026.08 购买 · ✓ 账号自动同步", image: "device-riverside.png", status: "1 次新车安装权益可用", note: "新车专享服务", action: "预约安装", tone: "positive" },
+      { category: "ski", source: "迪卡侬设备", name: "WEDZE 单板滑雪板", detail: "All Mountain / 黑色全能款", date: "2025.11 购买 · ✓ 账号自动同步", image: "device-wedze.png", status: "雪季开始，可以准备开板养护了", note: "雪季提醒", action: "查看雪板保养", tone: "warning" },
+      { category: "racket", source: "迪卡侬设备", name: "PERFLY 羽毛球拍", detail: "BR 990 / 碳纤维专业级", date: "2025.12 购买 · ✓ 账号自动同步", image: "device-perfly.png", status: "上次穿线：2026.05", note: "拉线张力：26磅", action: "查看设备详情", tone: "neutral" },
+      { category: "other", source: "其他品牌", name: "Specialized Allez 公路车", detail: "SPECIALIZED / 红色款", date: "2026.06 手动添加", image: "device-specialized.png", status: "可使用迪卡侬自行车维修与保养服务", note: "支持线下门店预约", action: "查看可用服务", tone: "neutral" }
+    ];
+    const filters = [
+      { id: "all", label: "全部" },
+      { id: "bike", label: "自行车" },
+      { id: "racket", label: "球拍" },
+      { id: "ski", label: "雪板" },
+      { id: "other", label: "大器械" }
+    ];
+    const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+    const tabs = document.getElementById("equipment-tabs");
+    const list = document.getElementById("equipment-list");
+    const scrollArea = document.getElementById("scroll-area");
+    const live = document.getElementById("live");
+    let activeFilter = "all";
+    let toastTimer;
+
+    function render() {
+      const grouped = filters.slice(1).map(filter => ({
+        ...filter,
+        items: equipmentItems.filter(item => item.category === filter.id)
+      }));
+      tabs.innerHTML = filters.map(filter => {
+        const count = filter.id === "all" ? equipmentItems.length : equipmentItems.filter(item => item.category === filter.id).length;
+        const target = filter.id === "all" ? "equipment-list" : `equipment-group-${filter.id}`;
+        return `<button type="button" class="equipment-tab" id="equipment-tab-${filter.id}" role="tab" aria-selected="${activeFilter === filter.id}" aria-controls="${target}" data-equipment-category="${filter.id}">${filter.label} ${count}</button>`;
+      }).join("");
+      list.innerHTML = grouped.map(group => `<section class="equipment-group" id="equipment-group-${group.id}" data-equipment-group="${group.id}" aria-labelledby="equipment-group-title-${group.id}">
+        <div class="equipment-group-heading"><h2 id="equipment-group-title-${group.id}">${group.label}</h2><span>${group.items.length} 件</span></div>
+        ${group.items.map(item => `<article class="equipment-card">
+          <div class="equipment-card-main">
+            <img src="assets/figma/${item.image}" alt="" width="58" height="58">
+            <div class="equipment-card-copy"><span class="equipment-source ${item.source === "其他品牌" ? "other" : ""}">${item.source}</span><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.detail)}</p><small>${escapeHtml(item.date)}</small></div>
+          </div>
+          <div class="equipment-status ${item.tone === "brand" ? "" : item.tone}">
+            <div class="equipment-status-copy"><strong>${escapeHtml(item.status)}</strong><small>${escapeHtml(item.note)}</small></div>
+            <button type="button" data-action="equipment-service" data-equipment-index="${equipmentItems.indexOf(item)}" data-title="${escapeHtml(item.action)}">${escapeHtml(item.action)}</button>
+          </div>
+        </article>`).join("")}
+      </section>`).join("");
+    }
+    function selectCategory(id) {
+      const tab = tabs.querySelector(`#equipment-tab-${id}`);
+      if (!tab) throw new Error(`未知装备分类：${id}`);
+      activeFilter = id;
+      tabs.querySelectorAll("[data-equipment-category]").forEach(button => {
+        button.setAttribute("aria-selected", String(button.dataset.equipmentCategory === id));
+      });
+      const target = id === "all" ? document.getElementById("equipment-list") : document.getElementById(`equipment-group-${id}`);
+      const stickyHeight = document.querySelector(".page-nav").offsetHeight;
+      const top = scrollArea.scrollTop + target.getBoundingClientRect().top - scrollArea.getBoundingClientRect().top - stickyHeight;
+      scrollArea.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+      live.textContent = id === "all" ? "已定位到全部装备。" : `已定位到${filters.find(filter => filter.id === id).label}装备。`;
+    }
+    function showToast(message) {
+      let toast = document.querySelector(".toast");
+      if (!toast) {
+        toast = document.createElement("div");
+        toast.className = "toast";
+        toast.setAttribute("role", "status");
+        document.body.append(toast);
+      }
+      toast.textContent = message;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.remove(), 2400);
+    }
+    tabs.addEventListener("click", event => {
+      const tab = event.target.closest("[data-equipment-category]");
+      if (tab) selectCategory(tab.dataset.equipmentCategory);
+    });
+    document.addEventListener("click", event => {
+      const action = event.target.closest("[data-action]");
+      if (action?.dataset.action === "equipment-add") showToast("添加装备流程尚未连接。");
+      if (action?.dataset.action === "equipment-service") {
+        const item = equipmentItems[Number(action.dataset.equipmentIndex)];
+        const next = new URL(item.tone === "positive" ? "03-benefit-detail.html" : "02-service-detail.html", location.href);
+        next.search = new URLSearchParams({ category: item.category === "racket" ? "badminton" : item.category === "other" ? "bike" : item.category, equipment: item.name });
+        if (item.tone === "positive") next.searchParams.set("benefit", "installation");
+        location.assign(next);
+      }
+    });
+    document.getElementById("back").addEventListener("click", () => {
+      if (history.length > 1 && document.referrer && new URL(document.referrer).origin === location.origin) {
+        history.back();
+        return;
+      }
+      const returnUrl = new URLSearchParams(location.search).get("return");
+      let destination = new URL("01-service-entry.html", location.href);
+      if (returnUrl) {
+        const candidate = new URL(returnUrl, location.href);
+        if (candidate.origin === location.origin) destination = candidate;
+      }
+      location.assign(destination);
+    });
+    render();
+  </script>
+</body>
+</html>

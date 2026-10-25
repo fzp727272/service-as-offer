@@ -1,0 +1,220 @@
+:root {
+  --iphone17-width: 402px;
+  --iphone17-height: 874px;
+  --prototype-shadow: 0 18px 55px #10102426;
+}
+
+.device,
+.phone,
+.artboard {
+  width: var(--iphone17-width);
+  max-width: var(--iphone17-width);
+  height: var(--iphone17-height);
+  min-height: 0;
+  flex: none;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: var(--prototype-shadow);
+}
+
+.device .screen,
+.phone .screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.preview,
+.stage,
+.presentation {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: var(--iphone17-width) minmax(320px, 360px);
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  padding: 28px 24px;
+}
+
+.presentation {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.scenario-panel,
+.design-panel,
+.annotation {
+  position: sticky;
+  top: 28px;
+  width: 100%;
+  max-width: 360px;
+  max-height: calc(100vh - 56px);
+  overflow: auto;
+  padding: 24px;
+  border: 1px solid #e1e0df;
+  background: #fff;
+  box-shadow: 0 12px 32px #1010100d;
+}
+
+.design-panel h1 {
+  margin: 10px 0 9px;
+  font-size: 30px;
+  line-height: 1.22;
+}
+
+.design-facts h3 {
+  margin: 12px 0 0;
+  font-size: 15px;
+}
+
+.design-panel p {
+  color: #555;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.design-kicker {
+  margin: 0;
+  color: #3643ba !important;
+  font-size: 11px !important;
+  font-weight: 700;
+  letter-spacing: .13em;
+}
+
+.design-facts {
+  margin-top: 18px;
+  border-top: 1px solid #c9c9ce;
+}
+
+.design-fact {
+  padding: 12px 0;
+  border-bottom: 1px solid #c9c9ce;
+}
+
+.design-fact strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #777;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.design-fact span {
+  display: block;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.design-note {
+  margin-top: 16px;
+  padding: 12px;
+  border-left: 3px solid #db6900;
+  background: #fff7e8;
+  color: #5e4a2a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.design-link {
+  display: block;
+  margin-top: 16px;
+  padding: 11px 12px;
+  background: #3643ba;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.scenario-panel {
+  width: 360px;
+  padding: 20px;
+}
+
+.scenario-panel > p { display: block; }
+.scenario-options { grid-template-columns: 1fr; }
+.scenario-option small { display: block; }
+
+.artboard {
+  height: var(--iphone17-height);
+  min-height: var(--iphone17-height);
+}
+
+@media (max-width: 960px) {
+  .preview,
+  .stage,
+  .presentation {
+    grid-template-columns: var(--iphone17-width);
+    gap: 24px;
+    padding: 24px 16px;
+  }
+
+  .scenario-panel,
+  .design-panel,
+  .annotation {
+    position: static;
+    width: min(360px, 100%);
+    max-width: 360px;
+    max-height: none;
+  }
+
+  .scenario-panel { order: 0; }
+}
+
+@media (max-width: 600px) {
+  html,
+  body {
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
+  }
+
+  .preview,
+  .stage,
+  .presentation {
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 0 24px;
+  }
+
+  .device,
+  .phone,
+  .artboard {
+    width: min(var(--iphone17-width), 100vw);
+    max-width: var(--iphone17-width);
+    height: var(--iphone17-height);
+    min-height: var(--iphone17-height);
+    margin: 0 auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: var(--prototype-shadow);
+  }
+
+  .screen { border-radius: 0; }
+
+  .scenario-panel,
+  .design-panel,
+  .annotation {
+    position: static;
+    width: min(360px, calc(100vw - 24px));
+    max-width: 360px;
+    max-height: none;
+    margin: 0 auto;
+  }
+
+  .scenario-panel > p,
+  .scenario-option small {
+    display: block;
+  }
+}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Service as Offer 15：微信消息落地页评审原型">
+  <title>15 · 微信消息落地 · Service as Offer</title>
+  <link rel="stylesheet" href="remaining-pages.css">
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body class="gray-section-layout">
+  <main class="page-presentation">
+    <article class="page-artboard" aria-label="微信消息落地评审原型">
+      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
+      <header class="page-nav"><a class="page-back" href="01-service-entry.html" aria-label="返回服务首页">‹</a><span class="page-nav-title">服务消息</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <div class="page-body">
+        <header class="page-intro">
+          <h1 class="page-heading" style="margin-top:10px">您的服务有新进展</h1>
+        </header>
+        <section class="page-section">
+          <h2 class="page-section-title">关联服务</h2>
+          <div class="page-service">
+            <div class="page-thumb" aria-label="服务封面待提供">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#616161" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8"/></g></svg>
+            </div>
+            <div class="page-service-copy"><strong>自行车标准维保服务</strong><small>服务单 SO-2601024 · 示例</small></div>
+            <span class="page-tag green">待预约</span>
+          </div>
+          <div class="page-row"><span>当前进度</span><strong>已支付，待选择门店和时间</strong></div>
+          <div class="page-row"><span>消息时间</span><strong>以实际通知记录为准</strong></div>
+        </section>
+        <section class="page-section">
+          <div class="page-status warning" id="message-feedback" role="status" hidden>消息链接已失效，请从“我的订单”查询服务。</div>
+        </section>
+      </div>
+      <div class="page-foot">
+        <a class="page-button" href="12-service-order-detail.html" style="display:block;text-decoration:none">查看这笔服务单</a>
+      </div>
+    </article>
+    <aside class="page-annotation">
+      <p class="page-annotation-kicker">UX SPEC 15 · REQ-015</p>
+      <h1>微信消息落地</h1>
+      <p>只示意消息点开后的服务上下文，不设计微信模板、不复用历史邮件方案，也不增加短信兜底承诺。</p>
+      <h2>落地契约待确认</h2>
+      <ul><li>通知事件、订阅授权与消息字段。</li><li>按具体服务单或预约进入业务上下文。</li><li>失效链接、跨账号与已取消对象的恢复方式。</li></ul>
+      <p class="page-status warning">GAP-019 · 消息触发与授权未定</p>
+      <nav class="page-flow-nav" aria-label="页面原型导航">
+        <a href="my-orders.html">我的订单</a><a aria-current="page" href="15-message-landing.html">15 消息落地</a>
+        <a href="12-service-order-detail.html">12 服务单详情</a><a href="01-service-entry.html">01 服务首页</a>
+      </nav>
+    </aside>
+  </main>
+  <script src="remaining-pages.js"></script>
+</body>
+</html>

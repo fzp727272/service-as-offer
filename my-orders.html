@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Service as Offer 设计稿 · 我的订单">
+  <title>我的订单设计稿 · Service as Offer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #101010;
+      --muted: #616161;
+      --line: #e1e0df;
+      --soft: #f5f4f5;
+      --brand: #3643ba;
+      --brand-soft: #f0f1ff;
+      --positive: #149b65;
+      --warning: #db6900;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-width: 320px; margin: 0; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    button, a { color: inherit; font: inherit; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+    .artboard { display: flex; flex-direction: column; }
+    .screen { width: 100%; height: 100%; min-height: 0; display: flex; flex-direction: column; overflow: hidden; background: #f7f8fa; }
+    .statusbar { height: 42px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; background: #fff; font-size: 12px; font-weight: 650; }
+    .status-icons { letter-spacing: 2px; }
+    .page-nav { height: 50px; flex: none; display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; padding: 0 12px; border-bottom: 1px solid #eee; background: #fff; }
+    .page-nav a { min-height: 42px; display: flex; align-items: center; color: var(--ink); text-decoration: none; font-size: 25px; }
+    .page-nav h1 { overflow: hidden; margin: 0; text-align: center; text-overflow: ellipsis; white-space: nowrap; font-size: 17px; }
+    .page-nav .more { text-align: right; letter-spacing: 2px; font-size: 20px; }
+    .orders-main { min-height: 0; flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .orders-tabs { flex: none; display: flex; overflow-x: auto; background: #fff; scrollbar-width: none; }
+    .orders-tabs::-webkit-scrollbar { display: none; }
+    .orders-tab { position: relative; flex: 0 0 auto; min-width: 65px; height: 48px; padding: 0 12px; border: 0; background: #fff; color: var(--ink); font-size: 12px; white-space: nowrap; cursor: pointer; }
+    .orders-tab[aria-selected="true"] { color: var(--brand); font-weight: 700; }
+    .orders-tab[aria-selected="true"]::after { position: absolute; right: 16px; bottom: 0; left: 16px; height: 3px; background: var(--brand); content: ""; }
+    .orders-list { min-height: 0; flex: 1; display: grid; align-content: start; gap: 12px; overflow: auto; padding: 12px; scrollbar-width: thin; }
+    .order-card { display: grid; gap: 12px; padding: 14px; border: 1px solid #ededed; background: #fff; }
+    .order-card-head, .order-card-foot, .order-card-foot-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .order-number { margin: 0; color: var(--muted); font-size: 11px; }
+    .order-status-tag { display: inline-block; padding: 3px 6px; background: #ebf2fe; color: var(--brand); font-size: 10px; white-space: nowrap; }
+    .order-status-tag.warning { background: #fff3e0; color: var(--warning); }
+    .order-status-tag.complete { background: var(--soft); color: #949494; }
+    .order-status-tag.positive { background: #e2f6ec; color: var(--positive); }
+    .order-card-divider { height: 1px; background: var(--line); }
+    .order-card-body { display: grid; grid-template-columns: 60px minmax(0, 1fr); align-items: center; gap: 10px; }
+    .order-card-body img { width: 60px; height: 60px; object-fit: cover; }
+    .order-service-copy { min-width: 0; }
+    .order-service-copy strong { display: block; overflow: hidden; font-size: 14px; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; }
+    .order-service-copy small { display: block; margin-top: 2px; overflow: hidden; color: var(--muted); font-size: 10px; line-height: 16px; text-overflow: ellipsis; white-space: nowrap; }
+    .order-info-banner { display: flex; align-items: center; gap: 8px; padding: 8px; background: #f8f8f8; color: var(--brand); font-size: 11px; font-weight: 600; }
+    .order-info-banner.warning { background: #fff3e0; color: var(--warning); }
+    .order-card-foot { align-items: flex-end; font-size: 11px; }
+    .order-price { font-size: 18px; font-weight: 700; }
+    .order-benefit-label { color: var(--positive); font-size: 14px; font-weight: 700; }
+    .order-card-foot-actions { justify-content: flex-end; flex-wrap: wrap; }
+    .order-action {
+      min-height: 40px;
+      padding: 0 14px;
+      border: 1px solid #c9cbd2;
+      background: #fff;
+      color: #30313a;
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+    }
+    .order-action:hover { border-color: var(--brand); color: var(--brand); }
+    .order-action.primary { border-color: var(--brand); background: var(--brand); color: #fff; }
+    .order-action.primary:hover { border-color: #29359e; background: #29359e; }
+    @media (prefers-reduced-motion: reduce) {
+      .order-action { transition: none; }
+    }
+    .order-progress { display: flex; justify-content: space-between; gap: 4px; color: var(--muted); font-size: 9px; }
+    .order-progress span:nth-child(2) { color: var(--warning); font-weight: 700; }
+    .orders-empty { padding: 40px 16px; color: var(--muted); text-align: center; font-size: 13px; }
+    .orders-tabbar { height: 62px; flex: none; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #e8e8e8; background: #fff; }
+    .orders-tabbar a { display: grid; align-content: center; justify-items: center; gap: 3px; color: var(--muted); text-decoration: none; font-size: 10px; }
+    .orders-tabbar a[aria-current="page"] { color: var(--brand); font-weight: 700; }
+    .orders-tabbar svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .toast { position: absolute; right: 16px; bottom: 80px; left: 16px; z-index: 2; width: fit-content; max-width: calc(100% - 32px); margin: 0 auto; padding: 9px 12px; background: #222; color: #fff; text-align: center; font-size: 12px; }
+    .toast[hidden] { display: none; }
+  </style>
+  <link rel="stylesheet" href="iphone17-presentation.css">
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body>
+  <main class="stage">
+    <article class="artboard" aria-label="我的订单页面设计画板">
+      <div class="screen">
+        <div class="statusbar"><span>9:41</span><span class="status-icons">● ▮ ▰</span></div>
+        <header class="page-nav">
+          <a href="01-service-entry.html?scenario=all" aria-label="返回服务首页">‹</a>
+          <h1>我的订单</h1>
+          <span class="more" aria-hidden="true">···</span>
+        </header>
+        <section class="orders-main" aria-label="服务订单列表">
+          <div class="orders-tabs" role="tablist" aria-label="订单状态" id="order-filters"></div>
+          <div class="orders-list" role="tabpanel" id="order-list"></div>
+        </section>
+        <nav class="orders-tabbar" aria-label="主导航">
+          <a href="01-service-entry.html?scenario=all">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-6 8 6v11h-6v-7h-4v7Z"/></svg><span>官方服务</span>
+          </a>
+          <a href="my-orders.html" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM14 4h6v7h-6zM4 14h7v6H4zM14 14h6v6h-6z"/></svg><span>我的订单</span>
+          </a>
+        </nav>
+        <div class="toast" id="order-toast" role="status" hidden></div>
+      </div>
+    </article>
+    <aside class="design-panel" aria-labelledby="orders-design-title">
+      <p class="design-kicker">SERVICE AS OFFER / PROTOTYPE</p>
+      <h1 id="orders-design-title">我的订单</h1>
+      <p>独立展示用户购买的服务订单，支持按履约状态筛选并查看对应操作入口。</p>
+      <div class="design-facts">
+        <div class="design-fact"><strong>信息层级</strong><span>订单状态筛选 → 订单与装备信息 → 预约 / 履约提示 → 订单操作。</span></div>
+        <div class="design-fact"><strong>主要交互</strong><span>状态标签筛选当前样例订单；操作按钮只展示评审反馈，不触发支付、取消或履约。</span></div>
+        <div class="design-fact"><strong>页面拆分</strong><span>从服务首页底部“我的订单”入口进入本独立页面，返回按钮回到首页。</span></div>
+        <div class="design-fact"><strong>画板规格</strong><span>iPhone 17：402 × 874 CSS px；无手机边框，保留画板阴影。</span></div>
+      </div>
+      <div class="design-note">列表和状态数量均为设计评审示例，不表示完整订单、实时支付结果或真实服务进度。</div>
+      <a class="design-link" href="equipment-library.html">查看我的装备设计稿</a>
+      <a class="design-link" href="01-service-entry.html?scenario=all">返回服务首页设计稿</a>
+    </aside>
+  </main>
+  <script>
+    const orders = [
+      { number: "DX20240905102", status: "待付款", title: "自行车基础保养", equipment: "Rockrider ST 530", store: "迪卡侬上海五角场店", price: "199", image: "order-bike-pending.png", actions: ["取消服务", "立即付款"] },
+      { number: "DX20240905102", status: "待预约", title: "自行车基础保养", equipment: "Rockrider ST 530", store: "迪卡侬上海五角场店", price: "199", image: "order-bike-awaiting.png", actions: ["取消服务", "立即预约"] },
+      { number: "DX20240905101", status: "待服务", title: "自行车基础保养", equipment: "Rockrider ST 530", store: "迪卡侬上海五角场店", price: "199", image: "order-bike-awaiting.png", appointment: "9月5日 周六 · 14:00 到店", actions: ["修改预约", "查看预约"] },
+      { number: "DX20240908339", status: "待服务", benefit: "新车安装权益", title: "自行车新车安装", equipment: "Riverside Touring", store: "迪卡侬上海花木店", image: "order-bike-install.png", appointment: "9月8日 · 10:00 到店", actions: ["查看预约"] },
+      { number: "DX20240905088", status: "服务中", title: "自行车维修", equipment: "Specialized Allez", store: "迪卡侬上海五角场店", image: "order-bike-repair.png", warning: "有新的维修方案需要确认", actions: ["查看并确认"] },
+      { number: "DX20240821004", status: "已完成", title: "羽毛球拍穿线", equipment: "PERFLY BR 990", store: "上海五角场店", image: "order-badminton.png", actions: ["查看记录", "再次穿线"] },
+    ];
+    const filters = [
+      { id: "all", label: "全部", count: "20" },
+      { id: "待付款", label: "待付款", count: "0" },
+      { id: "待预约", label: "待预约", count: "0" },
+      { id: "待服务", label: "待服务", count: "1" },
+      { id: "服务中", label: "服务中", count: "1" },
+      { id: "已完成", label: "已完成", count: "18" },
+      { id: "已取消", label: "已取消", count: "" },
+    ];
+    const primaryActions = {
+      "待付款": "立即付款",
+      "待预约": "立即预约",
+      "待服务": "查看预约",
+      "服务中": "查看并确认",
+      "已完成": "查看记录",
+    };
+    const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+    const filterRoot = document.querySelector("#order-filters");
+    const listRoot = document.querySelector("#order-list");
+    const toast = document.querySelector("#order-toast");
+    let activeFilter = "all";
+    let toastTimer;
+
+    function orderCardMarkup(order) {
+      const tagClass = order.status === "待付款" ? "warning" : order.status === "已完成" ? "complete" : "";
+      return `<article class="order-card">
+        <div class="order-card-head"><p class="order-number">服务单号: ${escapeHtml(order.number)}</p><div>${order.benefit ? `<span class="order-status-tag positive">${escapeHtml(order.benefit)}</span> ` : ""}<span class="order-status-tag ${tagClass}">${escapeHtml(order.status)}</span></div></div>
+        <div class="order-card-divider"></div>
+        <div class="order-card-body"><img src="assets/figma/${order.image}" alt="" width="60" height="60"><div class="order-service-copy"><strong>${escapeHtml(order.title)}</strong><small>设备：${escapeHtml(order.equipment)}</small><small>门店：${escapeHtml(order.store)}</small></div></div>
+        ${order.appointment ? `<div class="order-info-banner">▦ ${escapeHtml(order.appointment)}</div>` : ""}
+        ${order.warning ? `<div class="order-info-banner warning">ⓘ ${escapeHtml(order.warning)}</div><div class="order-progress"><span>已接单 ✓</span><span>等待确认 ●</span><span>维修中</span><span>待取车</span></div>` : ""}
+        <div class="order-card-divider"></div>
+        <div class="order-card-foot">${order.benefit ? '<strong class="order-benefit-label">免费权益</strong>' : order.price ? `<strong class="order-price">${order.status === "待服务" ? "已付款：" : ""}¥${escapeHtml(order.price)}</strong>` : "<span></span>"}<div class="order-card-foot-actions">${order.actions.map(action => `<button type="button" class="order-action ${action === primaryActions[order.status] ? "primary" : ""}" data-order-index="${orders.indexOf(order)}" data-order-action="${escapeHtml(action)}">${escapeHtml(action)}</button>`).join("")}</div></div>
+      </article>`;
+    }
+
+    function render() {
+      const shownOrders = activeFilter === "all" ? orders : orders.filter(order => order.status === activeFilter);
+      filterRoot.innerHTML = filters.map(filter => `<button type="button" class="orders-tab" role="tab" aria-selected="${activeFilter === filter.id}" data-filter="${escapeHtml(filter.id)}">${escapeHtml(filter.label)} ${filter.id === "all" ? orders.length : orders.filter(order => order.status === filter.id).length}</button>`).join("");
+      listRoot.innerHTML = shownOrders.map(orderCardMarkup).join("") || '<p class="orders-empty">暂无该状态的订单</p>';
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { toast.hidden = true; }, 2200);
+    }
+
+    filterRoot.addEventListener("click", event => {
+      const button = event.target.closest("[data-filter]");
+      if (!button) return;
+      activeFilter = button.dataset.filter;
+      document.querySelector(".orders-list").scrollTop = 0;
+      render();
+    });
+    listRoot.addEventListener("click", event => {
+      const button = event.target.closest("[data-order-action]");
+      if (!button) return;
+      const order = orders[Number(button.dataset.orderIndex)];
+      const routes = { "立即付款": "05-order-checkout.html", "立即预约": "06-store-selection.html", "修改预约": "10-reschedule-review.html", "查看预约": "12-service-order-detail.html", "取消服务": "12-service-order-detail.html", "查看并确认": "12-service-order-detail.html", "查看记录": "12-service-order-detail.html", "再次穿线": "02-service-detail.html" };
+      const next = new URL(routes[button.dataset.orderAction], location.href);
+      next.search = new URLSearchParams({ name: order.title, equipment: order.equipment, order: order.number, category: order.title.includes("羽毛球") ? "badminton" : "bike", booking: order.status === "待服务" ? "created" : "none" });
+      if (order.price) next.searchParams.set("price", order.price);
+      if (order.benefit) next.searchParams.set("context", "benefit");
+      if (order.status === "待付款") next.searchParams.set("paymentState", "unpaid");
+      if (button.dataset.orderAction === "取消服务") next.searchParams.set("demoState", order.status === "待付款" ? "unpaid" : "pending");
+      if (order.status === "服务中") next.searchParams.set("serviceState", "active");
+      if (order.status === "已完成" && button.dataset.orderAction !== "再次穿线") next.searchParams.set("serviceState", "completed");
+      location.assign(next);
+    });
+    render();
+  </script>
+</body>
+</html>

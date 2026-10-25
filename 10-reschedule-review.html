@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Service as Offer 10：改约模型评审原型">
+  <title>10 · 改约 / 再预约评审 · Service as Offer</title>
+  <link rel="stylesheet" href="remaining-pages.css">
+  <link rel="stylesheet" href="service-system.css">
+  <script src="service-journey.js" defer></script>
+</head>
+<body class="gray-section-layout">
+  <main class="page-presentation">
+    <article class="page-artboard" aria-label="改约模型评审原型">
+      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
+      <header class="page-nav"><a class="page-back" href="12-service-order-detail.html?booking=created" aria-label="返回订单详情">‹</a><span class="page-nav-title">更换预约时间</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <div class="page-body">
+        <header class="page-intro">
+          <h1 class="page-heading">更换预约时间</h1>
+          <p class="page-lede">先核对当前预约，再选择新的到店时间。</p>
+        </header>
+        <section class="page-section">
+          <h2 class="page-section-title">现有预约</h2>
+          <div class="page-row"><span>服务</span><strong>自行车标准保养套餐</strong></div>
+          <div class="page-row"><span>门店</span><strong>门店样例 01 · 示例</strong></div>
+          <div class="page-row"><span>时间</span><strong>2026 年 10 月 24 日（周六）11:00</strong></div>
+          <div class="page-row"><span>状态</span><strong>已创建 · 待到店</strong></div>
+        </section>
+        <p class="page-status">选择新时段期间，当前预约保持有效。若新时段未能预约成功，原预约不变。</p>
+      </div>
+      <div class="page-foot">
+        <div class="page-foot-actions">
+          <a class="page-button secondary" style="display:block;text-decoration:none" href="12-service-order-detail.html?booking=created">保留当前预约</a>
+          <a class="page-button" id="reschedule-action" style="display:block;text-decoration:none" href="07-date-time-selection.html?reschedule=1">选择新时段</a>
+        </div>
+      </div>
+    </article>
+    <aside class="page-annotation">
+      <p class="page-annotation-kicker">UX SPEC 10 · REQ-010</p>
+      <h1>改约 / 再预约</h1>
+      <p>改约演示采用“先创建新预约，成功后替换旧预约”。新时段选择或创建失败时，原预约继续有效。</p>
+      <h2>演示边界</h2>
+      <ul><li>在新预约确认前不取消或释放原时段。</li><li>成功后回到同一服务单，展示新的门店和时间。</li><li>权益继续绑定原装备，不跨装备套用。</li></ul>
+      <p class="page-status warning">流程为原型演示，资源替换及失败恢复仍需技术确认。</p>
+      <nav class="page-flow-nav" aria-label="页面原型导航">
+        <a href="09-appointment-detail-cancel.html">09 预约详情</a><a aria-current="page" href="10-reschedule-review.html">10 改约评审</a>
+        <a href="07-date-time-selection.html">07 选择时段</a><a href="12-service-order-detail.html">12 服务单详情</a>
+      </nav>
+    </aside>
+  </main>
+  <script src="remaining-pages.js"></script>
+</body>
+</html>
