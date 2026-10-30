@@ -2,9 +2,25 @@
   const page = document.body.dataset.page;
   const params = new URLSearchParams(window.location.search);
   const serviceContext = new URLSearchParams();
-  ["category", "name", "description", "price", "context", "benefit", "equipment", "order", "city", "store", "date", "time", "booking", "serviceState", "checkin", "payment", "paymentState", "reschedule", "oldDate", "oldTime", "oldCity", "oldStore"].forEach((key) => {
+  ["category", "name", "description", "price", "context", "benefit", "equipment", "order", "sourceOrder", "entry", "city", "store", "date", "time", "booking", "serviceState", "checkin", "payment", "paymentState"].forEach((key) => {
     if (params.has(key)) serviceContext.set(key, params.get(key));
   });
+  if (["store", "schedule"].includes(page) &&
+      (params.get("booking") === "created" || params.get("reschedule") === "1" ||
+       params.get("checkin") === "done" || params.has("serviceState"))) {
+    const destination = new URL("12-service-order-detail.html", location.href);
+    destination.search = serviceContext.toString();
+    if (params.get("reschedule") === "1") {
+      ["date", "time", "city", "store"].forEach(key => {
+        const oldValue = params.get(`old${key[0].toUpperCase()}${key.slice(1)}`);
+        if (oldValue) destination.searchParams.set(key, oldValue);
+      });
+      destination.searchParams.set("booking", "created");
+    }
+    destination.searchParams.set("notice", "reschedule-unavailable");
+    location.replace(destination.href);
+    return;
+  }
   const stores = {
     shanghai: ["上海门店 01", "上海门店 02"],
     hangzhou: ["杭州门店 01", "杭州门店 02"],
@@ -20,13 +36,6 @@
     ],
   };
   const storeMapUrl = (name, address) => `https://map.qq.com/?q=${encodeURIComponent(`${name} ${address}`)}`;
-  const sampleWeekdays = {
-    "2026-10-23": "周五",
-    "2026-10-24": "周六",
-    "2026-10-25": "周日",
-    "2026-10-26": "周一",
-  };
-  const dates = [...document.querySelectorAll("[data-date]")];
   const slots = [...document.querySelectorAll("[data-time]")];
   const stateButtons = [...document.querySelectorAll(".state-option")];
 
@@ -55,6 +64,14 @@
     let state = ["paid", "unpaid", "unknown"].includes(params.get("paymentState"))
       ? params.get("paymentState")
       : "paid";
+    let queryResult = "unknown";
+    let pollTimer;
+    let pollCount = 0;
+    const loadingToast = document.querySelector("#payment-loading-toast");
+    const stopPolling = () => {
+      window.clearInterval(pollTimer);
+      pollTimer = undefined;
+    };
 
     const render = () => {
       card.dataset.paymentState = state;
@@ -69,6 +86,8 @@
         ? "支付已完成，现在可以预约服务"
         : state === "unpaid" ? "未完成支付，请重新发起支付" : "请稍候，暂不要重复支付或预约";
       action.disabled = state === "unknown";
+      loadingToast.hidden = state !== "unknown";
+      card.setAttribute("aria-busy", String(state === "unknown"));
       action.textContent = state === "paid"
         ? "立即预约"
         : state === "unpaid" ? "重新支付" : "结果确认中";
@@ -91,12 +110,33 @@
       orderLink.search = serviceContext.toString();
       orderLink.searchParams.set("paymentState", state);
       document.querySelector("#result-order-link").href = orderLink.href;
+      if (state !== "unknown") stopPolling();
+      else if (!pollTimer) {
+        pollTimer = window.setInterval(() => {
+          pollCount += 1;
+          feedback.textContent = `本地轮询演示：已查询 ${pollCount} 次，尚未接入真实支付接口。请通过状态按钮提供模拟查询结果。`;
+          if (queryResult !== "unknown") {
+            state = queryResult;
+            render();
+          }
+        }, 1500);
+      }
     };
 
     buttons.forEach((button) => {
       button.addEventListener("click", () => {
-        state = button.dataset.paymentState;
+        queryResult = button.dataset.paymentState;
+        if (state === "unknown" && queryResult !== "unknown") {
+          feedback.textContent = "已设置模拟查询结果，等待下一次轮询返回。";
+          return;
+        }
+        state = queryResult;
+        pollCount = 0;
         render();
+      });
+      window.addEventListener("pagehide", stopPolling);
+      window.addEventListener("pageshow", event => {
+        if (event.persisted) render();
       });
     });
     action.addEventListener("click", () => {
@@ -123,8 +163,21 @@
     const resourceButtons = [...document.querySelectorAll("button[data-resource-state]")];
     const contactDialog = document.querySelector("#store-contact-dialog");
     const contactStore = document.querySelector("[data-contact-store]");
-    let resourceState = "available";
+    let resourceState = params.get("location") === "denied" ? "denied" : "available";
     let selectedStore = ["store-1", "store-2"].includes(params.get("store")) ? params.get("store") : "store-1";
+    const locationDialog = document.querySelector("#location-denied-dialog");
+    const showLocationDenied = () => {
+      selectedCity = "shanghai";
+      selectedStore = "store-1";
+      cityLabel.textContent = "上海";
+      cityOptions.querySelectorAll("[data-city]").forEach(option => {
+        option.setAttribute("aria-pressed", String(option.dataset.city === "shanghai"));
+      });
+      cityOptions.classList.remove("open");
+      city.setAttribute("aria-expanded", "false");
+      if (!locationDialog.open) locationDialog.showModal();
+    };
+    locationDialog.querySelector("[data-close-location]").addEventListener("click", () => locationDialog.close());
 
     cityLabel.textContent = selectedCity === "shanghai" ? "上海" : "杭州";
     cityOptions.querySelectorAll("[data-city]").forEach((option) => {
@@ -156,7 +209,7 @@
       message.textContent = resourceState === "empty"
         ? "当前城市暂无匹配门店，请切换城市。"
         : resourceState === "denied"
-          ? "定位未授权，请手动选择服务城市。"
+          ? "未获得定位权限，已默认选择上海。您可以手动切换城市。"
           : "";
       action.disabled = resourceState === "empty" || params.get("context") === "repair" || ["unpaid", "unknown"].includes(params.get("paymentState"));
       action.textContent = params.get("context") === "repair" ? "请到店确认维修项目" : "确定";
@@ -220,6 +273,7 @@
     resourceButtons.forEach((button) => {
       button.addEventListener("click", () => {
         resourceState = button.dataset.resourceState;
+        if (resourceState === "denied") showLocationDenied();
         render();
       });
     });
@@ -228,6 +282,7 @@
         navigate("07-date-time-selection.html", { city: selectedCity, store: selectedStore, time: "" });
       }
     });
+    if (resourceState === "denied") showLocationDenied();
     render();
     return;
   }
@@ -244,27 +299,37 @@
     const action = document.querySelector("#primary-action");
     const feedback = document.querySelector("#state-description");
     const scheduleButtons = [...document.querySelectorAll("button[data-schedule-state]")];
-    const rescheduling = params.get("reschedule") === "1";
     const storeQuery = new URLSearchParams(serviceContext);
     storeQuery.set("city", city);
     storeQuery.set("store", storeId);
     let state = "available";
-    let selectedDate = params.get("date") || "2026-10-24";
-    let selectedTime = params.get("reset") === "1" || rescheduling ? "" : params.get("time") || "";
+    const dateRoot = document.querySelector("#booking-dates");
+    const demoStart = new Date(2026, 9, 26, 12);
+    const dates = Array.from({ length: 7 }, (_, index) => {
+      const value = new Date(demoStart);
+      value.setDate(value.getDate() + index);
+      const date = `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}`;
+      const weekday = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"][value.getDay()];
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "date";
+      button.dataset.date = date;
+      button.dataset.dateLabel = `${weekday} · ${value.getMonth() + 1} 月 ${value.getDate()} 日`;
+      button.setAttribute("aria-label", button.dataset.dateLabel);
+      button.innerHTML = `<small>${weekday}</small><strong>${value.getDate()}</strong><small>${value.getMonth() + 1} 月</small>`;
+      dateRoot.append(button);
+      return button;
+    });
+    let selectedDate = params.get("date") || dates[0].dataset.date;
+    let selectedTime = params.get("reset") === "1" ? "" : params.get("time") || "";
 
     storeLabel.textContent = storeName;
-    if (rescheduling) {
-      document.querySelector("#schedule-heading").textContent = "选择新的预约时间";
-      document.querySelector("#schedule-description").textContent = "可约窗口以门店实时服务资源为准。";
-      document.querySelector("#reschedule-guidance").hidden = false;
-      const oldDate = params.get("oldDate") || params.get("date") || "2026-10-24";
-      const oldTime = params.get("oldTime") || params.get("time") || "11:00";
-      document.querySelector("#reschedule-guidance").textContent =
-        `当前预约：${oldDate} ${oldTime}。新预约确认成功后，才会替换原预约。`;
-    }
     changeStore.href = `06-store-selection.html?${storeQuery}`;
     const selectedDateButton = dates.find((button) => button.dataset.date === selectedDate && !button.disabled);
-    if (!selectedDateButton) selectedDate = "2026-10-24";
+    if (!selectedDateButton) {
+      selectedDate = dates[0].dataset.date;
+      selectedTime = "";
+    }
     if (selectedTime && !slots.some((button) => button.dataset.time === selectedTime && !button.disabled)) selectedTime = "";
     slots.forEach((button) => {
       button.dataset.baseLabel = button.dataset.time;
@@ -317,7 +382,7 @@
       const blocked = ["unpaid", "unknown"].includes(params.get("paymentState")) || params.get("booking") === "unknown" ||
         params.get("checkin") === "done" || ["active", "completed"].includes(params.get("serviceState"));
       action.disabled = state === "empty" || !selectedTime || blocked;
-      action.textContent = rescheduling ? "确认更换预约时间" : "确认预约";
+      action.textContent = "确认预约";
       if (blocked) {
         message.hidden = false;
         message.textContent = "订单结果尚未确认，请返回订单查看状态，暂勿重复提交。";
@@ -326,7 +391,8 @@
       feedback.textContent = state === "available"
         ? "选择一个可约时段后可以继续。"
         : state === "empty" ? "当前无可约时段，主按钮已禁用；尝试更换日期或门店。"
-          : "提交动作将模拟服务端发现所选时段冲突，并进入冲突结果页。";
+          : state === "conflict" ? "提交将模拟时段冲突，并回到订单展示结果弹窗。"
+            : "提交将模拟无响应，回到同一服务订单，以弹窗展示模拟查询结果。";
     };
 
     dates.forEach((button) => {
@@ -354,131 +420,20 @@
     });
     action.addEventListener("click", () => {
       if (action.disabled) return;
-      navigate(state === "conflict" ? "08-appointment-result.html" : "12-service-order-detail.html", {
+      const result = state === "timeout-success" ? "created"
+        : state === "conflict" || state === "timeout-failure" ? "conflict"
+          : state === "timeout-unknown" ? "unknown" : "created";
+      navigate("12-service-order-detail.html", {
         city,
         store: storeId,
         date: selectedDate,
         time: selectedTime,
-        result: state === "conflict" ? "conflict" : "created",
-        booking: state === "conflict" && !rescheduling ? "none" : "created",
-        ...(rescheduling ? { reschedule: state === "conflict" ? "1" : "done" } : {}),
+        booking: result === "created" ? "created" : result === "unknown" ? "unknown" : "none",
+        ...(state !== "available" ? { bookingResult: result } : {}),
       });
     });
     render();
     return;
   }
 
-  if (page === "result") {
-    const city = stores[params.get("city")] ? params.get("city") : "shanghai";
-    const storeIndex = params.get("store") === "store-2" ? 1 : 0;
-    const storeName = stores[city][storeIndex];
-    const date = sampleWeekdays[params.get("date")] ? params.get("date") : "2026-10-24";
-    const time = /^\d{2}:\d{2}$/.test(params.get("time") || "") ? params.get("time") : "11:00";
-    const result = ["created", "conflict", "unknown"].includes(params.get("result"))
-      ? params.get("result") : "created";
-    const resultCard = document.querySelector(".success");
-    const mark = document.querySelector("#result-mark");
-    const title = document.querySelector("#result-title");
-    const description = document.querySelector("#result-description");
-    const appointmentPill = document.querySelector("#appointment-pill");
-    const appointmentStore = document.querySelector("#appointment-store");
-    const appointmentTime = document.querySelector("#appointment-time");
-    const appointmentStatus = document.querySelector("#appointment-status");
-    const transactionStatus = document.querySelector("#transaction-status");
-    const serviceProgress = document.querySelector("#service-progress");
-    const resultMessage = document.querySelector("#result-message");
-    const action = document.querySelector("#primary-action");
-    const feedback = document.querySelector("#state-description");
-    const resultButtons = [...document.querySelectorAll("button[data-result-state]")];
-    let state = result;
-
-    const formatDate = (value) => {
-      const [year, month, day] = value.split("-");
-      const weekday = sampleWeekdays[value];
-      return `${year} 年 ${Number(month)} 月 ${Number(day)} 日${weekday ? `（${weekday}）` : ""} ${time}`;
-    };
-
-    const render = () => {
-      resultCard.dataset.resultState = state;
-      mark.classList.toggle("warning", state === "conflict");
-      mark.classList.toggle("error", state === "unknown");
-      mark.textContent = state === "created" ? "✓" : state === "conflict" ? "!" : "?";
-      title.textContent = state === "created"
-        ? "预约已创建" : state === "conflict" ? "时段已被占用" : "预约结果待确认";
-      description.textContent = state === "created"
-        ? "门店与时间已确认，服务状态为待到店。"
-        : state === "conflict" ? "该时段未能创建预约，请重新选择时间。"
-          : "暂无法确认预约是否创建，请勿重复提交。";
-      appointmentPill.textContent = state === "created"
-        ? "预约 · 已创建" : state === "conflict" ? "预约 · 未创建" : "预约 · 待确认";
-      appointmentPill.classList.toggle("green", state === "created");
-      appointmentStore.textContent = storeName;
-      appointmentTime.textContent = formatDate(date);
-      appointmentStatus.textContent = state === "created"
-        ? "已创建 · 待到店" : state === "conflict" ? "未创建 · 需重新选择" : "状态待确认";
-      transactionStatus.textContent = params.get("context") === "benefit" ? "权益兑换" : "已支付";
-      document.querySelector("#result-payment-pill").textContent = params.get("context") === "benefit" ? "权益兑换" : "交易 · 已支付";
-      serviceProgress.textContent = state === "created"
-        ? "待到店 · 暂无服务进度" : state === "conflict" ? "待预约 · 暂无服务进度" : "结果待确认 · 暂无服务进度";
-      document.querySelector("#attempt-title").textContent = state === "created" ? "预约信息" : "本次提交信息";
-      document.querySelector(".service-name").textContent = params.get("name") || "自行车标准保养套餐";
-      if (params.get("reschedule") === "1" && state !== "created") {
-        serviceProgress.textContent = state === "conflict" ? "原预约保留 · 待到店" : "改约结果待确认";
-      }
-      const current = new URL(location.href);
-      current.searchParams.set("result", state);
-      current.searchParams.set("booking", state === "unknown" ? "unknown" : state === "created" || params.get("reschedule") === "1" ? "created" : "none");
-      current.searchParams.delete("demoState");
-      history.replaceState(null, "", current);
-      const orderLink = new URL("12-service-order-detail.html", location.href);
-      orderLink.search = current.search;
-      document.querySelector("#result-order-link").href = orderLink.href;
-      resultMessage.classList.toggle("success", state === "created");
-      resultMessage.classList.toggle("warning", state === "conflict");
-      resultMessage.classList.toggle("error", state === "unknown");
-      resultMessage.innerHTML = state === "created"
-        ? "<strong>到店前请核对预约信息</strong>请携带预约装备到店。"
-        : state === "conflict"
-          ? params.get("reschedule") === "1"
-            ? "<strong>新时段未预约成功</strong>当前预约仍然有效，请重新选择时间。"
-            : "<strong>请重新选择时间</strong>本次预约未创建，已支付金额不变。"
-          : "<strong>暂勿重复提交</strong>预约结果暂时无法确认，请稍后查看服务单。";
-      document.querySelector(".service-hint").textContent = params.get("context") === "benefit" ? "权益兑换，无需再次支付" : "本次预约不重复收取服务费用";
-      action.disabled = state === "unknown";
-      action.textContent = state === "created"
-        ? "查看订单详情" : state === "conflict" ? "重新选择时间" : "结果确认前暂不可继续";
-      setPressed(resultButtons, state, "resultState");
-      feedback.textContent = state === "created"
-        ? "预约成功后直接进入订单，查看到店时间、门店与二维码。"
-        : state === "conflict" ? params.get("reschedule") === "1"
-          ? "新时段创建失败不会影响原预约；可返回重新选择。"
-          : "可以返回时间选择页修改日期或时段。"
-          : "结果待确认时请勿重复提交，稍后查看服务单。";
-    };
-
-    resultButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        state = button.dataset.resultState;
-        if (state === "created") {
-          navigate("12-service-order-detail.html", { city, store: params.get("store") || "store-1", date, time, booking: "created", ...(params.get("reschedule") === "1" ? { reschedule: "done" } : {}) });
-          return;
-        }
-        render();
-      });
-    });
-    action.addEventListener("click", () => {
-      if (state === "created") {
-        navigate("12-service-order-detail.html", { city, store: params.get("store") || "store-1", date, time, booking: "created" });
-      } else if (state === "conflict") {
-        navigate("07-date-time-selection.html", {
-          city,
-          store: params.get("store") || "store-1",
-          date,
-          reset: "1",
-          booking: params.get("reschedule") === "1" ? "created" : "none",
-        });
-      }
-    });
-    render();
-  }
 })();

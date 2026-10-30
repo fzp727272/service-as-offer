@@ -278,6 +278,16 @@
         <button type="button" class="scenario-option" data-scenario="benefits" aria-pressed="false"><strong>只有权益订单</strong><small>服务订单不可用时，仍单独展示商品权益</small></button>
         <button type="button" class="scenario-option" data-scenario="recommendations" aria-pressed="false"><strong>无订单 / 权益</strong><small>展示基于装备使用情况的推荐</small></button>
       </div>
+      <section class="prototype-controls">
+        <h2>入口来源预览</h2>
+        <div class="state-options" role="group" aria-label="服务入口来源">
+          <button class="state-option" type="button" data-entry="service" aria-pressed="true">服务入口</button>
+          <button class="state-option" type="button" data-entry="scan" aria-pressed="false">购后扫码</button>
+          <button class="state-option" type="button" data-entry="product" aria-pressed="false">其他商品页面</button>
+          <button class="state-option" type="button" data-entry="order" aria-pressed="false">购买商品订单</button>
+        </div>
+        <p>扫码仅演示进入权益上下文，不执行码识别或装备绑定。商品订单为本地样例，可从中跳转赠送权益。</p>
+      </section>
       <section class="design-facts" aria-labelledby="home-design-title">
         <p class="design-kicker">UX SPEC 01 / SERVICE AS OFFER</p>
         <h3 id="home-design-title">首页设计说明</h3>
@@ -290,6 +300,15 @@
     </aside>
   </main>
   <div class="live-region" id="live" aria-live="polite"></div>
+  <dialog class="service-change-dialog" id="source-product-dialog" aria-labelledby="source-product-title">
+    <h2 id="source-product-title">购买商品的订单</h2>
+    <p>商品订单 810263 · Rockrider ST 530 山地自行车。以下赠送权益仅用于这件商品，订单与资格为演示数据。</p>
+    <div class="service-change-actions">
+      <a href="03-benefit-detail.html?benefit=inspection&amp;entry=order&amp;sourceOrder=810263">查看新车安全检查权益</a>
+      <a href="03-benefit-detail.html?benefit=six-month&amp;entry=order&amp;sourceOrder=810263">查看 6 个月检查权益</a>
+      <button type="button" data-source-close>返回服务首页</button>
+    </div>
+  </dialog>
   <script src="service-catalog.js"></script>
   <script>
     const baseScenario = {
@@ -325,6 +344,20 @@
       recommendations: { title: "无订单、无权益场景", orders: false, benefits: false }
     };
     let activeScenario = "all";
+    const entryLabels = {
+      service: { title: "从服务入口进入", description: "" },
+      scan: { title: "购买商品附带的服务权益", description: "请核对赠送权益与来源商品，再选择服务。" },
+      product: { title: "为装备找到合适的服务", description: "从商品页面继续了解检查、保养与维修服务。" },
+      order: { title: "商品订单 810263 的赠送权益", description: "查看来源商品和附带权益，无需再次购买服务。" }
+    };
+    const entryParams = new URLSearchParams(location.search);
+    let activeEntry = entryParams.get("entry") || "service";
+    if (!Object.hasOwn(entryLabels, activeEntry)) {
+      console.warn(`未知入口来源“${activeEntry}”，请从已确认的入口重新选择。`);
+      activeEntry = "service";
+    }
+    const sourceDialog = document.querySelector("#source-product-dialog");
+    document.querySelector("[data-source-close]").addEventListener("click", () => sourceDialog.close());
     let scenario = baseScenario;
     const directoryState = { category: "all" };
     let activeTab = "services";
@@ -544,6 +577,7 @@
               <li><button type="button" data-action="assurance" data-title="服务记录"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9a9 9 0 1 1 0 6M3 3v6h6"/><path d="M12 7v5l4 3"/></svg><span>服务记录</span></button></li>
             </ul>
           </header>
+          ${activeEntry === "service" ? "" : `<section class="entry-context" aria-label="入口上下文"><strong>${entryLabels[activeEntry].title}</strong><p>${entryLabels[activeEntry].description}</p></section>`}
           <div class="personal-services">${orderMarkup(scenario)}${benefitMarkup(scenario)}${recommendationMarkup(scenario)}</div>
           ${serviceDirectoryMarkup()}
       `;
@@ -565,6 +599,7 @@
     }
     function openServiceDetail(action) {
       const url = new URL("02-service-detail.html", location.href);
+      url.searchParams.set("entry", activeEntry);
       url.searchParams.set("category", action.dataset.serviceCategory || "bike");
       url.searchParams.set("name", action.dataset.serviceName || action.dataset.title || "服务详情");
       if (action.dataset.serviceGroup) url.searchParams.set("group", action.dataset.serviceGroup);
@@ -593,6 +628,10 @@
       }
       const action = event.target.closest("[data-action]");
       if (!action) return;
+      if (action.dataset.action === "source-order") {
+        sourceDialog.showModal();
+        return;
+      }
       if (action.dataset.action === "equipment-entry") {
         openEquipmentLibrary();
         return;
@@ -604,6 +643,8 @@
       if (action.dataset.action === "benefit") {
         const url = new URL("03-benefit-detail.html", location.href);
         url.searchParams.set("benefit", Number(action.dataset.benefitIndex) === 1 ? "six-month" : "inspection");
+        url.searchParams.set("entry", activeEntry);
+        url.searchParams.set("sourceOrder", "810263");
         location.assign(url);
         return;
       }
@@ -651,6 +692,17 @@
       const button = event.target.closest("[data-scenario]");
       if (button) switchScenario(button.dataset.scenario);
     });
+    document.querySelectorAll("[data-entry]").forEach(button => {
+      button.addEventListener("click", () => {
+        activeEntry = button.dataset.entry;
+        switchScenario(["scan", "order"].includes(activeEntry) ? "benefits" : "all");
+        document.querySelectorAll("[data-entry]").forEach(option => option.setAttribute("aria-pressed", String(option === button)));
+        const current = new URL(location.href);
+        current.searchParams.set("entry", activeEntry);
+        history.replaceState(null, "", current);
+        if (activeEntry === "order") sourceDialog.showModal();
+      });
+    });
     const requestedScenario = new URLSearchParams(location.search).get("scenario");
     if (requestedScenario && !Object.hasOwn(scenarioOptions, requestedScenario)) {
       console.warn(`未知首页场景“${requestedScenario}”，已切换至重叠场景。`);
@@ -660,9 +712,9 @@
       console.warn(`未知首页标签“${requestedTab}”，已显示官方服务。`);
     }
     if (requestedTab === "orders") location.replace("my-orders.html");
-    else history.replaceState(null, "", `${location.pathname}${location.hash}`);
     activeTab = "services";
-    switchScenario(Object.hasOwn(scenarioOptions, requestedScenario) ? requestedScenario : "all");
+    switchScenario(Object.hasOwn(scenarioOptions, requestedScenario) ? requestedScenario : ["scan", "order"].includes(activeEntry) ? "benefits" : "all");
+    document.querySelectorAll("[data-entry]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.entry === activeEntry)));
     window.addEventListener("popstate", () => {
       const params = new URLSearchParams(location.search);
       const tab = params.get("tab");

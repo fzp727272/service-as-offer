@@ -3,76 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Service as Offer 购后预约流程设计稿 04：预约已创建">
-  <title>08 · 预约确认 / 结果 · Service as Offer</title>
-  <style>
-    :root{color-scheme:light;--ink:#101010;--quiet:#616161;--tertiary:#949494;--brand:#3643ba;--lime:#7affa6;--paper:#f8f8f8;--line:#e1e0df;--soft:#f5f4f5;--positive:#149b65;--warning:#db6900}
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}body{background:#ececef}.presentation{min-height:100vh;display:grid;grid-template-columns:375px 310px;align-content:center;justify-content:center;align-items:center;gap:72px;padding:36px}.artboard{width:375px;height:812px;background:#fff;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 64px #10102424}.statusbar{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:14px;font-weight:650}.status-icons{display:flex;align-items:center;gap:6px;font-size:11px}.signal{font-size:13px;letter-spacing:-3px}.battery{width:19px;height:10px;border:1.4px solid #101010;border-radius:3px;position:relative}.battery:after{content:"";position:absolute;right:-3px;top:2px;width:2px;height:4px;background:#101010}.battery:before{content:"";position:absolute;inset:2px 4px 2px 2px;background:#101010;border-radius:1px}.nav{height:44px;flex:none;display:grid;grid-template-columns:52px 1fr 52px;align-items:center;border-bottom:1px solid var(--line);padding:0 12px}.back{font-size:25px;line-height:1;font-weight:300}.nav-title{text-align:center;font-size:16px;font-weight:650}.more{text-align:right;font-size:20px;letter-spacing:2px}.body{flex:1;overflow:hidden;padding:21px 20px 13px;background:#fff}.success{text-align:center;padding:4px 0 17px}.success-mark{width:56px;height:56px;margin:0 auto 11px;border-radius:50%;background:#e6f6ee;color:var(--positive);display:grid;place-items:center;font-size:30px;font-weight:600}.success h2{font-size:22px;line-height:1.35;margin:0;font-weight:700;letter-spacing:-.3px}.success p{font-size:12px;color:var(--quiet);margin:5px 0 0;line-height:1.5}.status-pills{display:flex;justify-content:center;gap:7px;margin-top:12px}.pill{font-size:10px;font-weight:600;padding:5px 8px;border-radius:4px;background:#f0f1ff;color:var(--brand)}.pill.green{background:#e6f6ee;color:#087547}.section{border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:11px}.section-title{font-size:13px;font-weight:700;margin:0 0 10px}.service-line{display:flex;gap:10px;align-items:center;padding-bottom:11px;border-bottom:1px solid #f0f0f0}.service-thumb{width:43px;height:43px;flex:none;border-radius:6px;background:#ededed;display:grid;place-items:center;position:relative}.service-thumb svg{width:33px;height:33px}.service-name{font-size:12px;font-weight:650;line-height:1.4}.service-hint{font-size:10px;color:var(--quiet);margin-top:3px}.detail{display:grid;grid-template-columns:68px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid #f0f0f0;font-size:11px;line-height:1.45}.detail:last-child{border-bottom:0;padding-bottom:0}.detail span{color:var(--quiet)}.detail strong{font-size:11px;font-weight:600}.sample{display:inline-block;margin-left:4px;padding:2px 4px;border-radius:3px;background:#fff3db;color:#744a08;font-size:8px;font-weight:650;vertical-align:1px}.info{margin-top:12px;padding:11px 12px;border-radius:8px;background:#f5f4f5;font-size:11px;line-height:1.5;color:#444}.info strong{display:block;color:var(--ink);font-size:11px;margin-bottom:2px}.foot{flex:none;padding:11px 20px 17px;border-top:1px solid var(--line);background:#fff}.foot-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:10px;color:var(--quiet)}.cta{height:47px;border-radius:5px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:650}.secondary{text-align:center;color:var(--brand);font-size:11px;font-weight:600;padding:9px 0 0}.annotation{max-width:310px}.ann-kicker{font-size:11px;letter-spacing:.13em;color:var(--brand);font-weight:700}.annotation h1{font-size:30px;line-height:1.22;margin:12px 0 9px;letter-spacing:-.7px}.ann-desc{font-size:14px;line-height:1.7;color:#555;margin:0 0 25px}.ann-list{border-top:1px solid #c9c9ce}.ann-row{padding:13px 0;border-bottom:1px solid #c9c9ce}.ann-label{font-size:11px;color:#777;margin-bottom:4px}.ann-value{font-size:13px;line-height:1.55}.note{margin-top:18px;padding:13px 14px;background:#fff7e8;border-left:3px solid var(--warning);font-size:12px;line-height:1.55;color:#5e4a2a}.sequence{font-size:11px;color:#777;margin-top:17px;letter-spacing:.04em}
-    .body{padding:14px 20px 8px}.success{padding:0 0 10px}.success-mark{width:44px;height:44px;margin:0 auto 7px;font-size:25px}.section{padding:10px;margin-top:8px}.service-line{padding-bottom:8px}.detail{padding:6px 0;line-height:1.3}.info{margin-top:8px;padding:8px 10px;font-size:10px}
-    .back,.cta,.change{text-decoration:none}.back{color:var(--ink);display:flex;align-items:center}
-    @media(max-width:800px){body{background:#fff}.presentation{display:block;padding:0}.artboard{margin:0 auto;box-shadow:none}.annotation{max-width:375px;margin:24px auto;padding:0 20px 28px}.annotation h1{font-size:24px}}
-  </style>
-  <link rel="stylesheet" href="post-purchase-flow.css">
-  <link rel="stylesheet" href="iphone17-presentation.css">
+  <meta name="description" content="预约结果回到同一服务订单，通过订单内弹窗反馈。">
+  <title>查看订单预约结果 · Service as Offer</title>
+  <link rel="stylesheet" href="remaining-pages.css">
   <link rel="stylesheet" href="service-system.css">
   <script src="service-journey.js" defer></script>
 </head>
-<body data-page="result">
-  <main class="presentation">
-    <article class="artboard" aria-label="小程序设计画板：预约已创建">
-      <div class="statusbar"><span>9:41</span><div class="status-icons"><span class="signal">▂▄▆</span><span>⌁</span><span class="battery"></span></div></div>
-      <header class="nav"><a class="back" href="01-service-entry.html?scenario=all" aria-label="返回服务首页">‹</a><span class="nav-title">预约结果</span><span class="more" aria-hidden="true">···</span></header>
-      <section class="body">
-        <div class="success" data-result-state="created" role="status" aria-live="polite">
-          <div class="success-mark" id="result-mark" aria-hidden="true">✓</div>
-          <h2 id="result-title">预约已创建</h2>
-          <p id="result-description">门店与时间已确认，服务状态为待到店。</p>
-          <div class="status-pills"><span class="pill green" id="appointment-pill">预约 · 已创建</span><span class="pill" id="result-payment-pill">交易 · 已支付</span></div>
-        </div>
-        <section class="section">
-          <h3 class="section-title" id="attempt-title">预约信息</h3>
-          <div class="detail"><span>服务项目</span><strong>自行车标准维保服务</strong></div>
-          <div class="detail"><span>预约门店</span><strong id="appointment-store">上海门店 01</strong></div>
-          <div class="detail"><span>预约时间</span><strong id="appointment-time">2026 年 10 月 24 日（周六）11:00</strong></div>
-          <div class="detail"><span>预约状态</span><strong id="appointment-status">已创建 · 待到店</strong></div>
-        </section>
-        <section class="section">
-          <h3 class="section-title">服务与交易</h3>
-          <div class="service-line">
-            <div class="service-thumb" aria-hidden="true">
-              <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#5e5e5e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8m-8 0-2-4m12 4 2-5h5"/></g></svg>
-            </div>
-            <div><div class="service-name">服务已支付，等待到店履约</div><div class="service-hint">实付金额以交易单记录为准</div></div>
-          </div>
-          <div class="detail"><span>交易状态</span><strong id="transaction-status">已支付</strong></div>
-          <div class="detail"><span>履约进度</span><strong id="service-progress">待到店 · 暂无服务进度</strong></div>
-        </section>
-        <div class="info" id="result-message"><strong>到店前请核对预约信息</strong>请按预约时间到店办理服务。</div>
-      </section>
-      <footer class="foot"><button class="cta" id="primary-action" type="button">查看订单详情</button><a class="flow-secondary" id="result-order-link" href="12-service-order-detail.html">返回订单详情</a></footer>
+<body>
+  <main class="page-presentation">
+    <article class="page-artboard">
+      <div class="page-body">
+        <h1 class="page-heading">正在查看订单预约结果</h1>
+        <p>预约时间属于服务订单。正在回到同一订单，查询结果以弹窗反馈。</p>
+        <a class="page-button" href="12-service-order-detail.html?booking=unknown&amp;bookingResult=unknown">查看订单</a>
+      </div>
     </article>
-    <aside class="annotation">
-      <section class="prototype-controls" aria-labelledby="state-heading">
-        <h2 id="state-heading">状态切换</h2>
-        <p>切换预约状态，查看不同结果下可执行的操作。</p>
-        <div class="state-options" role="group" aria-label="预约创建结果">
-          <button type="button" class="state-option" data-result-state="created" aria-pressed="true">预约已创建</button>
-          <button type="button" class="state-option" data-result-state="conflict" aria-pressed="false">资源冲突</button>
-          <button type="button" class="state-option" data-result-state="unknown" aria-pressed="false">结果待确认</button>
-        </div>
-        <p class="control-feedback" id="state-description" role="status">预约创建成功后返回服务首页。</p>
-      </section>
-      <nav class="flow-nav" aria-label="购后流程页面">
-        <h2>流程导航</h2>
-        <div class="flow-links">
-          <a class="flow-link" href="05-payment-result.html">05 · 支付结果</a>
-          <a class="flow-link" href="06-store-selection.html">06 · 选择门店</a>
-          <a class="flow-link" href="07-date-time-selection.html">07 · 选择时间</a>
-          <a class="flow-link" href="08-appointment-result.html" aria-current="step">08 · 预约结果</a>
-        </div>
-      </nav>
-    </aside>
   </main>
-  <script src="post-purchase-flow.js"></script>
 </body>
 </html>

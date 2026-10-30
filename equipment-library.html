@@ -79,7 +79,6 @@
     .equipment-card-copy small { display: block; margin-top: 2px; color: #949494; font-size: 9px; line-height: 13px; }
     .equipment-status { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 8px; background: var(--accent-soft); color: var(--accent); font-size: 10px; line-height: 15px; }
     .equipment-status.positive { background: #edf8f2; color: #149b65; }
-    .equipment-status.warning { background: #fff6ec; color: #db6900; }
     .equipment-status.neutral { background: var(--soft); color: var(--muted); }
     .equipment-status-copy { min-width: 0; }
     .equipment-status-copy strong { display: block; font-size: 11px; }
@@ -145,7 +144,7 @@
     const equipmentItems = [
       { category: "bike", source: "迪卡侬设备", name: "Rockrider 山地自行车", detail: "ST 530 / 灰色", date: "2026.03 购买 · ✓ 账号自动同步", image: "device-rockrider.png", status: "建议进行基础保养", note: "已使用约 6 个月", action: "查看推荐服务", tone: "brand" },
       { category: "bike", source: "迪卡侬设备", name: "Riverside Touring 自行车", detail: "经典旅行系列 / 蓝色", date: "2026.08 购买 · ✓ 账号自动同步", image: "device-riverside.png", status: "1 次新车安装权益可用", note: "新车专享服务", action: "预约安装", tone: "positive" },
-      { category: "ski", source: "迪卡侬设备", name: "WEDZE 单板滑雪板", detail: "All Mountain / 黑色全能款", date: "2025.11 购买 · ✓ 账号自动同步", image: "device-wedze.png", status: "雪季开始，可以准备开板养护了", note: "雪季提醒", action: "查看雪板保养", tone: "warning" },
+      { category: "ski", source: "迪卡侬设备", name: "WEDZE 单板滑雪板", detail: "All Mountain / 黑色全能款", date: "2025.11 购买 · ✓ 账号自动同步", image: "device-wedze.png", status: "雪季开始，可以准备开板养护了", note: "雪季提醒", action: "查看雪板保养", tone: "neutral" },
       { category: "racket", source: "迪卡侬设备", name: "PERFLY 羽毛球拍", detail: "BR 990 / 碳纤维专业级", date: "2025.12 购买 · ✓ 账号自动同步", image: "device-perfly.png", status: "上次穿线：2026.05", note: "拉线张力：26磅", action: "查看设备详情", tone: "neutral" },
       { category: "other", source: "其他品牌", name: "Specialized Allez 公路车", detail: "SPECIALIZED / 红色款", date: "2026.06 手动添加", image: "device-specialized.png", status: "可使用迪卡侬自行车维修与保养服务", note: "支持线下门店预约", action: "查看可用服务", tone: "neutral" }
     ];

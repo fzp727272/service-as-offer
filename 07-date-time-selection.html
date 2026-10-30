@@ -25,8 +25,7 @@
       <section class="body">
         <div class="step" aria-label="预约进度"><span>1 选择门店</span><span class="step-line"></span><span aria-current="step">2 选择时间</span><span class="step-line"></span><span>3 预约完成</span></div>
         <h2 class="heading" id="schedule-heading">选择日期和时段</h2>
-        <p class="subheading" id="schedule-description" hidden>可约窗口以门店实时服务资源为准。</p>
-        <p class="state-message" id="reschedule-guidance" hidden></p>
+        <p class="subheading" id="schedule-description">可预约未来 1 周，具体时段以门店资源为准。</p>
         <div class="service-strip booking-service-card">
           <div class="service-thumb" aria-hidden="true"></div>
           <div class="service-info"><strong class="service-name">自行车标准保养套餐</strong><span>已支付 · 待预约</span></div>
@@ -37,14 +36,8 @@
         </div>
         <hr class="booking-store-divider" aria-hidden="true">
         <div class="store-summary"><div><strong id="selected-store-name">上海门店 01</strong></div><a class="change" href="06-store-selection.html">更换门店</a></div>
-        <div class="calendar-title"><strong>2026 年 10 月</strong><span>演示可约日期</span></div>
-        <div class="dates" aria-label="可选日期">
-          <button type="button" class="date" data-date="2026-10-23" data-date-label="周五 · 10 月 23 日" aria-pressed="false"><small>周五</small><strong>23</strong></button>
-          <button type="button" class="date selected" data-date="2026-10-24" data-date-label="周六 · 10 月 24 日" aria-pressed="true"><small>周六</small><strong>24</strong></button>
-          <button type="button" class="date" data-date="2026-10-25" data-date-label="周日 · 10 月 25 日" aria-pressed="false"><small>周日</small><strong>25</strong></button>
-          <button type="button" class="date" data-date="2026-10-26" data-date-label="周一 · 10 月 26 日" aria-pressed="false"><small>周一</small><strong>26</strong></button>
-          <button type="button" class="date disabled" data-date="2026-10-27" data-date-label="周二 · 10 月 27 日" aria-pressed="false" disabled><small>周二</small><strong>27</strong></button>
-        </div>
+        <div class="calendar-title"><strong>10 月 26 日 — 11 月 1 日</strong><span>1 周演示资源</span></div>
+        <div class="dates booking-dates" id="booking-dates" aria-label="未来一周可选日期"></div>
         <div class="legend"><span class="legend-item"><i class="legend-dot"></i>可约</span><span class="legend-item"><i class="legend-dot full"></i>约满</span><span class="legend-item"><i class="legend-dot unavailable"></i>不可约</span></div>
         <h3 class="section-title" id="selected-date-label">周六 · 10 月 24 日　可选时段</h3>
         <div class="slots" aria-label="可选时段">
@@ -61,11 +54,14 @@
       <h1>选择日期<br>和时段</h1>
       <section class="prototype-controls" aria-labelledby="state-heading">
         <h2 id="state-heading">状态切换</h2>
-        <p>切换时段状态，查看可选与不可选的处理方式；改约时新时段成功前保留原预约。</p>
+        <p>展示 7 个连续日期的一周资源样例，起止日仅供演示，不代表生产含当日及截止算法已确认。订单已有预约时不允许直接更换。</p>
         <div class="state-options" role="group" aria-label="预约时段状态">
           <button type="button" class="state-option" data-schedule-state="available" aria-pressed="true">有可约时段</button>
           <button type="button" class="state-option" data-schedule-state="empty" aria-pressed="false">当前无可约时段</button>
           <button type="button" class="state-option" data-schedule-state="conflict" aria-pressed="false">提交时段冲突</button>
+          <button type="button" class="state-option" data-schedule-state="timeout-success" aria-pressed="false">无响应：查询成功</button>
+          <button type="button" class="state-option" data-schedule-state="timeout-failure" aria-pressed="false">无响应：查询失败</button>
+          <button type="button" class="state-option" data-schedule-state="timeout-unknown" aria-pressed="false">无响应：仍待确认</button>
         </div>
         <p class="control-feedback" id="state-description" role="status">选择一个可约时段后可以继续。</p>
       </section>

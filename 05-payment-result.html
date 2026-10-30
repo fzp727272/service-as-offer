@@ -54,11 +54,12 @@
         </section>
       </section>
       <footer class="foot"><button class="cta" id="primary-action" type="button">立即预约</button><a class="flow-secondary" id="result-order-link" href="12-service-order-detail.html">查看订单详情</a></footer>
+      <div class="payment-loading-toast" id="payment-loading-toast" role="status" aria-live="polite" hidden><span class="loading-indicator" aria-hidden="true"></span><span>正在确认支付结果，请勿重复支付</span></div>
     </article>
     <aside class="annotation">
       <section class="prototype-controls" aria-labelledby="state-heading">
         <h2 id="state-heading">状态切换</h2>
-        <p>切换订单状态，查看当前可执行的操作。</p>
+        <p>待确认时展示 loading toast，并每 1.5 秒模拟一次后台查询。点击成功 / 失败按钮提供下次查询结果；不会自动推定成功。频率仅供演示，不是生产契约。</p>
         <div class="state-options" role="group" aria-label="订单支付状态">
           <button type="button" class="state-option" data-payment-state="paid" aria-pressed="true">支付成功</button>
           <button type="button" class="state-option" data-payment-state="unpaid" aria-pressed="false">支付失败</button>

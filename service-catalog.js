@@ -19,19 +19,19 @@ const serviceCatalog = [
     id: "badminton-stringing", category: "badminton", title: "羽毛球穿线",
     detail: "按取拍时效及球拍、球线购买渠道选择穿线方案", tags: ["2 小时快取", "48 小时取"],
     options: [
-      { id: "badminton-express", title: "羽毛球 · 2 小时快速穿线", detail: "不区分球拍及球线的购买渠道", price: 60 },
-      { id: "badminton-own", title: "羽毛球 · 48 小时取 · 自带球拍球线", detail: "非迪卡侬球拍 + 非迪卡侬球线", price: 40 },
-      { id: "badminton-mixed", title: "羽毛球 · 48 小时取 · 单项购于迪卡侬", detail: "球拍或球线购于迪卡侬，二者满足其一", price: 30 },
-      { id: "badminton-decathlon", title: "羽毛球 · 48 小时取 · 球拍球线均购于迪卡侬", detail: "迪卡侬球拍 + 迪卡侬球线", price: 20 }
+      { id: "badminton-express", title: "2 小时快速穿线", detail: "不区分球拍及球线的购买渠道", price: 60 },
+      { id: "badminton-own", title: "48 小时取 · 自带球拍球线", detail: "非迪卡侬球拍 + 非迪卡侬球线", price: 40 },
+      { id: "badminton-mixed", title: "48 小时取 · 单项购于迪卡侬", detail: "球拍或球线购于迪卡侬，二者满足其一", price: 30 },
+      { id: "badminton-decathlon", title: "48 小时取 · 球拍球线均购于迪卡侬", detail: "迪卡侬球拍 + 迪卡侬球线", price: 20 }
     ]
   },
   {
     id: "tennis-stringing", category: "badminton", title: "网球穿线",
     detail: "按取拍时效及球线购买渠道选择穿线方案", tags: ["2 小时快取", "48 小时取"],
     options: [
-      { id: "tennis-express", title: "网球 · 2 小时快速穿线", detail: "不区分球拍及球线的购买渠道", price: 80 },
-      { id: "tennis-own", title: "网球 · 48 小时取 · 自带球线", detail: "非迪卡侬球线；球拍购买渠道不限", price: 60 },
-      { id: "tennis-decathlon", title: "网球 · 48 小时取 · 迪卡侬球线", detail: "迪卡侬球线；球拍购买渠道不限", price: 40 }
+      { id: "tennis-express", title: "2 小时快速穿线", detail: "不区分球拍及球线的购买渠道", price: 80 },
+      { id: "tennis-own", title: "48 小时取 · 自带球线", detail: "非迪卡侬球线；球拍购买渠道不限", price: 60 },
+      { id: "tennis-decathlon", title: "48 小时取 · 迪卡侬球线", detail: "迪卡侬球线；球拍购买渠道不限", price: 40 }
     ]
   },
   {

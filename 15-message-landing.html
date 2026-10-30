@@ -16,7 +16,8 @@
       <header class="page-nav"><a class="page-back" href="01-service-entry.html" aria-label="返回服务首页">‹</a><span class="page-nav-title">服务消息</span><span class="page-nav-more" aria-hidden="true">···</span></header>
       <div class="page-body">
         <header class="page-intro">
-          <h1 class="page-heading" style="margin-top:10px">您的服务有新进展</h1>
+          <h1 class="page-heading" id="message-title" style="margin-top:10px">您的服务有新进展</h1>
+          <p class="page-lede" id="message-description"></p>
         </header>
         <section class="page-section">
           <h2 class="page-section-title">关联服务</h2>
@@ -29,22 +30,36 @@
           </div>
           <div class="page-row"><span>当前进度</span><strong>已支付，待选择门店和时间</strong></div>
           <div class="page-row"><span>消息时间</span><strong>以实际通知记录为准</strong></div>
+          <div class="page-row" id="message-queue-number" hidden><span>排队编号</span><strong>A-023</strong></div>
+          <div class="page-row" id="message-queue-wait" hidden><span>排队时间</span><strong>预计等待约 20 分钟</strong></div>
+          <p class="page-lede" id="message-queue-note" hidden>编号与等待时间为演示数据，实际以门店队列为准。</p>
         </section>
         <section class="page-section">
           <div class="page-status warning" id="message-feedback" role="status" hidden>消息链接已失效，请从“我的订单”查询服务。</div>
         </section>
       </div>
       <div class="page-foot">
-        <a class="page-button" href="12-service-order-detail.html" style="display:block;text-decoration:none">查看这笔服务单</a>
+        <a class="page-button" id="message-order-link" data-fresh-start href="12-service-order-detail.html" style="display:block;text-decoration:none">查看这笔服务订单</a>
       </div>
     </article>
     <aside class="page-annotation">
       <p class="page-annotation-kicker">UX SPEC 15 · REQ-015</p>
       <h1>微信消息落地</h1>
       <p>只示意消息点开后的服务上下文，不设计微信模板、不复用历史邮件方案，也不增加短信兜底承诺。</p>
-      <h2>落地契约待确认</h2>
-      <ul><li>通知事件、订阅授权与消息字段。</li><li>按具体服务单或预约进入业务上下文。</li><li>失效链接、跨账号与已取消对象的恢复方式。</li></ul>
-      <p class="page-status warning">GAP-019 · 消息触发与授权未定</p>
+      <section class="prototype-controls">
+        <h2>六类通知事件</h2>
+        <div class="state-options" role="group" aria-label="微信通知事件">
+          <button class="state-option" type="button" data-message-event="order-created">服务下单成功</button>
+          <button class="state-option" type="button" data-message-event="booked">预约成功</button>
+          <button class="state-option" type="button" data-message-event="reminder">临近预约时间</button>
+          <button class="state-option" type="button" data-message-event="queued">扫码成功开始排队</button>
+          <button class="state-option" type="button" data-message-event="completed">服务完成</button>
+          <button class="state-option" type="button" data-message-event="cancelled">订单取消</button>
+        </div>
+      </section>
+      <h2>落地边界</h2>
+      <ul><li>六类事件已确认；临近时间阈值、模板、订阅授权与消息字段仍待补。</li><li>进入同一服务订单，不存在独立预约单。</li><li>失效链接、跨账号与发送失败恢复仍待确认；原型不发送真实微信消息。</li></ul>
+      <p class="page-status warning">GAP-019 · 事件已确认，不承诺通知必达；服务完成不等同核销或入账。</p>
       <nav class="page-flow-nav" aria-label="页面原型导航">
         <a href="my-orders.html">我的订单</a><a aria-current="page" href="15-message-landing.html">15 消息落地</a>
         <a href="12-service-order-detail.html">12 服务单详情</a><a href="01-service-entry.html">01 服务首页</a>

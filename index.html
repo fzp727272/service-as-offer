@@ -83,7 +83,7 @@
         <ol>
           <li><a class="node" href="06-store-selection.html">选择门店</a><p>按城市查看可承接当前服务的门店。</p></li>
           <li><a class="node" href="07-date-time-selection.html">选择日期与时段</a><p>区分可约、约满和不可约。</p></li>
-          <li><a class="node" href="12-service-order-detail.html?booking=created">预约成功 / 订单详情</a><p>成功后直接进入订单，优先展示到店时间、门店与二维码。待到店时可在订单内更换时间或取消本次预约。</p><div class="branch">预约异常<br><a href="08-appointment-result.html?result=conflict">时段冲突</a></div></li>
+          <li><a class="node" href="12-service-order-detail.html?booking=created">服务订单 · 预约状态</a><p>预约结果是订单状态而非独立流程节点；结果待确认时在订单状态栏说明，并可在订单内查看结果弹窗。预约时间属于同一服务订单；不提供更换预约，扫码前取消需二次确认。</p></li>
         </ol>
       </section>
       <section class="lane">
@@ -97,7 +97,8 @@
     </div>
     <section class="entry-paths" aria-labelledby="entry-title">
       <h2 id="entry-title">其他入口，接回同一条主线</h2>
-      <div class="entry-path"><h3>装备附带权益</h3><p><a class="path-link" href="equipment-library.html">我的装备</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="03-benefit-detail.html">权益详情</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="06-store-selection.html?context=benefit&amp;benefit=inspection&amp;name=安全检查&amp;equipment=Rockrider%20ST%20530">选择门店与时间</a>，无需再次支付。</p></div>
+      <div class="entry-path"><h3>购买商品赠送权益</h3><p><a class="path-link" href="01-service-entry.html?entry=scan">购后扫码进入</a> / <a class="path-link" href="03-benefit-detail.html?entry=order&amp;sourceOrder=810263">商品订单跳转权益</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="06-store-selection.html?context=benefit&amp;benefit=inspection&amp;name=安全检查&amp;equipment=Rockrider%20ST%20530">选择门店与时间</a>，无需再次支付。扫码不执行装备绑定。</p></div>
+      <div class="entry-path"><h3>浏览其他商品或服务</h3><p><a class="path-link" href="01-service-entry.html?entry=product">其他商品页面进入</a> / <a class="path-link" href="01-service-entry.html?entry=service">服务入口进入</a>，在同一首页浏览服务。</p></div>
       <div class="entry-path"><h3>不确定维修项目</h3><p><a class="path-link" href="04-repair-request.html">描述维修需求</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="06-store-selection.html?name=自行车维修&amp;category=bike&amp;context=repair">查看服务门店</a>，项目与报价由门店确认。</p></div>
       <div class="entry-path"><h3>继续已有服务</h3><p><a class="path-link" href="my-orders.html">我的订单</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="12-service-order-detail.html">对应服务单</a>，按当前状态继续付款、预约或查看进度。</p></div>
       <div class="entry-path"><h3>从消息返回</h3><p><a class="path-link" href="15-message-landing.html">服务消息</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="12-service-order-detail.html">关联服务单</a>，保留原服务与预约上下文。</p></div>
@@ -107,15 +108,16 @@
       <dl>
         <div><dt>同一套组件</dt><dd>Vitamin C 品牌蓝、直角容器、统一文字与间距。按钮、列表、表单、状态反馈和底栏由共享样式管理。</dd></div>
         <div><dt>同一笔服务</dt><dd>跨页保留服务、费用、装备、服务单、门店与时间。取消预约后保留服务单，重新预约不再购买。</dd></div>
-        <div><dt>05–13 交互约定</dt><dd>更换日期或门店后重新选择时段；定位未授权仍可手动选城市。失败和待确认不展示支付或预约成功，待确认时禁止重复提交。更换预约时间与取消服务单在当前页弹层提示，不再进入独立页面；改约确认后选择新时段，成功后才更新订单。09 入口继续合并到 12 订单详情。</dd></div>
+        <div><dt>05–13 交互约定</dt><dd>支付未知时后台轮询演示并展示 loading toast；拒绝定位默认上海并弹窗。日历展示未来一周，预约无响应回到同一订单，将结果说明置于订单状态栏；结果弹窗只是订单状态反馈，不是单独流程节点。未查明时无成功二维码。取消预约二次确认，不提供更换预约。08 / 09 / 10 旧入口均回到 12。</dd></div>
         <div><dt>界面与说明分离</dt><dd>手机内只保留业务信息和可操作的下一步。每页右侧提供同一套流程导航，设计说明与演示状态默认折叠。</dd></div>
       </dl>
       <details><summary>未确认的能力与演示边界</summary><ul>
         <li>所有页面均为交互原型，不连接真实支付、订单、资格、预约、相机或门店系统。</li>
-        <li>改约演示采用新预约成功后替换原预约；失败时保留原预约。生产资源替换、同步和幂等仍待接入。</li>
+        <li>不提供更换预约。订单内可模拟预约当天 23:59 无记录更新取消预约并回退待预约；有更新则不命中此规则。未运行真实后台任务，事件范围与并发仍待接入。</li>
         <li>仅待付款服务单可取消；已支付订单仅在预约成功、扫码签到前取消本次预约，保留订单，不承诺退款。</li>
         <li>二维码为到店签到示意，不可实际核销。扫码后排队仅通过演示状态查看，未连接门店系统。</li>
-        <li>日期固定为 2026 年 10 月的演示资源；门店为示例名称，无真实地址、距离或营业时间。支付金额与燃值换算为示例，未读取余额。</li>
+        <li>日历固定展示 2026 年 10 月 26 日至 11 月 1 日的 7 天演示资源，不代表生产起止边界已确认；门店名称、地址、距离与营业时间均为示例。支付金额与燃值换算为示例，未读取余额。</li>
+        <li>服务消息覆盖六类确认事件；排队消息包含编号与预计等待时间。未发送微信通知，不确定临近提醒阈值，不扩展退款或签收核销。</li>
         <li>排队号仅在订单详情的“排队中”演示状态显示；示例号码和状态不代表真实门店结果。维修需求仅保存于当前页面，不表示已提交门店。</li>
         <li>已有需求缺口与 Blocked 状态继续有效；本轮整合不代表业务规则获批或生产上线。</li>
       </ul></details>

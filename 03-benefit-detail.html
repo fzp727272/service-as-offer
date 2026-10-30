@@ -178,7 +178,7 @@
       document.getElementById("footer-label").textContent = "请重新核对权益";
     } else {
       const serviceUrl = new URL("02-service-detail.html", location.href);
-      serviceUrl.search = new URLSearchParams({category:"bike", name:benefit.service, description:benefit.description, context:"benefit", benefit:benefitId, state:scenario, equipment:equipmentName});
+      serviceUrl.search = new URLSearchParams({category:"bike", name:benefit.service, description:benefit.description, context:"benefit", benefit:benefitId, state:scenario, equipment:equipmentName, sourceOrder:params.get("sourceOrder") || "810263", entry:params.get("entry") || "service"});
       if (benefitId === "inspection") serviceUrl.searchParams.set("price","69.90");
       content.innerHTML = `
         <section class="benefit-intro" aria-labelledby="benefit-title">
@@ -238,7 +238,7 @@
     document.getElementById("source-order")?.addEventListener("click", () => showSheet("order"));
     confirm.addEventListener("click", () => {
       const next = new URL("06-store-selection.html", location.href);
-      next.search = new URLSearchParams({ context: "benefit", benefit: benefitId, name: benefit.service, description: benefit.description, category: "bike", equipment: equipmentName, order: params.get("order") || "SO-2601024" });
+      next.search = new URLSearchParams({ context: "benefit", benefit: benefitId, name: benefit.service, description: benefit.description, category: "bike", equipment: equipmentName, order: params.get("order") || "SO-2601024", sourceOrder: params.get("sourceOrder") || "810263", entry: params.get("entry") || "service" });
       location.assign(next);
     });
     close.addEventListener("click", closeSheet);

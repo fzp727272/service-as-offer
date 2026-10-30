@@ -271,7 +271,7 @@ html body[data-page="store"],
 html body[data-page="schedule"] { background: #fff; }
 html body[data-page="store"] .body,
 html body[data-page="schedule"] .body { background: #fff; }
-body[data-page="store"] .store-card:not(.selected) { background: var(--flow-soft); }
+body[data-page="store"] .store-card:not(.selected) { background: #fff;border: 1px solid var(--flow-line); }
 body.vitamin-app.purchase-flow[data-page="store"] .store-card {
   gap: 0;
   padding: 8px 12px;
