@@ -15,7 +15,8 @@
   <link rel="stylesheet" href="post-purchase-flow.css">
   <link rel="stylesheet" href="iphone17-presentation.css">
   <link rel="stylesheet" href="service-system.css">
-  <script src="service-journey.js" defer></script>
+  <script src="figma-copy.js" defer></script>
+  <script src="service-journey.js?v=20261103-picker" defer></script>
 </head>
 <body data-page="schedule">
   <main class="presentation">
@@ -42,7 +43,7 @@
         <h3 class="section-title" id="selected-date-label">周六 · 10 月 24 日　可选时段</h3>
         <div class="slots" aria-label="可选时段">
           <button type="button" class="slot" data-time="09:00" aria-pressed="false">09:00</button><button type="button" class="slot full" data-time="09:30" aria-pressed="false" disabled><span>09:30</span></button><button type="button" class="slot unavailable" data-time="10:00" aria-pressed="false" disabled>10:00 不可约</button>
-          <button type="button" class="slot" data-time="10:30" aria-pressed="false">10:30</button><button type="button" class="slot selected" data-time="11:00" aria-pressed="true">11:00　✓</button><button type="button" class="slot" data-time="11:30" aria-pressed="false">11:30</button>
+          <button type="button" class="slot" data-time="10:30" aria-pressed="false">10:30</button><button type="button" class="slot selected" data-time="11:00" aria-pressed="true">11:00<span class="inline-check-icon" aria-hidden="true"></span></button><button type="button" class="slot" data-time="11:30" aria-pressed="false">11:30</button>
           <button type="button" class="slot" data-time="13:00" aria-pressed="false">13:00</button><button type="button" class="slot full" data-time="13:30" aria-pressed="false" disabled><span>13:30</span></button><button type="button" class="slot" data-time="14:00" aria-pressed="false">14:00</button>
         </div>
         <div class="state-message" id="schedule-message" role="status" hidden></div>
@@ -76,6 +77,6 @@
       </nav>
     </aside>
   </main>
-  <script src="post-purchase-flow.js"></script>
+  <script src="post-purchase-flow.js?v=20261103-picker"></script>
 </body>
 </html>

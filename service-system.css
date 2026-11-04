@@ -20,6 +20,19 @@
   --shadow: 0 12px 12px rgb(16 16 16 / 4%);
 }
 
+.inline-check-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin: 0 2px;
+  vertical-align: -2px;
+  background-color: currentColor;
+  -webkit-mask: url("assets/figma/selection-check.svg") center / contain no-repeat;
+  mask: url("assets/figma/selection-check.svg") center / contain no-repeat;
+}
+.check img { display: block; width: 24px; height: 24px; }
+
 .vitamin-app .service-change-dialog {
   box-sizing: border-box;
   width: min(360px, calc(100% - 32px));
@@ -317,7 +330,6 @@ body.vitamin-app {
 .vitamin-app:is(body[data-page="checkout"], body[data-page="order"], body[data-page="store"], body[data-page="schedule"], body[data-page="result"]) .artboard :is(.status-card, .section, .service-strip, .city, .store-card, .placeholder-card, .store-summary, .related-products, .payment-option, .date, .slot, .info, .state-message, .state-option, .flow-link, .cta, .sample, .sample-tag, .pill, .service-thumb, .store-image, .service-icon) {
   border-radius: var(--radius-regular);
 }
-.vitamin-app :is(.order-card, .equipment-card) { }
 .vitamin-app :is(.hero-banner::before, .thumb-caption, .image-label, .image-caption, .sample, .demo-note, .prototype-caption, .placeholder-card) { display: none; }
 .vitamin-app .hero-banner { background-image: none; }
 .vitamin-app .page-inline-action { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; }
@@ -366,7 +378,26 @@ body.vitamin-app {
 .journey-details .prototype-controls { margin: 12px 0; }
 .journey-tools { display: flex; flex-wrap: wrap; gap: 8px 16px; padding-top: 16px; border-top: 1px solid var(--border-quiet); }
 .journey-tools a { min-height: 32px; color: var(--content-brand); font-size: 12px; }
-.journey-alert { padding: 12px; border: 1px solid var(--status-negative); color: var(--status-negative); font-size: 14px; }
+.figma-copy-button {
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  padding: 12px 16px;
+  border: 0;
+  background: var(--content-brand);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.figma-copy-button:hover { background: #29359e; }
+.figma-copy-button:disabled { cursor: progress; opacity: .7; }
+.figma-copy-button:focus-visible { outline: 3px solid #101010; outline-offset: 3px; }
+.figma-copy-help, .figma-copy-status { display: block; margin-top: 8px; color: var(--content-quiet); font-size: 12px; line-height: 18px; }
+.figma-copy-status:not(:empty) { color: var(--content-brand); }
 
 .vitamin-app.purchase-flow :is(.artboard, .page-artboard) {
   height: min(812px, calc(100dvh - 64px));
@@ -912,7 +943,6 @@ body.service-detail .app :is(.section, .status-panel, .chip, .date, .slot, .text
 }
 
 body.service-detail .app .section {
-  border-color: var(--line);
   box-shadow: none;
 }
 

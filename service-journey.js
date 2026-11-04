@@ -9,6 +9,82 @@
     params.set("booking", bookingResult === "created" ? "created" : bookingResult === "conflict" ? "none" : "unknown");
     params.delete("demoState");
   }
+  if (["06-store-selection.html", "07-date-time-selection.html"].includes(file)) {
+    const destination = new URL("12-service-order-detail.html", location.href);
+    destination.search = params.toString();
+    destination.searchParams.set("selectBooking", "1");
+    if (params.get("reschedule") === "1") {
+      ["city", "store", "date", "time"].forEach(key => {
+        const old = params.get(`old${key[0].toUpperCase()}${key.slice(1)}`);
+        if (old) destination.searchParams.set(key, old);
+      });
+      destination.searchParams.set("booking", "created");
+      destination.searchParams.set("notice", "reschedule-unavailable");
+      destination.searchParams.delete("selectBooking");
+    }
+    location.replace(destination.href);
+    return;
+  }
+  let pickerReady;
+  const loadScript = name => new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = new URL(name, location.href).href;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.append(script);
+  });
+  const openOrderBooking = async (context = new URLSearchParams(location.search), trigger = document.activeElement) => {
+    const demo = context.get("demoState");
+    const result = context.get("bookingResult");
+    const blocked = ["unpaid", "unknown"].includes(context.get("paymentState")) ||
+      ["created", "unknown"].includes(context.get("booking")) || ["created", "unknown"].includes(result) ||
+      context.get("checkin") === "done" || context.has("serviceState") || context.get("reschedule") === "1" ||
+      ["unpaid", "booked", "queued", "active", "completed", "cancelled", "payment-unknown", "booking-unknown"].includes(demo);
+    if (blocked) return;
+    try {
+      pickerReady ||= window.StoreTimePicker ? Promise.resolve() : (typeof storeCities !== 'undefined' ? Promise.resolve() : loadScript("booking-fixtures.js?v=20261103-picker")).then(() => loadScript("store-time-picker.js?v=20261103-picker"));
+      await pickerReady;
+      const selection = await StoreTimePicker.open({root: document.querySelector(".page-artboard,.artboard,.app"), value: Object.fromEntries(context), mode: "order", trigger, demoState: document.querySelector('[data-booking-preview][aria-pressed="true"]')?.dataset.bookingPreview || "available"});
+      if (!selection) return;
+      const destination = new URL("12-service-order-detail.html", location.href);
+      destination.search = context.toString();
+      ["demoState", "selectBooking", "reschedule", "result", "notice", "oldCity", "oldStore", "oldDate", "oldTime"].forEach(key => destination.searchParams.delete(key));
+      Object.entries(selection).forEach(([key, value]) => destination.searchParams.set(key, value));
+      const outcome = selection.bookingResult || "created";
+      destination.searchParams.set("booking", outcome === "created" ? "created" : outcome === "unknown" ? "unknown" : "none");
+      destination.searchParams.set("bookingResult", outcome);
+      if (context.get("context") !== "benefit") destination.searchParams.set("paymentState", "paid");
+      location.assign(destination.href);
+    } catch (error) {
+      pickerReady = undefined;
+      console.error("预约选择器加载失败", error);
+      const message = document.createElement("p");
+      message.setAttribute("role", "alert");
+      message.textContent = "门店时间选择暂时无法加载，请稍后重试。";
+      trigger?.insertAdjacentElement("afterend", message);
+    }
+  };
+  window.openServiceOrderBooking = openOrderBooking;
+  document.addEventListener("click", event => {
+    const link = event.target.closest("a[href]");
+    if (!link) return;
+    const destination = new URL(link.href, location.href);
+    if (destination.origin !== location.origin || !["06-store-selection.html", "07-date-time-selection.html"].includes(destination.pathname.split("/").pop())) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const context = new URLSearchParams(location.search);
+    destination.searchParams.forEach((value, key) => context.set(key, value));
+    openOrderBooking(context, link);
+  }, true);
+  document.addEventListener("click", event => {
+    const link = event.target.closest('a[href]');
+    if (!link) return;
+    const destination = new URL(link.href, location.href);
+    if (destination.origin !== location.origin || destination.searchParams.get('selectBooking') !== '1' || file !== '12-service-order-detail.html') return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    openOrderBooking(new URLSearchParams(location.search), link);
+  }, true);
   if (params.get("change") === "reschedule") {
     params.delete("change");
     params.set("notice", "reschedule-unavailable");
@@ -144,12 +220,11 @@
     { title: "选服务与下单", pages: [
       ["01-service-entry.html", "服务首页", "从服务、装备权益或进行中订单进入。"],
       ["02-service-detail.html", "服务详情", "了解服务内容和费用，再确认订单。"],
-      ["05-order-checkout.html", "确认订单", "核对项目与金额，选择支付方式。"],
-      ["05-payment-result.html", "支付结果", "查看支付结果，成功后可立即预约。"],
+      ["05-order-checkout.html", "确认订单", "核对项目与金额，并选择“现在预约”或“暂不预约”。"],
+      ["05-payment-result.html", "支付结果", "查看支付与预约结果；支付成功不等于预约成功。"],
     ] },
     { title: "预约到店", pages: [
-      ["06-store-selection.html", "选择门店", "先选择能够承接服务的门店。"],
-      ["07-date-time-selection.html", "选择日期与时段", "查看门店可约资源，提交后复核时段。"],
+      ["12-service-order-detail.html?selectBooking=1", "选择门店与时间", "在当前页面打开共享选择弹框，提交后回同一服务单查看结果。"],
       ["12-service-order-detail.html", "订单详情", "预约结果作为订单状态反馈；扫码前查看预约信息，到店扫码成功后在订单内查看门店排队号。"],
     ] },
     { title: "权益、维修与其他入口", pages: [
@@ -160,7 +235,7 @@
       ["15-message-landing.html", "服务消息", "消息进入关联服务单，不跳转泛订单列表。"],
     ] },
   ];
-  const current = groups.flatMap(group => group.pages).find(item => item[0].split("?")[0] === file);
+  const current = groups.flatMap(group => group.pages).find(item => item[0] === file);
   const contextKeys = ["category", "name", "description", "price", "context", "benefit", "equipment", "order", "sourceOrder", "entry", "city", "store", "date", "time", "booking", "serviceState", "checkin", "payment", "paymentState"];
   const withContext = (href) => {
     const url = new URL(href, location.href);
@@ -249,6 +324,33 @@
     tools.append(link);
   });
   panel.append(tools);
+  const figmaCopy = document.createElement("button");
+  figmaCopy.className = "figma-copy-button";
+  figmaCopy.dataset.figmaCopyUi = "";
+  figmaCopy.type = "button";
+  figmaCopy.textContent = "复制界面到 Figma";
+  figmaCopy.setAttribute("aria-describedby", "figma-copy-help");
+  const figmaCopyHelp = document.createElement("span");
+  figmaCopyHelp.className = "figma-copy-help";
+  figmaCopyHelp.id = "figma-copy-help";
+  figmaCopyHelp.textContent = "复制当前画板的高清图片与 HTML，切换到 Figma 后按 ⌘V 粘贴。图片保留样式但不是可编辑图层；请通过 localhost 打开。";
+  const figmaCopyStatus = document.createElement("span");
+  figmaCopyStatus.className = "figma-copy-status";
+  figmaCopyStatus.setAttribute("role", "status");
+  figmaCopyStatus.setAttribute("aria-live", "polite");
+  panel.append(figmaCopy, figmaCopyHelp, figmaCopyStatus);
+  figmaCopy.addEventListener("click", async () => {
+    figmaCopy.disabled = true;
+    figmaCopyStatus.textContent = "正在准备画板与图片…";
+    try {
+      await window.copyCurrentArtboardToFigma();
+      figmaCopyStatus.textContent = "已复制。切换到 Figma 画布并按 ⌘V 粘贴。";
+    } catch (error) {
+      figmaCopyStatus.textContent = error instanceof Error ? error.message : "复制失败，请检查浏览器剪贴板权限后重试。";
+    } finally {
+      figmaCopy.disabled = false;
+    }
+  });
   const demo = document.createElement("p");
   demo.textContent = "交互原型：数据为示例，不发起真实支付、兑换、签到或退款。";
   if (!["05-order-checkout.html", "05-payment-result.html", "06-store-selection.html", "07-date-time-selection.html", "08-appointment-result.html"].includes(file)) {
@@ -283,7 +385,7 @@
       if (["服务", "服务项目"].includes(row.querySelector("span")?.textContent.trim())) row.querySelector("strong").textContent = params.get("name");
     });
   }
-  const cities = { shanghai: "上海门店", hangzhou: "杭州门店" };
+  const cities = { shanghai: "上海门店", hangzhou: "杭州门店", beijing: "北京门店" };
   const storeLocations = {
     shanghai: [
       { address: "上海市杨浦区淞沪路161号", distance: "2.3 km", hours: "10:00–22:00" },
@@ -293,11 +395,16 @@
       { address: "杭州市滨江区江南大道", distance: "1.8 km", hours: "10:00–22:00" },
       { address: "杭州市西湖区古墩路", distance: "4.2 km", hours: "10:00–22:00" },
     ],
+    beijing: [
+      { address: "北京市朝阳区大屯路", distance: "3.1 km", hours: "10:00–22:00" },
+      { address: "北京市朝阳区广渠路", distance: "5.4 km", hours: "10:00–22:00" },
+    ],
   };
   const city = cities[params.get("city")] ? params.get("city") : "shanghai";
   const storeIndex = params.get("store") === "store-2" ? 1 : 0;
-  const store = `${cities[city]} ${storeIndex === 1 ? "02" : "01"}`;
-  const storeLocation = storeLocations[city][storeIndex];
+  const matchedStore = typeof storeCities === 'undefined' ? null : storeCities.find(item => item.key === city)?.stores.find(item => item.id === params.get('storeId') || item.name === params.get('store'));
+  const store = matchedStore?.name || (params.get('store') && !/^store-[12]$/.test(params.get('store')) ? params.get('store') : `${cities[city]} ${storeIndex === 1 ? "02" : "01"}`);
+  const storeLocation = matchedStore ? {...matchedStore, distance: `${matchedStore.distance.toFixed(1)} km`} : storeLocations[city][storeIndex];
   const date = params.get("date") || "2026-10-24";
   const time = params.get("time") || "11:00";
   const appointment = /^\d{4}-\d{2}-\d{2}$/.test(date) && /^\d{2}:\d{2}$/.test(time) ? `${date} ${time}` : "请重新选择预约时间";
@@ -652,6 +759,13 @@
           renderOrderState();
         });
       });
+      document.querySelectorAll("[data-booking-preview]").forEach(button => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll("[data-booking-preview]").forEach(option => option.setAttribute("aria-pressed", String(option === button)));
+          window.StoreTimePicker?.setDemoState(button.dataset.bookingPreview);
+          document.querySelector("#booking-preview-feedback").textContent = `当前预约演示：${button.textContent}。仅影响预约选择与提交结果，不调用真实接口。`;
+        });
+      });
       document.querySelectorAll("[data-expiry-preview]").forEach(button => {
         button.addEventListener("click", () => {
           const feedback = document.querySelector("#expiry-preview-feedback");
@@ -670,7 +784,13 @@
         });
       });
       renderOrderState();
-      if (bookingResult) showBookingResult(bookingResult);
+      if (bookingResult && params.get("selectBooking") !== "1") showBookingResult(bookingResult);
+      if (params.get("selectBooking") === "1") {
+        const current = new URL(location.href);
+        current.searchParams.delete("selectBooking");
+        history.replaceState(null, "", current);
+        openOrderBooking(new URLSearchParams(current.search), primaryAction);
+      }
       else if (params.get("notice") === "reschedule-unavailable") {
         document.querySelector("#booking-unavailable-dialog").showModal();
       }

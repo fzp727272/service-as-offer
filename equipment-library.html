@@ -96,6 +96,7 @@
   </style>
   <link rel="stylesheet" href="iphone17-presentation.css">
   <link rel="stylesheet" href="service-system.css">
+  <script src="figma-copy.js" defer></script>
   <script src="service-journey.js" defer></script>
 </head>
 <body>
@@ -142,10 +143,10 @@
   <div class="live-region" id="live" aria-live="polite"></div>
   <script>
     const equipmentItems = [
-      { category: "bike", source: "迪卡侬设备", name: "Rockrider 山地自行车", detail: "ST 530 / 灰色", date: "2026.03 购买 · ✓ 账号自动同步", image: "device-rockrider.png", status: "建议进行基础保养", note: "已使用约 6 个月", action: "查看推荐服务", tone: "brand" },
-      { category: "bike", source: "迪卡侬设备", name: "Riverside Touring 自行车", detail: "经典旅行系列 / 蓝色", date: "2026.08 购买 · ✓ 账号自动同步", image: "device-riverside.png", status: "1 次新车安装权益可用", note: "新车专享服务", action: "预约安装", tone: "positive" },
-      { category: "ski", source: "迪卡侬设备", name: "WEDZE 单板滑雪板", detail: "All Mountain / 黑色全能款", date: "2025.11 购买 · ✓ 账号自动同步", image: "device-wedze.png", status: "雪季开始，可以准备开板养护了", note: "雪季提醒", action: "查看雪板保养", tone: "neutral" },
-      { category: "racket", source: "迪卡侬设备", name: "PERFLY 羽毛球拍", detail: "BR 990 / 碳纤维专业级", date: "2025.12 购买 · ✓ 账号自动同步", image: "device-perfly.png", status: "上次穿线：2026.05", note: "拉线张力：26磅", action: "查看设备详情", tone: "neutral" },
+      { category: "bike", source: "迪卡侬设备", name: "Rockrider 山地自行车", detail: "ST 530 / 灰色", date: "2026.03 购买 · 账号自动同步", image: "device-rockrider.png", status: "建议进行基础保养", note: "已使用约 6 个月", action: "查看推荐服务", tone: "brand", synced: true },
+      { category: "bike", source: "迪卡侬设备", name: "Riverside Touring 自行车", detail: "经典旅行系列 / 蓝色", date: "2026.08 购买 · 账号自动同步", image: "device-riverside.png", status: "1 次新车安装权益可用", note: "新车专享服务", action: "预约安装", tone: "positive", synced: true },
+      { category: "ski", source: "迪卡侬设备", name: "WEDZE 单板滑雪板", detail: "All Mountain / 黑色全能款", date: "2025.11 购买 · 账号自动同步", image: "device-wedze.png", status: "雪季开始，可以准备开板养护了", note: "雪季提醒", action: "查看雪板保养", tone: "neutral", synced: true },
+      { category: "racket", source: "迪卡侬设备", name: "PERFLY 羽毛球拍", detail: "BR 990 / 碳纤维专业级", date: "2025.12 购买 · 账号自动同步", image: "device-perfly.png", status: "上次穿线：2026.05", note: "拉线张力：26磅", action: "查看设备详情", tone: "neutral", synced: true },
       { category: "other", source: "其他品牌", name: "Specialized Allez 公路车", detail: "SPECIALIZED / 红色款", date: "2026.06 手动添加", image: "device-specialized.png", status: "可使用迪卡侬自行车维修与保养服务", note: "支持线下门店预约", action: "查看可用服务", tone: "neutral" }
     ];
     const filters = [
@@ -178,7 +179,7 @@
         ${group.items.map(item => `<article class="equipment-card">
           <div class="equipment-card-main">
             <img src="assets/figma/${item.image}" alt="" width="58" height="58">
-            <div class="equipment-card-copy"><span class="equipment-source ${item.source === "其他品牌" ? "other" : ""}">${item.source}</span><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.detail)}</p><small>${escapeHtml(item.date)}</small></div>
+            <div class="equipment-card-copy"><span class="equipment-source ${item.source === "其他品牌" ? "other" : ""}">${item.source}</span><h3>${escapeHtml(item.name)}</h3><p>${escapeHtml(item.detail)}</p><small>${item.synced ? '<span class="inline-check-icon" role="img" aria-label="已同步"></span> ' : ''}${escapeHtml(item.date)}</small></div>
           </div>
           <div class="equipment-status ${item.tone === "brand" ? "" : item.tone}">
             <div class="equipment-status-copy"><strong>${escapeHtml(item.status)}</strong><small>${escapeHtml(item.note)}</small></div>

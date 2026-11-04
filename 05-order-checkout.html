@@ -10,7 +10,7 @@
     *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Decathlon Text","Source Han Sans CN",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink)}body{background:#edeef3}
     a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
     .presentation{min-height:100vh;display:grid;grid-template-columns:402px minmax(320px,360px);align-items:center;justify-content:center;gap:48px;padding:28px 24px}
-    .artboard{width:402px;height:874px;display:flex;flex-direction:column;overflow:hidden;background:#fff;box-shadow:0 18px 55px #10102426}
+    .artboard{position:relative;width:402px;height:874px;display:flex;flex-direction:column;overflow:hidden;background:#fff;box-shadow:0 18px 55px #10102426}
     .statusbar{height:28px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;font-weight:650}
     .status-icons{font-size:11px;letter-spacing:2px}
     .nav{height:48px;flex:none;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:0 14px;border-bottom:1px solid var(--line)}
@@ -48,6 +48,19 @@
     .payment-copy strong{display:block;font-size:14px;line-height:20px;font-weight:700}
     .payment-copy small{display:block;margin-top:4px;color:var(--quiet);font-size:12px;line-height:18px}
     .payment-rule{margin:12px 0 0;color:var(--quiet);font-size:12px;line-height:18px}
+    .booking-section{padding:0 16px 14px}
+    .booking-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0 -16px 12px;padding:0;border:0;border-bottom:1px solid var(--line);min-width:0}
+    .booking-options legend{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+    .booking-mode{position:relative;display:grid;place-items:center;min-height:48px;border-bottom:3px solid transparent;color:var(--quiet);cursor:pointer}
+    .booking-mode:has(input:checked){border-color:var(--brand);color:var(--brand);font-weight:700}
+    .booking-mode:has(input:focus-visible){outline:2px solid var(--brand);outline-offset:-3px}
+    .booking-mode input{position:absolute;opacity:0}
+    .booking-mode-copy strong{font-size:14px;line-height:20px}
+    .booking-summary{margin-top:10px;color:var(--quiet);font-size:12px;line-height:18px}
+    .booking-error{margin:10px 0 0;color:#b45400;font-size:12px;line-height:18px}
+    .booking-trigger{width:100%;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:0;background:var(--soft);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+    .booking-trigger span:first-child{min-width:0;font-size:13px;line-height:20px;overflow-wrap:anywhere}
+    .booking-trigger span:last-child{flex:none;color:var(--brand);font-size:13px;font-weight:650}
     .notice{margin:0;padding:12px;border-left:3px solid var(--brand);background:var(--brand-soft);color:var(--brand);font-size:12px;line-height:18px}
     .foot{flex:none;padding:12px 16px max(16px,env(safe-area-inset-bottom));border-top:1px solid var(--line);background:#fff}
     .foot-total{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:12px;line-height:18px;color:var(--quiet)}
@@ -69,105 +82,161 @@
   </style>
   <link rel="stylesheet" href="iphone17-presentation.css">
   <link rel="stylesheet" href="service-system.css">
-  <script src="service-journey.js" defer></script>
-</head>
-<body data-page="checkout">
+  <style>
+    .artboard{background:#f8f8f8}
+    .statusbar{height:44px;padding:0 16px;font-size:15px;background:#f8f8f8}
+    .nav{height:48px;grid-template-columns:40px 1fr 87px;padding:0 8px 0 12px;border:0;background:#f8f8f8}
+    .back{min-height:40px}.nav-title{font-size:18px;font-weight:700}
+    .more{justify-self:end;width:87px;height:32px;display:flex;align-items:center;justify-content:space-evenly;border:1px solid #ededed;border-radius:20px;background:#fff;font-size:17px;letter-spacing:0}
+    .more i{height:18px;border-left:1px solid #ededed}.more-target{width:16px;height:16px;border:2px solid #101010;border-radius:50%;position:relative}.more-target:after{content:"";position:absolute;inset:4px;border:1px solid #101010;border-radius:50%}
+    .booking-options{flex:none;margin:0;padding:0;border:0;}
+    .booking-mode{min-height:48px;border:0;color:#616161;font-weight:500;isolation:isolate}
+    .booking-mode:has(input:checked){border:0;color:#101010;font-weight:700}
+    .booking-mode:has(input:checked):before{content:"";position:absolute;z-index:-1;inset:0;background:#fff;clip-path:polygon(5% 0,100% 0,100% 100%,0 100%)}
+    .booking-mode:first-of-type:has(input:checked):before{clip-path:polygon(0 0,100% 0,95% 100%,0 100%)}
+    .body{padding:0 0 24px;background:#f8f8f8;scrollbar-width:thin}
+    .section{margin:0 0 8px;padding:16px;border:0;background:#fff}
+    .booking-section{margin:0;padding:12px 16px 0}
+    .booking-trigger{margin:0 0 12px}.booking-selection-divider{border-bottom:1px solid #ededed}
+    .booking-summary,.booking-error{margin:0;padding:8px 0;color:#616161;font-size:12px;line-height:18px}
+    .booking-summary[hidden],.booking-error[hidden]{display:none}
+    .checkout-toast{position:absolute;z-index:6;right:16px;bottom:112px;left:16px;width:max-content;max-width:calc(100% - 32px);margin:0 auto;padding:12px 16px;background:#101010eF;color:#fff;text-align:center;font-size:13px;line-height:20px;box-shadow:0 6px 20px #0003}
+    .checkout-toast[hidden]{display:none}
+    @media(prefers-reduced-motion:no-preference){.checkout-toast{animation:checkout-toast-in .16s ease-out both}@keyframes checkout-toast-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}}
+    .service-section{padding:12px 16px 16px}.service{align-items:flex-start}.service-thumb{width:64px;height:64px}.service-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+    .service-name{font-size:16px;line-height:24px}.price{font-weight:400}.related-products{margin-top:12px;padding:0;background:#fff}.related-products h4{margin-bottom:4px}
+    .fee-section{padding:12px 12px}.fee-row{display:flex;align-items:center;justify-content:space-between;min-height:40px;color:#1a2a34;font-size:14px;line-height:20px}.fee-row strong{font-weight:400}.fee-discount{color:#3643ba;font-size:12px}.fee-total{margin-top:8px;padding-top:12px;border-top:1px solid #ededed;justify-content:flex-end;gap:12px;color:#101010}
+    .payment-section{padding:0 12px}.payment-options{display:block}.payment-option{min-height:52px;padding:16px 0;border:0;gap:8px}.payment-option+.payment-option{border-top:1px solid #ededed}.payment-option:has(input:checked){border-color:#ededed;background:#fff}.payment-option input{order:2;margin-left:auto;accent-color:#3643ba}.payment-copy{order:1}.payment-copy strong{font-weight:400}.payment-icon{width:20px;height:20px;flex:none}.payment-icon img{width:100%;height:100%;display:block}.payment-icon.flame{display:grid;place-items:center;border-radius:50%;background:#3643ba}.payment-icon.flame img{width:10px;height:13px}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .foot{padding:12px 16px max(16px,env(safe-area-inset-bottom))}.foot-total{margin-bottom:10px;align-items:end}.foot-total strong{font-size:24px;line-height:30px}.cta{font-size:15px;line-height:22px}
+    body.vitamin-app[data-page="checkout"] .artboard{background:#f8f8f8}
+    body.vitamin-app[data-page="checkout"] .body{padding:0 0 24px}
+    body.vitamin-app[data-page="checkout"] .section{margin-top:0}
+    body.vitamin-app[data-page="checkout"] .booking-section{margin-bottom:0}
+    body.vitamin-app[data-page="checkout"] .cta{font-size:15px;line-height:22px}
+    body[data-page="checkout"] .presentation .artboard .body .section{border-top:0;margin:0 0 8px}
+    body[data-page="checkout"] .presentation .artboard .body .booking-section{margin:0;padding:12px 16px 0}
+    body[data-page="checkout"] .presentation .artboard .body .service-section{padding:12px 16px 16px}
+    body[data-page="checkout"] .presentation .artboard .body .fee-section{padding:12px}
+    body[data-page="checkout"] .presentation .artboard .body .payment-section{padding:0 12px}
+    .nav .more:after{display:none}
+    body[data-page="checkout"] .nav .more>*{visibility:hidden}
+  </style>
+  <script src="figma-copy.js" defer></script>
+  <script src="service-journey.js?v=20261103-picker" defer></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+ </head>
+ <body data-page="checkout">
   <main class="presentation">
-    <article class="artboard" aria-label="服务结算页设计画板">
-      <div class="statusbar"><span>9:41</span><span class="status-icons" aria-hidden="true">● ▮ ▰</span></div>
-      <header class="nav">
-        <a class="back" href="02-service-detail.html" aria-label="返回服务详情">‹</a>
-        <span class="nav-title">确认订单</span>
-        <span class="more" aria-hidden="true">···</span>
-      </header>
-      <section class="body">
-        <section class="section" aria-labelledby="service-section-title">
-          <h3 class="section-title" id="service-section-title">本次服务</h3>
-          <div class="service">
-            <div class="service-thumb" aria-hidden="true">
-              <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#5e5e5e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8m-8 0-2-4m12 4 2-5h5"/></g></svg>
-            </div>
-            <div class="service-info">
-              <div class="service-name" id="service-name">自行车标准保养套餐</div>
-              <div class="service-meta" id="service-meta">自行车 · 到店服务</div>
-            </div>
-            <strong class="price" id="item-price">¥199.90</strong>
-          </div>
-          <div class="related-products" id="related-products">
-            <h4>服务装备</h4>
-            <ul aria-label="服务装备">
-              <li id="checkout-equipment">未指定，可用于自行车，到店时确认车型</li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="section">
-          <fieldset class="payment-options" aria-describedby="payment-rule">
-            <legend class="section-title">支付方式</legend>
-            <label class="payment-option">
-              <input type="radio" name="payment" value="wechat" checked>
-              <span class="payment-copy"><strong>微信支付</strong><small id="wechat-amount">支付 ¥199.90</small></span>
-            </label>
-            <label class="payment-option">
-              <input type="radio" name="payment" value="points">
-              <span class="payment-copy"><strong>燃值抵扣</strong><small id="points-amount">需扣除 19,990 燃值</small></span>
-            </label>
-          </fieldset>
-          <p class="payment-rule" id="payment-rule">燃值为演示换算，未查询实际余额；实际可抵扣金额以结算为准。</p>
-        </section>
-
-        <p class="notice">支付完成后，选择服务门店与到店时间。本页不会锁定预约时段。</p>
-      </section>
-      <footer class="foot">
-        <div class="foot-total" aria-live="polite"><span id="footer-label">应付金额</span><strong id="footer-total">¥199.90</strong></div>
-        <a class="cta" id="payment-action" href="05-payment-result.html">模拟微信支付</a>
-        <p class="prototype-caption">原型演示，不会发起真实支付</p>
-      </footer>
-    </article>
-
-    <aside class="annotation">
-      <h1>结算</h1>
-      <p class="ann-desc">下单前核对服务、服务装备与费用，选择微信支付或燃值抵扣；支付后继续预约门店与时段。未传入装备时不展示未经确认的配件清单。</p>
-      <a class="design-link" href="05-payment-result.html">查看支付结果</a>
-    </aside>
+   <article class="artboard" aria-label="服务结算页设计画板">
+    <div class="statusbar"><span>9:41</span><span class="status-icons" aria-hidden="true">● ▮ ▰</span></div>
+    <header class="nav"><a class="back" href="02-service-detail.html" aria-label="返回服务详情">‹</a><span class="nav-title">确认订单</span><span class="more" aria-hidden="true"><span>•••</span><i></i><span class="more-target"></span></span></header>
+    <fieldset class="booking-options"><legend id="booking-section-title">到店安排</legend>
+     <label class="booking-mode"><input type="radio" name="bookingMode" value="later" checked><span class="booking-mode-copy"><strong>暂不预约</strong></span></label>
+     <label class="booking-mode"><input type="radio" name="bookingMode" value="now"><span class="booking-mode-copy"><strong>立即预约</strong></span></label>
+    </fieldset>
+    <section class="body">
+    <section class="section booking-section" aria-labelledby="booking-section-title">
+      <p class="booking-summary" id="booking-summary">支付成功后可在服务单中预约到店。</p>
+      <button type="button" class="booking-trigger" id="open-booking-sheet" hidden><span id="booking-selection">请选择门店、日期和时段</span><span>选择 ›</span></button>
+      <div class="booking-selection-divider" aria-hidden="true"></div>
+     </section>
+     <section class="section service-section" aria-label="本次服务">
+      <div class="service"><div class="service-thumb" aria-hidden="true"><img id="service-image" src="assets/figma/checkout-service.png" alt=""></div><div class="service-info"><div class="service-name" id="service-name">自行车标准保养套餐</div><div class="service-meta" id="service-meta">自行车 · 到店服务</div></div><strong class="price" id="item-price">¥199.90</strong></div>
+      <div class="related-products" id="related-products"><h4>服务装备</h4><ul aria-label="服务装备"><li id="checkout-equipment">未指定，可用于自行车，到店时确认车型</li></ul></div>
+     </section>
+     <section class="section fee-section" aria-label="费用明细"><div class="fee-row"><span>服务费</span><strong id="service-fee">¥199.90</strong></div><div class="fee-row"><span>折扣优惠</span><span class="fee-discount">暂无</span></div><div class="fee-row fee-total"><span>合计：</span><strong id="fee-total">¥199.90</strong></div></section>
+    <section class="section payment-section"><fieldset class="payment-options"><legend class="sr-only">支付方式</legend>
+      <label class="payment-option"><span class="payment-icon"><img src="assets/figma/checkout-wechat.svg" alt=""></span><span class="payment-copy"><strong>微信支付</strong><small class="sr-only" id="wechat-amount">支付 ¥199.90</small></span><input type="radio" name="payment" value="wechat" checked></label>
+      <label class="payment-option"><span class="payment-icon flame"><img src="assets/figma/checkout-flame.svg" alt=""></span><span class="payment-copy"><strong>燃脂抵扣</strong><small class="sr-only" id="points-amount">需扣除 19,990 燃值</small></span><input type="radio" name="payment" value="points"></label>
+     </fieldset></section>
+     
+    </section>
+    <p class="checkout-toast" id="checkout-toast" role="alert" aria-live="assertive" aria-atomic="true" hidden>请选择完整的门店、日期与可约时段。</p>
+    <footer class="foot"><div class="foot-total" aria-live="polite"><span id="footer-label">应付金额</span><strong id="footer-total">¥199.90</strong></div><a class="cta" id="payment-action" href="05-payment-result.html">模拟微信支付</a></footer>
+   </article>
+  <aside class="annotation"><h1>结算</h1><p class="ann-desc">下单前核对服务、装备与费用；现在预约复用通用门店时间弹框，暂不预约则支付后继续安排。</p><a class="design-link" href="05-payment-result.html">查看支付结果</a></aside>
   </main>
+  <script src="booking-fixtures.js"></script>
+  <script src="store-time-picker.js"></script>
   <script>
     const params = new URLSearchParams(location.search);
-    const categories = { bike: "自行车", badminton: "羽毛球 / 网球", ski: "滑雪" };
-    const category = categories[params.get("category")] || categories.bike;
-    const name = params.get("name") || "自行车标准保养套餐";
-    const description = params.get("description");
-    const amount = Number(params.get("price"));
+    const categories = {bike:'自行车', badminton:'羽毛球 / 网球', ski:'滑雪'};
+    const category = categories[params.get('category')] || categories.bike;
+    const name = params.get('name') || '自行车标准保养套餐';
+    const amount = Number(params.get('price'));
     const price = Number.isFinite(amount) && amount > 0 ? amount : 199.9;
     const formattedPrice = `¥${price.toFixed(2)}`;
-    document.querySelector("#service-name").textContent = name;
-    document.querySelector("#service-meta").textContent = `${category} · ${description || "到店服务"}`;
-    document.querySelector("#item-price").textContent = formattedPrice;
-    document.querySelector("#checkout-equipment").textContent = params.get("equipment") || "可用于自行车，到店时确认具体型号";
-    const points = Math.round(price * 100).toLocaleString("zh-CN");
-    document.querySelector("#wechat-amount").textContent = `支付 ${formattedPrice}`;
-    document.querySelector("#points-amount").textContent = `需扣除 ${points} 燃值`;
-
-    const renderPayment = () => {
-      const usePoints = document.querySelector('input[name="payment"]:checked').value === "points";
-      document.querySelector("#footer-label").textContent = usePoints ? "需扣燃值" : "应付金额";
-      document.querySelector("#footer-total").textContent = usePoints ? `${points} 燃值` : formattedPrice;
-      document.querySelector("#payment-action").textContent = usePoints ? "确认燃值抵扣" : "确认支付";
-      const next = new URL("05-payment-result.html", location.href);
-      next.search = params;
-      next.searchParams.set("name", name);
-      next.searchParams.set("price", price.toFixed(2));
-      next.searchParams.set("order", params.get("order") || "SO-2601024");
-      next.searchParams.set("payment", usePoints ? "points" : "wechat");
-      next.searchParams.set("paymentState", "paid");
-      ["demoState", "serviceState", "checkin", "result", "reschedule", "oldDate", "oldTime", "oldCity", "oldStore"].forEach(key => next.searchParams.delete(key));
-      next.searchParams.set("booking", "none");
-      document.querySelector("#payment-action").href = next.href;
+    const points = Math.round(price * 100).toLocaleString('zh-CN');
+    document.querySelector('#service-name').textContent = name;
+    document.querySelector('#service-meta').textContent = `${category} · ${params.get('description') || '到店服务'}`;
+    document.querySelector('#item-price').textContent = formattedPrice;
+    document.querySelector('#service-fee').textContent = formattedPrice;
+    document.querySelector('#fee-total').textContent = formattedPrice;
+    const serviceImages = {bike:'checkout-service.png', badminton:'order-badminton.png', ski:'device-wedze.png'};
+    document.querySelector('#service-image').src = `assets/figma/${serviceImages[params.get('category')] || serviceImages.bike}`;
+    document.querySelector('#checkout-equipment').textContent = params.get('equipment') || `可用于${category}，到店时确认具体型号`;
+    document.querySelector('#wechat-amount').textContent = `支付 ${formattedPrice}`;
+    document.querySelector('#points-amount').textContent = `需扣除 ${points} 燃值`;
+    const trigger = document.querySelector('#open-booking-sheet');
+    const toast = document.querySelector('#checkout-toast');
+    let toastTimer;
+    const showBookingToast = () => {
+      clearTimeout(toastTimer);
+      toast.hidden = false;
+      toastTimer = setTimeout(() => { toast.hidden = true; }, 3000);
     };
-    document.querySelector(`input[value="${params.get("payment") === "points" ? "points" : "wechat"}"]`).checked = true;
-    document.querySelector("#payment-action").href = `05-payment-result.html${location.search}`;
-    document.querySelectorAll('input[name="payment"]').forEach((input) => {
-      input.addEventListener("change", renderPayment);
+    const modeInputs = [...document.querySelectorAll('input[name="bookingMode"]')];
+    let mode = params.get('bookingMode') === 'now' ? 'now' : 'later';
+    let selection = StoreTimePicker.normalize(Object.fromEntries(params));
+    if (!params.get('store') || !params.get('date')) selection.time = '';
+    const renderPayment = () => {
+      const usePoints = document.querySelector('input[name="payment"]:checked').value === 'points';
+      mode = modeInputs.find(input => input.checked)?.value || 'later';
+      trigger.hidden = mode !== 'now';
+      toast.hidden = true;
+      clearTimeout(toastTimer);
+      document.querySelector('#booking-summary').hidden = mode === 'now';
+      document.querySelector('#booking-summary').textContent = mode === 'later' ? '支付成功后可在服务单中预约到店。' : '选择门店和到店时间';
+      document.querySelector('#booking-selection').textContent = selection.time ? `${selection.store} · ${selection.date} ${selection.time}` : '请选择门店、日期和时段';
+      document.querySelector('#footer-label').textContent = usePoints ? '需扣燃值' : '应付金额';
+      document.querySelector('#footer-total').textContent = usePoints ? `${points} 燃值` : formattedPrice;
+      const action = document.querySelector('#payment-action');
+      action.textContent = mode === 'now' ? (usePoints ? '确认抵扣并提交预约' : '确认支付并提交预约') : (usePoints ? '确认燃值抵扣' : '确认支付');
+      const next = new URL('05-payment-result.html', location.href);
+      next.search = params.toString();
+      Object.entries({name, price:price.toFixed(2), order:params.get('order') || 'SO-2601024', payment:usePoints ? 'points' : 'wechat', paymentState:'paid', bookingMode:mode}).forEach(([key,value]) => next.searchParams.set(key,value));
+      if (mode === 'now' && selection.time) {
+        Object.entries(selection).forEach(([key,value]) => next.searchParams.set(key,value));
+        next.searchParams.set('booking','created');
+        next.searchParams.set('bookingResult','created');
+      } else {
+        ['city','store','storeId','date','time','bookingResult'].forEach(key => next.searchParams.delete(key));
+        next.searchParams.set('booking','none');
+      }
+      ['demoState','serviceState','checkin','result','reschedule','oldDate','oldTime','oldCity','oldStore','selectBooking'].forEach(key => next.searchParams.delete(key));
+      action.href = next.href;
+      action.setAttribute('aria-disabled','false');
+    };
+    const chooseBooking = async () => {
+      const result = await StoreTimePicker.open({root:document.querySelector('.artboard'),value:selection,mode:'checkout',trigger});
+      if (result) { selection = result; renderPayment(); }
+    };
+    trigger.setAttribute('aria-haspopup','dialog');
+    trigger.addEventListener('click',chooseBooking);
+    modeInputs.forEach(input => {
+      input.checked = input.value === mode;
+      input.addEventListener('change',() => {
+        renderPayment();
+        if (input.checked && input.value === 'now') chooseBooking();
+      });
+    });
+    document.querySelector(`input[name="payment"][value="${params.get('payment') === 'points' ? 'points' : 'wechat'}"]`).checked = true;
+    document.querySelectorAll('input[name="payment"]').forEach(input => input.addEventListener('change',renderPayment));
+    document.querySelector('#payment-action').addEventListener('click',event => {
+      if (mode !== 'now' || selection.time) return;
+      event.preventDefault();
+      showBookingToast();
     });
     renderPayment();
   </script>

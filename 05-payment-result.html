@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Service as Offer 购后预约流程设计稿：查看支付结果并继续预约">
+  <meta name="description" content="Service as Offer 购后预约流程设计稿：查看支付与预约结果">
   <title>05 · 支付结果 · Service as Offer</title>
   <style>
     :root{color-scheme:light;--ink:#101010;--quiet:#616161;--tertiary:#949494;--brand:#3643ba;--lime:#7affa6;--paper:#f8f8f8;--line:#e1e0df;--soft:#f5f4f5;--positive:#149b65;--warning:#db6900}
@@ -27,7 +27,8 @@
   <link rel="stylesheet" href="post-purchase-flow.css">
   <link rel="stylesheet" href="iphone17-presentation.css">
   <link rel="stylesheet" href="service-system.css">
-  <script src="service-journey.js" defer></script>
+  <script src="figma-copy.js" defer></script>
+  <script src="service-journey.js?v=20261103-picker" defer></script>
 </head>
 <body data-page="order">
   <main class="presentation">
@@ -36,7 +37,7 @@
       <header class="nav"><a class="back" href="02-service-detail.html" aria-label="返回服务详情">‹</a><span class="nav-title">支付结果</span><span class="more" aria-hidden="true">···</span></header>
       <section class="body">
         <div class="status-card" data-payment-state="paid" role="status" aria-live="polite">
-          <div class="status-head"><span class="check" aria-hidden="true">✓</span><div><div class="status-title">支付成功</div><div class="status-sub">支付已完成，现在可以预约服务</div></div></div>
+          <div class="status-head"><span class="check" aria-hidden="true"><img src="assets/figma/selection-check.svg" alt=""></span><div><div class="status-title">支付成功</div><div class="status-sub" id="status-subtitle">支付已完成，现在可以预约服务</div></div></div>
         </div>
         <section class="section">
           <h3 class="section-title">已购服务</h3>
@@ -44,11 +45,13 @@
             <div class="service-thumb" aria-hidden="true">
               <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#5e5e5e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8m-8 0-2-4m12 4 2-5h5"/></g></svg>
             </div>
-            <div class="service-info"><div class="service-name">自行车标准保养套餐</div><div class="service-meta">到店服务 · 支付后选择门店和时间</div></div>
+            <div class="service-info"><div class="service-name" id="result-service-name">自行车标准保养套餐</div><div class="service-meta" id="result-service-meta">到店服务 · 支付后选择门店和时间</div></div>
           </div>
           <div class="rows">
             <div class="row"><span id="payment-amount-label">实付金额</span><strong id="payment-amount">¥199.90</strong></div>
             <div class="row"><span>支付方式</span><strong id="payment-method">微信支付</strong></div>
+            <div class="row" id="booking-row" hidden><span>预约结果</span><strong id="booking-result">已预约，待到店</strong></div>
+            <div class="row" id="booking-intent-row" hidden><span>预约意向</span><strong id="booking-intent">上海 · 迪卡侬上海五角场店 · 11-03 14:00</strong></div>
             <div class="row"><span>服务单号</span><strong id="payment-order">SO-2601024</strong></div>
           </div>
         </section>
@@ -65,6 +68,11 @@
           <button type="button" class="state-option" data-payment-state="unpaid" aria-pressed="false">支付失败</button>
           <button type="button" class="state-option" data-payment-state="unknown" aria-pressed="false">支付结果待确认</button>
         </div>
+        <div class="state-options" id="booking-state-options" role="group" aria-label="预约结果状态" hidden>
+          <button type="button" class="state-option" data-booking-state="created" aria-pressed="true">预约成功</button>
+          <button type="button" class="state-option" data-booking-state="conflict" aria-pressed="false">预约冲突</button>
+          <button type="button" class="state-option" data-booking-state="unknown" aria-pressed="false">预约待确认</button>
+        </div>
         <p class="control-feedback" id="state-description" role="status">支付成功后点击“立即预约”选择服务门店与时段。</p>
       </section>
       <nav class="flow-nav" aria-label="购后流程页面">
@@ -78,6 +86,6 @@
       </nav>
     </aside>
   </main>
-  <script src="post-purchase-flow.js"></script>
+  <script src="post-purchase-flow.js?v=20261103-picker"></script>
 </body>
 </html>

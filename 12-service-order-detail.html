@@ -360,7 +360,9 @@
       .order-detail .order-store-contact { padding: 0 8px; }
     }
   </style>
-  <script src="service-journey.js" defer></script>
+  <script src="figma-copy.js" defer></script>
+  <script src="booking-fixtures.js?v=20261103-picker" defer></script>
+  <script src="service-journey.js?v=20261103-picker" defer></script>
 </head>
 <body class="order-detail">
   <main class="page-presentation">
@@ -533,6 +535,17 @@
           <button class="state-option" type="button" data-order-state="booking-unknown" aria-pressed="false">预约待确认</button>
         </div>
         <p class="control-feedback" id="order-state-feedback" role="status" aria-live="polite"></p>
+        <h3 id="booking-preview-heading">预约资源与结果</h3>
+        <p>在待预约状态下选择演示场景，再打开门店与时间选择；弹窗打开时也可切换。仅用于原型演示，不调用真实接口。</p>
+        <div class="state-options" role="group" aria-labelledby="booking-preview-heading">
+          <button class="state-option" type="button" data-booking-preview="available" aria-pressed="true">正常成功</button>
+          <button class="state-option" type="button" data-booking-preview="empty" aria-pressed="false">无可约时段</button>
+          <button class="state-option" type="button" data-booking-preview="conflict" aria-pressed="false">时段冲突</button>
+          <button class="state-option" type="button" data-booking-preview="timeout-success" aria-pressed="false">无响应后查询成功</button>
+          <button class="state-option" type="button" data-booking-preview="timeout-failure" aria-pressed="false">无响应后查询失败</button>
+          <button class="state-option" type="button" data-booking-preview="timeout-unknown" aria-pressed="false">无响应且结果未知</button>
+        </div>
+        <p class="control-feedback" id="booking-preview-feedback" role="status" aria-live="polite"></p>
       </section>
       <section class="prototype-controls" aria-labelledby="expiry-preview-title">
         <h2 id="expiry-preview-title">预约当日 23:59 检查</h2>

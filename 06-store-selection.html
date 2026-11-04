@@ -68,7 +68,8 @@
     .wechat-dialog-note{margin:8px 0 0;color:var(--quiet);font-size:11px;line-height:17px}
     .wechat-dialog-close{width:100%;min-height:38px;margin-top:12px;border:0;background:var(--brand);color:#fff;font-size:14px;font-weight:650;cursor:pointer}
   </style>
-  <script src="service-journey.js" defer></script>
+  <script src="figma-copy.js" defer></script>
+  <script src="service-journey.js?v=20261103-picker" defer></script>
 </head>
 <body data-page="store">
   <main class="presentation">
@@ -99,7 +100,7 @@
           <button class="store-card-select" type="button" data-store-select aria-pressed="true">
             <span class="store-card-head">
               <span class="store-name" data-store-name>上海门店 01</span>
-              <span class="store-selected" data-store-selected>✓ 已选门店</span>
+              <span class="store-selected" data-store-selected><span class="inline-check-icon" aria-hidden="true"></span> 已选门店</span>
             </span>
           </button>
           <div class="store-location-row">
@@ -118,7 +119,7 @@
           <button class="store-card-select" type="button" data-store-select aria-pressed="false">
             <span class="store-card-head">
               <span class="store-name" data-store-name>上海门店 02</span>
-              <span class="store-selected" data-store-selected hidden>✓ 已选门店</span>
+              <span class="store-selected" data-store-selected hidden><span class="inline-check-icon" aria-hidden="true"></span> 已选门店</span>
             </span>
           </button>
           <div class="store-location-row">
@@ -173,6 +174,6 @@
       </nav>
     </aside>
   </main>
-  <script src="post-purchase-flow.js"></script>
+  <script src="post-purchase-flow.js?v=20261103-picker"></script>
 </body>
 </html>

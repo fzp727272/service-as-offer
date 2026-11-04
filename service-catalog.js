@@ -51,3 +51,9 @@ const serviceCatalog = [
     ]
   }
 ];
+
+function formatServicePrice(price) {
+  const amount = Number(price);
+  if (!Number.isFinite(amount)) return "";
+  return amount.toFixed(2).replace(/\.?0+$/, "");
+}

@@ -2,6 +2,20 @@
 
 Static interactive prototype. Open `index.html` to browse the pages.
 
+Service detail now previews available stores plus date/time options before purchase.
+`store-time-picker.js` and `store-time-picker.css` own the single shared bottom
+sheet used by service details, checkout, payment-result booking and order booking.
+`StoreTimePicker.open({root, value, mode, trigger})` resolves a confirmed selection
+with city key, store ID/name, ISO date and time, or null on dismissal. Modes are
+`preview` (time optional), `checkout` (complete selection, no submission) and
+`order` (complete selection handed back to the order flow). Drafts are discarded
+on close; the nested city/store list commits only on its own confirmation.
+Legacy 06/07 URLs return to the same order and open this sheet only if eligible;
+existing bookings and unknown results cannot use it to bypass booking safeguards.
+Checkout supports two modes: book now (select store/date/time in checkout) or
+book later (pay first, keep the service order in pending-booking state). Payment
+and booking are rendered as separate confirmations in the payment-result page.
+
 Cards use square corners. In order details, the arrival QR code for booked orders
 and the queue number for queued orders appear directly below the order status,
 above the appointment information.
@@ -37,8 +51,9 @@ store/date selection to bypass the no-rescheduling rule.
   every 1.5 seconds; success/failure controls supply that result for the next tick.
   Unknown never automatically becomes success. No payment API is called.
 - Refused location defaults to Shanghai and opens a notice. Preview via the
-  location-denied state control or `06-store-selection.html?location=denied`.
-- The calendar shows 7 consecutive sample dates, October 26 to November 1, 2026.
+  legacy entry `06-store-selection.html?location=denied`, which now opens the
+  shared selector on the order with the default-city notice.
+- The shared calendar shows 7 consecutive sample dates, November 3–9, 2026.
   This fixed review fixture is not a decision about production inclusion of today,
   endpoint dates, timezone or cutoff algorithms. Resource availability is mocked.
 - Schedule controls cover normal success, conflict and three no-response query

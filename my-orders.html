@@ -86,6 +86,7 @@
   </style>
   <link rel="stylesheet" href="iphone17-presentation.css">
   <link rel="stylesheet" href="service-system.css">
+  <script src="figma-copy.js" defer></script>
   <script src="service-journey.js" defer></script>
 </head>
 <body>
@@ -167,7 +168,7 @@
         <div class="order-card-divider"></div>
         <div class="order-card-body"><img src="assets/figma/${order.image}" alt="" width="60" height="60"><div class="order-service-copy"><strong>${escapeHtml(order.title)}</strong><small>设备：${escapeHtml(order.equipment)}</small><small>门店：${escapeHtml(order.store)}</small></div></div>
         ${order.appointment ? `<div class="order-info-banner">${escapeHtml(order.appointment)}</div>` : ""}
-        ${order.warning ? `<div class="order-info-banner warning">ⓘ ${escapeHtml(order.warning)}</div><div class="order-progress"><span>已接单 ✓</span><span>等待确认 ●</span><span>维修中</span><span>待取车</span></div>` : ""}
+        ${order.warning ? `<div class="order-info-banner warning">ⓘ ${escapeHtml(order.warning)}</div><div class="order-progress"><span>已接单 <span class="inline-check-icon" aria-hidden="true"></span></span><span>等待确认 ●</span><span>维修中</span><span>待取车</span></div>` : ""}
         <div class="order-card-divider"></div>
         <div class="order-card-foot">${order.benefit ? '<strong class="order-benefit-label">免费权益</strong>' : order.price ? `<strong class="order-price">¥${escapeHtml(order.price)}</strong>` : "<span></span>"}<div class="order-card-foot-actions">${order.actions.map(action => `<button type="button" class="order-action ${action === primaryActions[order.status] ? "primary" : ""}" data-order-index="${orders.indexOf(order)}" data-order-action="${escapeHtml(action)}">${escapeHtml(action)}</button>`).join("")}</div></div>
       </article>`;
