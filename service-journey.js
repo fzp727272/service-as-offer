@@ -10,7 +10,7 @@
     params.delete("demoState");
   }
   if (["06-store-selection.html", "07-date-time-selection.html"].includes(file)) {
-    const destination = new URL("12-service-order-detail.html", location.href);
+    const destination = new URL("10-service-order-detail.html", location.href);
     destination.search = params.toString();
     destination.searchParams.set("selectBooking", "1");
     if (params.get("reschedule") === "1") {
@@ -42,11 +42,12 @@
       ["unpaid", "booked", "queued", "active", "completed", "cancelled", "payment-unknown", "booking-unknown"].includes(demo);
     if (blocked) return;
     try {
-      pickerReady ||= window.StoreTimePicker ? Promise.resolve() : (typeof storeCities !== 'undefined' ? Promise.resolve() : loadScript("booking-fixtures.js?v=20261103-picker")).then(() => loadScript("store-time-picker.js?v=20261103-picker"));
+      pickerReady ||= window.StoreTimePicker ? Promise.resolve() : (typeof storeCities !== 'undefined' ? Promise.resolve() : loadScript("booking-fixtures.js?v=20261104-one-css")).then(() => loadScript("store-time-picker.js?v=20261104-one-css"));
       await pickerReady;
-      const selection = await StoreTimePicker.open({root: document.querySelector(".page-artboard,.artboard,.app"), value: Object.fromEntries(context), mode: "order", trigger, demoState: document.querySelector('[data-booking-preview][aria-pressed="true"]')?.dataset.bookingPreview || "available"});
-      if (!selection) return;
-      const destination = new URL("12-service-order-detail.html", location.href);
+      const repairPreview = context.get("context") === "repair";
+      const selection = await StoreTimePicker.open({root: document.querySelector(".page-artboard,.artboard,.app"), value: Object.fromEntries(context), mode: repairPreview ? "preview" : "order", trigger, demoState: document.querySelector('[data-booking-preview][aria-pressed="true"]')?.dataset.bookingPreview || "available"});
+      if (!selection || repairPreview) return;
+      const destination = new URL("10-service-order-detail.html", location.href);
       destination.search = context.toString();
       ["demoState", "selectBooking", "reschedule", "result", "notice", "oldCity", "oldStore", "oldDate", "oldTime"].forEach(key => destination.searchParams.delete(key));
       Object.entries(selection).forEach(([key, value]) => destination.searchParams.set(key, value));
@@ -69,21 +70,17 @@
     const link = event.target.closest("a[href]");
     if (!link) return;
     const destination = new URL(link.href, location.href);
-    if (destination.origin !== location.origin || !["06-store-selection.html", "07-date-time-selection.html"].includes(destination.pathname.split("/").pop())) return;
+    const target = destination.pathname.split("/").pop();
+    const legacyPicker = ["06-store-selection.html", "07-date-time-selection.html"].includes(target);
+    const orderPicker = ["10-service-order-detail.html", "12-service-order-detail.html"].includes(target) && destination.searchParams.get("selectBooking") === "1";
+    if (destination.origin !== location.origin || (!legacyPicker && !orderPicker)) return;
+    // The workbench has no phone artboard; let its link open the order instead.
+    if (!document.querySelector(".page-artboard,.artboard,.app")) return;
     event.preventDefault();
     event.stopImmediatePropagation();
     const context = new URLSearchParams(location.search);
     destination.searchParams.forEach((value, key) => context.set(key, value));
     openOrderBooking(context, link);
-  }, true);
-  document.addEventListener("click", event => {
-    const link = event.target.closest('a[href]');
-    if (!link) return;
-    const destination = new URL(link.href, location.href);
-    if (destination.origin !== location.origin || destination.searchParams.get('selectBooking') !== '1' || file !== '12-service-order-detail.html') return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    openOrderBooking(new URLSearchParams(location.search), link);
   }, true);
   if (params.get("change") === "reschedule") {
     params.delete("change");
@@ -92,8 +89,8 @@
     destination.search = params.toString();
     history.replaceState(null, "", destination);
   }
-  if (file === "10-reschedule-review.html") {
-    const destination = new URL("12-service-order-detail.html", location.href);
+  if (["08-reschedule-review.html", "10-reschedule-review.html"].includes(file)) {
+    const destination = new URL("10-service-order-detail.html", location.href);
     destination.search = params.toString();
     destination.searchParams.set("notice", "reschedule-unavailable");
     destination.searchParams.delete("change");
@@ -103,10 +100,11 @@
     return;
   }
   const changePages = {
+    "11-service-cancel-review.html": "cancel",
     "13-service-cancel-review.html": "cancel",
   };
   if (changePages[file]) {
-    const destination = new URL("12-service-order-detail.html", location.href);
+    const destination = new URL("10-service-order-detail.html", location.href);
     destination.search = params.toString();
     destination.searchParams.set("change", changePages[file]);
     if (changePages[file] === "cancel" && !params.has("paymentState") && !params.has("booking")) destination.searchParams.set("paymentState", "unpaid");
@@ -135,7 +133,7 @@
     if (localCancel) {
       localCancel.click();
     } else {
-      const destination = new URL("12-service-order-detail.html", location.href);
+      const destination = new URL("10-service-order-detail.html", location.href);
       destination.search = changeContext.toString();
       destination.searchParams.set("demoState", "cancelled");
       destination.searchParams.set("paymentState", "unpaid");
@@ -200,12 +198,12 @@
       setTimeout(() => openChange(kind, new URLSearchParams(location.search)), 0);
     }
   }
-  const purchasePages = ["05-order-checkout.html", "05-payment-result.html", "06-store-selection.html", "07-date-time-selection.html", "08-appointment-result.html", "09-appointment-detail-cancel.html", "10-reschedule-review.html", "12-service-order-detail.html", "13-service-cancel-review.html"];
+  const purchasePages = ["05-order-checkout.html", "05-payment-result.html", "06-appointment-result.html", "07-appointment-detail-cancel.html", "08-reschedule-review.html", "10-service-order-detail.html", "11-service-cancel-review.html", "08-appointment-result.html", "09-appointment-detail-cancel.html", "10-reschedule-review.html", "12-service-order-detail.html", "13-service-cancel-review.html"];
   document.body.classList.toggle("purchase-flow", purchasePages.includes(file));
-  if (file === "09-appointment-detail-cancel.html" || file === "08-appointment-result.html") {
-    const destination = new URL("12-service-order-detail.html", location.href);
+  if (["07-appointment-detail-cancel.html", "09-appointment-detail-cancel.html", "06-appointment-result.html", "08-appointment-result.html"].includes(file)) {
+    const destination = new URL("10-service-order-detail.html", location.href);
     destination.search = params.toString();
-    if (file === "08-appointment-result.html") {
+    if (["06-appointment-result.html", "08-appointment-result.html"].includes(file)) {
       const result = params.get("result") || "created";
       const knownResult = ["created", "conflict", "unknown"].includes(result) ? result : "unknown";
       destination.searchParams.set("booking", knownResult === "created" ? "created" : knownResult === "conflict" ? "none" : "unknown");
@@ -224,23 +222,23 @@
       ["05-payment-result.html", "支付结果", "查看支付与预约结果；支付成功不等于预约成功。"],
     ] },
     { title: "预约到店", pages: [
-      ["12-service-order-detail.html?selectBooking=1", "选择门店与时间", "在当前页面打开共享选择弹框，提交后回同一服务单查看结果。"],
-      ["12-service-order-detail.html", "订单详情", "预约结果作为订单状态反馈；扫码前查看预约信息，到店扫码成功后在订单内查看门店排队号。"],
+      ["10-service-order-detail.html?selectBooking=1", "选择门店与时间", "在当前页面打开共享选择弹框，提交后回同一服务单查看结果。"],
+      ["10-service-order-detail.html", "订单详情", "预约结果作为订单状态反馈；扫码前查看预约信息，到店扫码成功后在订单内查看门店排队号。"],
     ] },
     { title: "权益、维修与其他入口", pages: [
       ["equipment-library.html", "我的装备", "从具体装备查看相关服务与可用权益。"],
       ["03-benefit-detail.html", "权益详情", "核对来源商品，使用权益后继续预约，无需再次支付。"],
       ["04-repair-request.html", "描述维修需求", "无法判断项目时先描述问题，不直接生成诊断或报价。"],
       ["my-orders.html", "我的订单", "按状态筛选，从对应订单继续付款、预约或查看记录。"],
-      ["15-message-landing.html", "服务消息", "消息进入关联服务单，不跳转泛订单列表。"],
+      ["13-message-landing.html", "服务消息", "消息进入关联服务单，不跳转泛订单列表。"],
     ] },
   ];
   const current = groups.flatMap(group => group.pages).find(item => item[0] === file);
   const contextKeys = ["category", "name", "description", "price", "context", "benefit", "equipment", "order", "sourceOrder", "entry", "city", "store", "date", "time", "booking", "serviceState", "checkin", "payment", "paymentState"];
   const withContext = (href) => {
     const url = new URL(href, location.href);
-    if (url.pathname.endsWith("/09-appointment-detail-cancel.html")) {
-      url.pathname = url.pathname.replace("09-appointment-detail-cancel.html", "12-service-order-detail.html");
+    if (["07-appointment-detail-cancel.html", "09-appointment-detail-cancel.html"].some(name => url.pathname.endsWith(`/${name}`))) {
+      url.pathname = url.pathname.replace(/(?:07|09)-appointment-detail-cancel\.html$/, "10-service-order-detail.html");
       if (!params.has("booking") && !url.searchParams.has("booking")) url.searchParams.set("booking", "created");
     }
     const active = new URLSearchParams(location.search);
@@ -249,7 +247,7 @@
         if (active.has(key) && !url.searchParams.has(key)) url.searchParams.set(key, active.get(key));
       });
     }
-    if (url.pathname.endsWith("/12-service-order-detail.html")) {
+    if (["10-service-order-detail.html", "12-service-order-detail.html"].some(name => url.pathname.endsWith(`/${name}`))) {
       if (active.get("demoState") === "cancelled") url.searchParams.set("demoState", "cancelled");
     }
     return url;
@@ -303,7 +301,7 @@
     const details = document.createElement("details");
     details.className = "journey-details";
     const summary = document.createElement("summary");
-    summary.textContent = ["05-payment-result.html", "06-store-selection.html", "07-date-time-selection.html", "08-appointment-result.html"].includes(file)
+    summary.textContent = ["05-payment-result.html", "06-appointment-result.html", "08-appointment-result.html"].includes(file)
       ? "状态切换"
       : "设计说明与演示状态";
     const content = document.createElement("div");
@@ -317,43 +315,16 @@
   panel.append(nav);
   const tools = document.createElement("div");
   tools.className = "journey-tools";
-  [["../prd/service-as-offer-ux-spec.html#journey", "需求与流程说明"], ["../design/design.md", "Vitamin C 规范"]].forEach(([href, label]) => {
+  [["../design/service-as-offer-ux-spec.html#journey", "需求与流程说明"], ["../design/design-guide/design.md", "Vitamin C 规范"]].forEach(([href, label]) => {
     const link = document.createElement("a");
     link.href = href;
     link.textContent = label;
     tools.append(link);
   });
   panel.append(tools);
-  const figmaCopy = document.createElement("button");
-  figmaCopy.className = "figma-copy-button";
-  figmaCopy.dataset.figmaCopyUi = "";
-  figmaCopy.type = "button";
-  figmaCopy.textContent = "复制界面到 Figma";
-  figmaCopy.setAttribute("aria-describedby", "figma-copy-help");
-  const figmaCopyHelp = document.createElement("span");
-  figmaCopyHelp.className = "figma-copy-help";
-  figmaCopyHelp.id = "figma-copy-help";
-  figmaCopyHelp.textContent = "复制当前画板的高清图片与 HTML，切换到 Figma 后按 ⌘V 粘贴。图片保留样式但不是可编辑图层；请通过 localhost 打开。";
-  const figmaCopyStatus = document.createElement("span");
-  figmaCopyStatus.className = "figma-copy-status";
-  figmaCopyStatus.setAttribute("role", "status");
-  figmaCopyStatus.setAttribute("aria-live", "polite");
-  panel.append(figmaCopy, figmaCopyHelp, figmaCopyStatus);
-  figmaCopy.addEventListener("click", async () => {
-    figmaCopy.disabled = true;
-    figmaCopyStatus.textContent = "正在准备画板与图片…";
-    try {
-      await window.copyCurrentArtboardToFigma();
-      figmaCopyStatus.textContent = "已复制。切换到 Figma 画布并按 ⌘V 粘贴。";
-    } catch (error) {
-      figmaCopyStatus.textContent = error instanceof Error ? error.message : "复制失败，请检查浏览器剪贴板权限后重试。";
-    } finally {
-      figmaCopy.disabled = false;
-    }
-  });
   const demo = document.createElement("p");
   demo.textContent = "交互原型：数据为示例，不发起真实支付、兑换、签到或退款。";
-  if (!["05-order-checkout.html", "05-payment-result.html", "06-store-selection.html", "07-date-time-selection.html", "08-appointment-result.html"].includes(file)) {
+  if (!["05-order-checkout.html", "05-payment-result.html", "06-appointment-result.html", "08-appointment-result.html"].includes(file)) {
     panel.append(demo);
   }
 
@@ -434,7 +405,7 @@
     if (params.get("paymentState") === "unpaid") setText(".service-strip .service-info span", "待支付 · 暂不可预约");
     if (params.get("paymentState") === "unknown") setText(".service-strip .service-info span", "支付待确认 · 暂不可预约");
   }
-  if (file === "13-service-cancel-review.html") {
+  if (["11-service-cancel-review.html", "13-service-cancel-review.html"].includes(file)) {
     const orderCancelled = params.get("demoState") === "cancelled";
     const canCancelOrder = !orderCancelled && !booked && booking !== "unknown" && !params.has("serviceState") && params.get("context") !== "benefit" && (params.get("paymentState") === "unpaid" ||
       (!params.has("paymentState") && !booked && booking !== "cancelled"));
@@ -442,7 +413,7 @@
     const boundaryMessage = root.querySelector("#service-cancel-boundary");
     if (cancelAction) cancelAction.hidden = !canCancelOrder;
     root.querySelector(".page-foot-actions").classList.toggle("single-action", !canCancelOrder);
-    root.querySelectorAll("a[href*='12-service-order-detail.html']").forEach(link => {
+    root.querySelectorAll("a[href*='10-service-order-detail.html'], a[href*='12-service-order-detail.html']").forEach(link => {
       const destination = new URL(link.href);
       if (canCancelOrder) destination.searchParams.set("paymentState", "unpaid");
       if (orderCancelled) destination.searchParams.set("demoState", "cancelled");
@@ -453,7 +424,7 @@
       const feedback = root.querySelector("#service-cancel-feedback");
       if (feedback) feedback.hidden = false;
       setText(".page-intro h1", "服务单已取消");
-      const returnLink = root.querySelector(".page-foot-actions a[href*='12-service-order-detail.html']");
+      const returnLink = root.querySelector(".page-foot-actions a[href*='10-service-order-detail.html'], .page-foot-actions a[href*='12-service-order-detail.html']");
       if (returnLink) {
         const destination = new URL(returnLink.href);
         destination.searchParams.set("demoState", "cancelled");
@@ -476,7 +447,7 @@
       if (label === "交易") value.textContent = orderCancelled || canCancelOrder ? "未支付" : params.get("context") === "benefit" ? "权益兑换" : params.get("paymentState") === "unknown" ? "待确认" : "已支付";
     });
   }
-  if (file === "15-message-landing.html") {
+  if (["13-message-landing.html", "15-message-landing.html"].includes(file)) {
     const events = {
       "order-created": { title: "服务下单成功", description: "这笔服务订单已创建，您可以在订单中查看下一步。", state: params.get("context") === "benefit" ? "pending" : "unpaid" },
       booked: { title: "预约成功", description: "门店和到店时间已确认，请按时携带装备到店。", state: "booked" },
@@ -510,7 +481,7 @@
       document.querySelectorAll("[data-message-event]").forEach(button => {
         button.setAttribute("aria-pressed", String(button.dataset.messageEvent === messageEvent));
       });
-      const destination = withContext("12-service-order-detail.html");
+      const destination = withContext("10-service-order-detail.html");
       ["serviceState", "checkin", "bookingResult", "messageEvent"].forEach(key => destination.searchParams.delete(key));
       destination.searchParams.set("demoState", item.state);
       destination.searchParams.set("booking", ["booked", "queued", "completed"].includes(item.state) ? "created" : "none");
@@ -530,12 +501,12 @@
     });
     renderMessage();
   }
-  if (["09-appointment-detail-cancel.html", "12-service-order-detail.html"].includes(file)) {
-    if (file.startsWith("09") && booking === "cancelled") {
+  if (["07-appointment-detail-cancel.html", "09-appointment-detail-cancel.html", "10-service-order-detail.html", "12-service-order-detail.html"].includes(file)) {
+    if (file.includes("appointment-detail-cancel") && booking === "cancelled") {
       setText("#appointment-state, .page-heading", "预约已取消");
       root.querySelector("#cancel-appointment-action").hidden = true;
     }
-    if (file.startsWith("12")) {
+    if (file.endsWith("service-order-detail.html")) {
       const initialState = params.get("demoState") ||
         (params.get("checkin") === "done" ? "queued" :
           params.get("paymentState") === "unknown" ? "payment-unknown" :
@@ -546,11 +517,11 @@
               booking === "cancelled" ? "booking-cancelled" : booked ? "booked" : "pending");
       const orderStates = {
         unpaid: { tag: "待付款", heading: "订单待支付", appointment: "尚未创建", location: "选择后显示", payment: "待支付", progress: 0, action: "继续支付", href: "05-order-checkout.html", ticket: false },
-        pending: { tag: "待预约", heading: params.get("context") === "benefit" ? "权益服务，待预约" : "已支付，待预约", appointment: "尚未创建", location: "选择后显示", payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 0, action: "选择门店与时段", href: "06-store-selection.html", ticket: false },
+        pending: { tag: "待预约", heading: params.get("context") === "benefit" ? "权益服务，待预约" : "已支付，待预约", appointment: "尚未创建", location: "选择后显示", payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 0, action: "选择门店与时段", href: "10-service-order-detail.html?selectBooking=1", ticket: false },
         booked: { tag: "待到店", heading: "预约成功，待到店", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 1, action: "去门店", href: "#store-navigation-dialog", ticket: true },
         queued: { tag: "排队中", heading: "已到店，正在排队", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 2, ticket: true },
-        "booking-cancelled": { tag: "预约已取消", heading: "预约已取消，订单保留", appointment: "已取消", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 0, action: "重新预约", href: "06-store-selection.html", ticket: false, feedback: "本次预约已取消，服务订单保留。您可以重新选择门店和时间。" },
-        "booking-expired": { tag: "待预约", heading: "本次预约已自动取消", appointment: "本次预约已取消", location: "请重新选择门店和时间", payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 0, action: "重新预约", href: "06-store-selection.html", ticket: false, feedback: "预约当天该次预约无任何记录更新，系统于当晚 23:59 取消预约。服务订单保留，状态回退为待预约。" },
+        "booking-cancelled": { tag: "预约已取消", heading: "预约已取消，订单保留", appointment: "已取消", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 0, action: "重新预约", href: "10-service-order-detail.html?selectBooking=1", ticket: false, feedback: "本次预约已取消，服务订单保留。您可以重新选择门店和时间。" },
+        "booking-expired": { tag: "待预约", heading: "本次预约已自动取消", appointment: "本次预约已取消", location: "请重新选择门店和时间", payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 0, action: "重新预约", href: "10-service-order-detail.html?selectBooking=1", ticket: false, feedback: "预约当天该次预约无任何记录更新，系统于当晚 23:59 取消预约。服务订单保留，状态回退为待预约。" },
         active: { tag: "服务中", heading: "服务进行中", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 3, action: "返回我的订单", href: "my-orders.html", ticket: false },
         completed: { tag: "已完成", heading: "服务已完成", appointment: "已创建", location: `${store} ${appointment}`, payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: 3, ticket: false },
         cancelled: { tag: "订单已取消", heading: "服务订单已取消", appointment: "尚未创建", location: "未预约", payment: "未支付", progress: 0, action: "重新下单", href: "01-service-entry.html?scenario=all", ticket: false, outline: true, feedback: "订单已取消，无需继续支付" },
@@ -558,18 +529,19 @@
         "booking-unknown": { tag: "预约待确认", heading: "预约结果待确认", appointment: "待确认", location: "提交结果待确认", payment: params.get("context") === "benefit" ? "权益兑换" : "已支付", progress: -1, action: "查看预约结果", href: "#booking-result-dialog", ticket: false, statusMessage: "暂未查明本次预约结果，请勿重复提交。服务订单保留，查询确认后再继续。" },
       };
       const statusIcons = {
-        unpaid: `<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18m-13 5h4"/>`,
-        pending: `<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-9 3v4m-2-2h4"/>`,
-        booked: `<path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/>`,
-        queued: `<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/>`,
-        "booking-cancelled": `<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-11 3 4 4m0-4-4 4"/>`,
-        active: `<path d="M8 4h8M8 20h8M6 4v3l6 5 6-5V4M6 20v-3l6-5 6 5v3"/>`,
-        completed: `<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>`,
-        cancelled: `<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/>`,
-        "payment-unknown": `<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18m-9 3v2m0 2v.01"/>`,
-        "booking-unknown": `<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-9 3v2m0 2v.01"/>`,
+        unpaid: "payment-pending.svg",
+        pending: "pending.svg",
+        booked: "booked.svg",
+        queued: "queued.svg",
+        "booking-cancelled": "booking-cancelled.svg",
+        active: "service-active.svg",
+        completed: "service-completed.svg",
+        cancelled: "order-cancelled.svg",
+        "payment-unknown": "payment-unknown.svg",
+        "booking-unknown": "booking-unknown.svg",
       };
       statusIcons["booking-expired"] = statusIcons.pending;
+      const statusIconBase = new URL("assets/order-status/", location.href);
       let state = orderStates[initialState] ? initialState : "pending";
       const primaryAction = root.querySelector("#order-primary-action");
       const resultDialog = document.querySelector("#booking-result-dialog");
@@ -643,7 +615,7 @@
         const current = orderStates[state];
         const statusSymbol = root.querySelector(".order-status-symbol");
         statusSymbol.dataset.state = state;
-        statusSymbol.querySelector("svg").innerHTML = statusIcons[state];
+        statusSymbol.querySelector("img").src = new URL(statusIcons[state], statusIconBase).href;
         setText("#order-status-tag", current.tag);
         setText("#order-status-heading", current.heading);
         setText("#order-transaction-status", current.payment);
@@ -665,7 +637,9 @@
         setText("#order-appointment-location", current.location);
         setText("#order-store-name", store);
         setText("#order-store-address", storeLocation.address);
-        setText("#order-store-hours", `营业时间 ${storeLocation.hours}`);
+        setText("#order-store-distance", storeLocation.distance || "");
+        root.querySelector("#order-store-distance").hidden = !storeLocation.distance;
+        setText("#order-store-hours", storeLocation.hours);
         setText("#order-store-appointment-time", appointment);
         const hasPrimaryAction = !["queued", "completed"].includes(state);
         primaryAction.hidden = !hasPrimaryAction;
@@ -789,20 +763,22 @@
         const current = new URL(location.href);
         current.searchParams.delete("selectBooking");
         history.replaceState(null, "", current);
-        openOrderBooking(new URLSearchParams(current.search), primaryAction);
+        const context = new URLSearchParams(params);
+        context.delete("selectBooking");
+        openOrderBooking(context, primaryAction);
       }
       else if (params.get("notice") === "reschedule-unavailable") {
         document.querySelector("#booking-unavailable-dialog").showModal();
       }
     }
   }
-  if (file === "09-appointment-detail-cancel.html" && booking === "cancelled") {
+  if (["07-appointment-detail-cancel.html", "09-appointment-detail-cancel.html"].includes(file) && booking === "cancelled") {
     setText(".page-intro .page-tag", "预约已取消");
     const action = root.querySelector(".page-foot a");
-    action.href = "06-store-selection.html";
+    action.href = "10-service-order-detail.html?selectBooking=1";
     action.textContent = "重新预约";
   }
-  if (params.get("context") === "benefit" && file === "08-appointment-result.html") {
+  if (params.get("context") === "benefit" && ["06-appointment-result.html", "08-appointment-result.html"].includes(file)) {
     setText("#result-payment-pill, #transaction-status", "权益兑换");
     setText(".service-name", params.get("name") || "权益服务");
     setText(".service-hint", "无需再次支付");
@@ -816,7 +792,7 @@
     const link = document.createElement("a");
     link.className = "page-button secondary";
     link.style.display = "block";
-    link.href = withContext("12-service-order-detail.html").href;
+    link.href = withContext("10-service-order-detail.html").href;
     link.textContent = params.get("name") || "查看服务单";
     card.append(heading, link);
     root.querySelector(".app")?.prepend(card);

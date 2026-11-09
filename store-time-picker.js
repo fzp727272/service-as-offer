@@ -1,9 +1,5 @@
 (() => {
-  const source = document.currentScript.src;
-  const stylesheet = document.createElement('link');
-  stylesheet.rel = 'stylesheet';
-  stylesheet.href = new URL('store-time-picker.css', source).href;
-  document.head.append(stylesheet);
+  // Picker styles are included in each page's single CSS file.
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const isoDate = label => {
     if (/^\d{4}-\d{2}-\d{2}$/.test(label || '')) return label;

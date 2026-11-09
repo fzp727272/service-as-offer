@@ -1,3 +1,555 @@
+/* Source 1: my-orders.css */
+/* my-orders.css — extracted from inline <style> blocks of my-orders.html (document order preserved). */
+:root {
+  color-scheme: light;
+  --ink: #101010;
+  --muted: #616161;
+  --line: #e1e0df;
+  --soft: #f5f4f5;
+  --brand: #3643ba;
+  --brand-soft: #f0f1ff;
+  --positive: #149b65;
+  --warning: #db6900;
+}
+* {
+  box-sizing: border-box;
+}
+html, body {
+  min-width: 320px;
+  margin: 0;
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+button, a {
+  color: inherit;
+  font: inherit;
+}
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+.artboard {
+  display: flex;
+  flex-direction: column;
+}
+.screen {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #f8f8f8;
+}
+.statusbar {
+  height: 44px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: #fff;
+  font-size: 15px;
+  font-weight: 500;
+}
+.statusbar > span {
+  width: 54px;
+  text-align: center;
+}
+.statusbar img {
+  width: 67px;
+  height: auto;
+}
+.page-nav {
+  height: 48px;
+  flex: none;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 12px;
+  background: #fff;
+}
+.page-nav a {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  color: var(--ink);
+  text-decoration: none;
+}
+.page-nav a img {
+  width: 24px;
+  height: 24px;
+}
+.page-nav h1 {
+  overflow: hidden;
+  margin: 0;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 18px;
+  line-height: 26px;
+}
+.page-nav .more {
+  justify-self: end;
+  width: 87px;
+  height: 32px;
+}
+.orders-main {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.orders-tabs {
+  flex: none;
+  display: flex;
+  overflow-x: auto;
+  background: #fff;
+  scrollbar-width: none;
+}
+.orders-tabs::-webkit-scrollbar {
+  display: none;
+}
+.orders-tab {
+  position: relative;
+  flex: 0 0 auto;
+  height: 48px;
+  padding: 0 16px;
+  border: 0;
+  background: #fff;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.orders-tab[aria-selected="true"] {
+  color: var(--brand);
+  font-weight: 700;
+}
+.orders-tab[aria-selected="true"]::after {
+  position: absolute;
+  right: 16px;
+  bottom: 0;
+  left: 16px;
+  height: 3px;
+  background: var(--brand);
+  content: "";
+}
+.orders-list {
+  min-height: 0;
+  flex: 1;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  overflow: auto;
+  padding: 12px;
+  scrollbar-width: thin;
+}
+.order-card {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  background: #fff;
+  cursor: pointer;
+}
+.order-card:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -2px;
+}
+.order-card-head, .order-card-foot, .order-card-foot-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.order-number {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.order-status-tag {
+  flex: none;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  white-space: nowrap;
+}
+.order-status-tag.warning {
+  color: var(--warning);
+}
+.order-status-tag.complete {
+  color: var(--muted);
+}
+.order-benefit {
+  margin: 0;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+}
+.order-card-body {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+.order-card-body img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+}
+.order-service-copy {
+  min-width: 0;
+}
+.order-service-copy strong {
+  display: block;
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 24px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.order-service-copy small {
+  display: block;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.order-info-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: var(--soft);
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+}
+.order-card-foot {
+  min-width: 0;
+}
+.order-price {
+  font-family: "Decathlon Display", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 16px;
+}
+.order-price span {
+  font-size: 12px;
+}
+.order-benefit-label {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+.order-card-foot-actions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.order-action {
+  position: relative;
+  min-height: 32px;
+  padding: 0 16px;
+  border: 1px solid #949494;
+  background: #fff;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+.order-action::before {
+  position: absolute;
+  inset: -6px 0;
+  content: "";
+}
+.order-action.medium {
+  min-height: 40px;
+  padding: 0 20px;
+  font-size: 14px;
+}
+.order-action.medium::before {
+  inset: -2px 0;
+}
+.order-action:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.order-action.primary {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+.order-action.primary:hover {
+  border-color: #29359e;
+  background: #29359e;
+}
+@media (prefers-reduced-motion: reduce) {
+  .order-action {
+    transition: none;
+  }
+}
+.orders-empty {
+  padding: 40px 16px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+}
+.toast {
+  position: absolute;
+  right: 16px;
+  bottom: 80px;
+  left: 16px;
+  z-index: 2;
+  width: fit-content;
+  max-width: calc(100% - 32px);
+  margin: 0 auto;
+  padding: 9px 12px;
+  background: #222;
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+}
+.toast[hidden] {
+  display: none;
+}
+
+/* Source 2: iphone17-presentation.css */
+:root {
+  --iphone17-width: 375px;
+  --iphone17-height: 812px;
+  --prototype-shadow: 0 18px 55px #10102426;
+}
+
+.device,
+.phone,
+.artboard {
+  width: var(--iphone17-width);
+  max-width: var(--iphone17-width);
+  height: var(--iphone17-height);
+  min-height: 0;
+  flex: none;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: var(--prototype-shadow);
+}
+
+.device .screen,
+.phone .screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.preview,
+.stage,
+.presentation {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: var(--iphone17-width) minmax(320px, 360px);
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  padding: 28px 24px;
+}
+
+.presentation {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.scenario-panel,
+.design-panel,
+.annotation {
+  position: sticky;
+  top: 28px;
+  width: 100%;
+  max-width: 360px;
+  max-height: calc(100vh - 56px);
+  overflow: auto;
+  padding: 24px;
+  border: 1px solid #e1e0df;
+  background: #fff;
+  box-shadow: 0 12px 32px #1010100d;
+}
+
+.design-panel h1 {
+  margin: 10px 0 9px;
+  font-size: 30px;
+  line-height: 1.22;
+}
+
+.design-facts h3 {
+  margin: 12px 0 0;
+  font-size: 15px;
+}
+
+.design-panel p {
+  color: #555;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.design-kicker {
+  margin: 0;
+  color: #3643ba !important;
+  font-size: 11px !important;
+  font-weight: 700;
+  letter-spacing: .13em;
+}
+
+.design-facts {
+  margin-top: 18px;
+  border-top: 1px solid #c9c9ce;
+}
+
+.design-fact {
+  padding: 12px 0;
+  border-bottom: 1px solid #c9c9ce;
+}
+
+.design-fact strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #777;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.design-fact span {
+  display: block;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.design-note {
+  margin-top: 16px;
+  padding: 12px;
+  border-left: 3px solid #db6900;
+  background: #fff7e8;
+  color: #5e4a2a;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.design-link {
+  display: block;
+  margin-top: 16px;
+  padding: 11px 12px;
+  background: #3643ba;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.scenario-panel {
+  width: 360px;
+  padding: 20px;
+}
+
+.scenario-panel > p { display: block; }
+.scenario-options { grid-template-columns: 1fr; }
+.scenario-option small { display: block; }
+
+.artboard {
+  height: var(--iphone17-height);
+  min-height: var(--iphone17-height);
+}
+
+@media (max-width: 960px) {
+  .preview,
+  .stage,
+  .presentation {
+    grid-template-columns: var(--iphone17-width);
+    gap: 24px;
+    padding: 24px 16px;
+  }
+
+  .scenario-panel,
+  .design-panel,
+  .annotation {
+    position: static;
+    width: min(360px, 100%);
+    max-width: 360px;
+    max-height: none;
+  }
+
+  .scenario-panel { order: 0; }
+}
+
+@media (max-width: 600px) {
+  html,
+  body {
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
+  }
+
+  .preview,
+  .stage,
+  .presentation {
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 0 24px;
+  }
+
+  .device,
+  .phone,
+  .artboard {
+    width: min(var(--iphone17-width), 100vw);
+    max-width: var(--iphone17-width);
+    height: var(--iphone17-height);
+    min-height: var(--iphone17-height);
+    margin: 0 auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: var(--prototype-shadow);
+  }
+
+  .screen { border-radius: 0; }
+
+  .scenario-panel,
+  .design-panel,
+  .annotation {
+    position: static;
+    width: min(360px, calc(100vw - 24px));
+    max-width: 360px;
+    max-height: none;
+    margin: 0 auto;
+  }
+
+  .scenario-panel > p,
+  .scenario-option small {
+    display: block;
+  }
+}
+
+/* Source 3: service-system.css */
 :root {
   --content-neutral: #101010;
   --content-quiet: #616161;
@@ -586,7 +1138,11 @@ body.vitamin-app {
   }
 }
 
+/* rule.md #4：模块间 8px #F8F8F8 分隔由容器 gap 提供，模块自身不加 border-top / margin */
 body.gray-section-layout .page-presentation .page-artboard .page-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
   padding: 0 0 24px;
   background: var(--background-alternative);
 }
@@ -599,7 +1155,6 @@ body.gray-section-layout .page-presentation .page-artboard .page-body > .page-se
   margin: 0;
   padding: 16px;
   border: 0;
-  border-top: 8px solid var(--background-alternative);
   background: var(--container-neutral);
 }
 body.gray-section-layout .page-presentation .page-artboard .page-body > .page-section > .page-section-title { margin: 0 0 10px; }
@@ -608,40 +1163,51 @@ body.gray-section-layout.repair-request .page-presentation .page-artboard .page-
   margin: 0;
   padding: 16px;
   border: 0;
-  border-top: 8px solid var(--background-alternative);
   background: var(--container-neutral);
 }
 body.gray-section-layout.repair-request .page-presentation .page-artboard .page-body form {
-  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  margin: 0;
   padding: 16px;
   background: var(--container-neutral);
 }
-body.gray-section-layout.repair-request .page-presentation .page-artboard .page-body form .page-section { padding: 16px 0 0; border: 0; }
+body.gray-section-layout.repair-request .page-presentation .page-artboard .page-body form .page-section { margin: 0; padding: 0; border: 0; }
+body.gray-section-layout.repair-request .page-presentation .page-artboard .page-body form .page-form-field { margin-top: 0; }
 .gray-section-layout > .page-presentation > .page-artboard > .page-body > .page-status {
-  margin: 8px 16px;
+  margin: 0 16px;
 }
 
+/* rule.md #4：模块间 8px #F8F8F8 分隔由 main 容器 gap 提供；main 不再左右 padding，
+   各模块自带水平 padding/margin，取消 margin:0 -20px 负边距满铺写法 */
 body.benefit-detail main {
-  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 0 0 20px;
   background: var(--background-alternative);
 }
 body.benefit-detail .benefit-intro {
-  margin: 0 -20px;
+  margin: 0;
   padding: 22px 20px 20px;
   background: var(--container-neutral);
 }
 body.benefit-detail .service-section,
 body.benefit-detail .product-section {
-  margin: 0 -20px;
+  margin: 0;
   padding: 20px 16px;
   border: 0;
-  border-top: 8px solid var(--background-alternative);
   background: var(--container-neutral);
 }
-body.benefit-detail .product-section { margin-top: 0; }
-body.benefit-detail .state-message { margin: 0 0 8px; }
+body.benefit-detail .rules { margin: 0 20px; }
+body.benefit-detail .demo-note { margin: 0 20px; }
+body.benefit-detail .state-message { margin: 0 20px; }
 
 body[data-page="checkout"] .presentation .artboard .body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
   padding: 0 0 24px;
   background: var(--background-alternative);
 }
@@ -649,11 +1215,13 @@ body[data-page="checkout"] .presentation .artboard .body .section {
   margin: 0;
   padding: 16px;
   border: 0;
-  border-top: 8px solid var(--background-alternative);
   background: var(--container-neutral);
 }
 
 body[data-page="order"] .presentation .artboard .body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
   padding: 0 0 24px;
   background: var(--background-alternative);
 }
@@ -665,7 +1233,6 @@ body[data-page="order"] .presentation .artboard .body .section {
   margin: 0;
   padding: 16px;
   border: 0;
-  /* border-top: 8px solid var(--background-alternative); */
   border-radius: 0;
   background: var(--container-neutral);
 }
@@ -686,41 +1253,37 @@ body[data-page="store"] .store-card.selected {
   box-shadow: none;
 }
 
-body[data-page="schedule"] .store-summary {
-  border-radius: 0;
+/* rule.md #4：预约页模块间 8px #F8F8F8 分隔由 .body 容器 gap 提供，
+   不再用 .calendar-title::before / .section-title::before 画 8px 假条。
+   选择器带上 .presentation .artboard 链，优先级高于 post-purchase-flow.css 的
+   html body[data-page="schedule"] .body{background:#fff} 与 .vitamin-app.purchase-flow 的 padding。 */
+body[data-page="schedule"] .presentation .artboard .body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 0 0 24px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: var(--background-alternative);
+}
+body[data-page="schedule"] .presentation .artboard .body .schedule-module {
+  flex: none;
+  padding: 16px;
+  border: 0;
   background: var(--container-neutral);
 }
-body[data-page="schedule"] .calendar-title {
-  position: relative;
-  margin-top: 8px;
-  padding-top: 20px;
-  border-top: 0;
-}
-body[data-page="schedule"] .calendar-title::before {
-  position: absolute;
-  top: 0;
-  right: -16px;
-  left: -16px;
-  height: 8px;
+body[data-page="schedule"] .presentation .artboard .body .schedule-module > :last-child { margin-bottom: 0; }
+body[data-page="schedule"] .store-summary {
+  border-radius: 0;
   background: var(--container-quiet);
-  content: "";
 }
-body[data-page="schedule"] .section-title {
-  position: relative;
-  padding-top: 20px;
-  border-top: 0;
-}
-body[data-page="schedule"] .section-title::before {
-  position: absolute;
-  top: 0;
-  right: -16px;
-  left: -16px;
-  height: 8px;
-  background: var(--container-quiet);
-  content: "";
-}
+body[data-page="schedule"] .calendar-title { margin-top: 0; padding-top: 0; border-top: 0; }
+body[data-page="schedule"] .section-title { padding-top: 0; border-top: 0; }
 
 body[data-page="result"] .presentation .artboard .body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
   padding: 0;
   background: var(--background-alternative);
 }
@@ -732,7 +1295,6 @@ body[data-page="result"] .presentation .artboard .body .section {
   margin: 0;
   padding: 14px 20px;
   border: 0;
-  border-top: 8px solid var(--background-alternative);
   border-radius: 0;
   background: var(--container-neutral);
 }
@@ -951,3 +1513,65 @@ body.service-detail .app :is(.chip.selected, .slot.selected, .date.selected) {
   background: var(--brand);
   color: #fff;
 }
+
+/* Shared store/date/time picker styles are loaded from store-time-picker.css. */
+.stp-head{display:flex;align-items:center;gap:8px;flex:none;padding:0 16px;}
+.stp-head h2{flex:1;margin:0;font-size:18px;line-height:26px;font-weight:700}
+.stp-head button{width:44px;height:44px;flex:none;padding:0;border:0;background:transparent;color:var(--stp-muted);font-size:26px}
+.stp-sheet--list .stp-head h2{text-align:center;font-size:16px}
+/* rule.md #4：模块间 8px #F8F8F8 分隔由 .stp-content 容器 gap 提供，不用 border-top */
+.stp-content{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;overflow-y:auto;overscroll-behavior:contain;background:#f8f8f8}
+.stp-content>*{flex:none;background:#fff}
+.stp-section{padding:12px 16px}
+.stp-section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.stp-section-head h3{margin:0;font-size:16px;line-height:24px}
+.stp-section-head button{min-height:44px;padding:0;border:0;background:transparent;color:var(--stp-brand);font-size:13px}
+.stp-store-rail{position:relative;display:flex;flex-wrap:nowrap;gap:10px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;overscroll-behavior-x:contain}
+.stp-overlay .stp-store-choice{position:relative;flex:0 0 auto;width:min(261px,80%);max-width:100%;min-height:108px;padding:12px 10px;border:1px solid var(--stp-line);background:#fff;text-align:left;scroll-snap-align:start}
+.stp-store-choice strong{display:block;padding-right:20px;font-size:14px;line-height:21px}
+.stp-store-choice small{display:block;min-width:0;overflow:hidden;margin-top:4px;color:var(--stp-muted);font-size:12px;line-height:18px;text-overflow:ellipsis;white-space:nowrap}
+.stp-overlay .stp-store-choice[aria-pressed=true]{border-color:var(--stp-brand);background:#f6f7ff}
+.stp-store-choice[aria-pressed=true]:after{content:'';position:absolute;top:0;right:0;width:18px;height:18px;background:var(--stp-brand) url('assets/figma/selection-check.svg') center/18px 18px no-repeat}
+.stp-note{margin:0 0 12px;color:var(--stp-muted);font-size:12px;line-height:18px}
+.stp-dates{position:relative;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.stp-overlay .stp-dates button{flex:0 0 60px;height:64px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;padding:4px;border:1px solid var(--stp-line);background:#fff;color:var(--stp-muted);font-size:11px}
+.stp-dates strong{font-size:16px;line-height:20px;color:#101010}
+.stp-overlay .stp-dates [aria-pressed=true],.stp-overlay .stp-slots [aria-pressed=true]{border-color:transparent;background:var(--stp-brand);color:#fff}
+.stp-dates [aria-pressed=true] strong{color:#fff}
+.stp-slot-title{margin:16px 0 8px;font-size:14px;line-height:20px}
+.stp-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.stp-overlay .stp-slots button{min-width:0;min-height:44px;padding:4px;border:1px solid #d5d5d5;background:#fff;color:#333;font-size:12px}
+.stp-overlay button:disabled{background:#f2f2f2;color:#949494;cursor:not-allowed}
+.stp-footer{flex:none;padding:12px 16px 0;border-top:1px solid var(--stp-line)}
+.stp-footer p{margin:0 0 8px;color:var(--stp-muted);font-size:12px;line-height:18px;overflow-wrap:anywhere}
+.stp-toast{position:absolute;z-index:1;right:16px;bottom:112px;left:16px;width:max-content;max-width:calc(100% - 32px);margin:0 auto;padding:12px 16px;background:#101010ef;color:#fff;text-align:center;font-size:13px;line-height:20px;box-shadow:0 6px 20px #0003;pointer-events:none}
+@media(prefers-reduced-motion:no-preference){.stp-toast{animation:stp-toast-in .16s ease-out both}@keyframes stp-toast-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}}
+.stp-overlay .stp-confirm{width:100%;min-height:48px;border:0;background:var(--stp-brand);color:#fff;font-size:15px;font-weight:650}
+.stp-list{padding:0 16px 8px}
+.stp-city{display:flex;align-items:center;gap:12px;min-height:52px;font-size:12px;color:var(--stp-muted)}
+.stp-city select{min-height:44px;padding:0 28px 0 0;border:0;background:#fff;color:#101010;font-size:20px;font-weight: bold;}
+.stp-overlay .stp-city select:focus{outline:none;box-shadow:none}
+.stp-store-list{display:grid;gap:8px}
+.stp-overlay .stp-store-card{position:relative;border:1px solid #ededed;background:#fff}
+.stp-overlay .stp-store-card[data-selected=true]{border-color:var(--stp-brand);background:#f0f1fa}
+.stp-overlay :is(.stp-store-choice,.stp-store-card,.stp-dates button,.stp-slots button):active{border-color:transparent}
+.stp-overlay .stp-store-card>button{border:1px solid var(--stp-line); display:block;width:100%;padding:12px 100px 12px 11px;border:0;background:transparent;text-align:left}
+.stp-store-card strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;line-height:22px;margin-bottom:10px}
+.stp-store-card small{display:block;overflow:hidden;color:var(--stp-muted);font-size:12px;line-height:20px;text-overflow:ellipsis;}
+.stp-store-card small+small{margin-top:2px}
+/* 营业时间行位于操作按钮下方，可占满卡片宽度（收回为按钮预留的右侧内边距） */
+.stp-store-card .stp-store-hours{margin-right:-89px}
+.stp-store-actions{position:absolute;top:6px;right:6px;display:flex}
+.stp-overlay .stp-store-actions a,.stp-overlay .stp-store-actions button{width:44px;height:44px;display:grid;place-items:center;padding:0;border:0;background:transparent;color:#101010}
+.stp-store-actions svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.stp-check{position:absolute;right:0;bottom:0;width:18px;height:18px;background:var(--stp-brand) url('assets/figma/selection-check.svg') center/18px 18px no-repeat}
+.stp-slot-check{display:inline-block;width:18px;height:18px;margin-left:4px;vertical-align:middle;background:currentColor;-webkit-mask:url('assets/figma/selection-check.svg') center/18px 18px no-repeat;mask:url('assets/figma/selection-check.svg') center/18px 18px no-repeat}
+.stp-contact{position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);width:calc(100% - 48px);max-width:320px;padding:20px;background:#fff;text-align:center;box-shadow:0 0 0 100vmax #0006}
+.stp-contact h2{margin:0;font-size:18px}
+.stp-contact p,.stp-contact a{font-size:12px;line-height:20px}
+.stp-qr{display:grid;place-items:center;width:152px;height:152px;margin:12px auto;border:1px dashed #aaa;background:#f7f8fa;font-size:12px}
+.stp-contact button{width:100%;min-height:44px;border:0;background:var(--stp-brand);color:#fff}
+.stp-demo{font-size:12px;line-height:20px;color:var(--stp-muted)}
+.stp-demo summary{min-height:44px;cursor:pointer}
+.stp-demo label{display:grid;gap:8px}
+.stp-demo select{min-height:44px;width:100%;background:#fff;border:1px solid var(--stp-line)}

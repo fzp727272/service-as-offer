@@ -32,9 +32,11 @@
     const bookingButtons = [...document.querySelectorAll("button[data-booking-state]")];
     const bookingOptions = document.querySelector("#booking-state-options");
     const bookingRow = document.querySelector("#booking-row");
-    const bookingIntentRow = document.querySelector("#booking-intent-row");
+    const bookingIntentRow = document.querySelector("#booking-store-row");
+    const bookingTimeRow = document.querySelector("#booking-time-row");
     const bookingResultLabel = document.querySelector("#booking-result");
-    const bookingIntentLabel = document.querySelector("#booking-intent");
+    const bookingStoreLabel = document.querySelector("#booking-store");
+    const bookingTimeLabel = document.querySelector("#booking-time");
     const bookingMode = params.get("bookingMode") === "now" ? "now" : "later";
     const hasBookingIntent = Boolean(params.get("city") && params.get("store") && params.get("date") && params.get("time"));
     let state = ["paid", "unpaid", "unknown"].includes(params.get("paymentState"))
@@ -53,13 +55,45 @@
     if (serviceName && params.get("name")) serviceName.textContent = params.get("name");
     if (serviceMeta) {
       serviceMeta.textContent = bookingMode === "now"
-        ? "到店服务 · 结算内已选择预约意向"
+        ? "到店服务 · 结算内已选择预约门店和时间"
         : "到店服务 · 支付后可继续预约门店和时间";
     }
 
-    const formatIntent = () => {
-      if (!hasBookingIntent) return "未选择预约意向";
-      return `${params.get("city")} · ${params.get("store")} · ${params.get("date")} ${params.get("time")}`;
+    const formatStore = () => {
+      if (!hasBookingIntent) return "未选择";
+      return params.get("store");
+    };
+
+    const formatTime = () => {
+      if (!hasBookingIntent) return "未选择";
+      return `${params.get("date")} ${params.get("time")}`;
+    };
+
+    // design/rule.md 21：金额拆成 ¥/小数 16px + 整数 24px（Decathlon Display），不写整串文本。
+    const renderAmount = (value) => {
+      const el = document.querySelector("#payment-amount");
+      if (!el) return;
+      const matched = /^([^0-9]*)([0-9][0-9,]*(?:\.[0-9]+)?)(.*)$/.exec(value);
+      el.classList.toggle("is-error", !matched);
+      if (!matched) {
+        el.textContent = value;
+        return;
+      }
+      const dot = matched[2].indexOf(".");
+      const parts = [
+        ["price-currency", matched[1]],
+        ["price-major", dot === -1 ? matched[2] : matched[2].slice(0, dot)],
+        ["price-decimal", dot === -1 ? "" : matched[2].slice(dot)],
+        ["price-currency", matched[3]],
+      ];
+      el.textContent = "";
+      parts.forEach(([cls, text]) => {
+        if (!text) return;
+        const span = document.createElement("span");
+        span.className = cls;
+        span.textContent = text;
+        el.append(span);
+      });
     };
 
     const bookingResultText = {
@@ -99,7 +133,9 @@
 
       bookingRow.hidden = !(bookingMode === "now" && state === "paid");
       bookingIntentRow.hidden = bookingMode !== "now";
-      if (bookingIntentLabel) bookingIntentLabel.textContent = formatIntent();
+      if (bookingTimeRow) bookingTimeRow.hidden = bookingMode !== "now";
+      if (bookingStoreLabel) bookingStoreLabel.textContent = formatStore();
+      if (bookingTimeLabel) bookingTimeLabel.textContent = formatTime();
       if (bookingResultLabel && bookingMode === "now") bookingResultLabel.textContent = bookingResultText[bookingState];
 
       action.disabled = state === "unknown" || (bookingMode === "now" && state === "paid" && bookingState === "unknown");
@@ -125,9 +161,9 @@
 
       const amount = Number(params.get("price") || 199.9);
       document.querySelector("#payment-amount-label").textContent = state === "paid" ? "实付金额" : "订单金额";
-      document.querySelector("#payment-amount").textContent = Number.isFinite(amount) && amount >= 0
+      renderAmount(Number.isFinite(amount) && amount >= 0
         ? params.get("payment") === "points" ? `${Math.round(amount * 100).toLocaleString("zh-CN")} 燃值` : `¥${amount.toFixed(2)}`
-        : "金额异常，请返回订单核对";
+        : "金额异常，请返回订单核对");
       document.querySelector("#payment-method").textContent = params.get("payment") === "points" ? "燃值抵扣" : "微信支付";
       document.querySelector("#payment-order").textContent = params.get("order") || "SO-2601024";
       const current = new URL(location.href);
@@ -135,7 +171,7 @@
       if (bookingMode === "now") current.searchParams.set("bookingResult", bookingState);
       current.searchParams.delete("demoState");
       history.replaceState(null, "", current);
-      const orderLink = new URL("12-service-order-detail.html", location.href);
+      const orderLink = new URL("10-service-order-detail.html", location.href);
       orderLink.search = serviceContext.toString();
       orderLink.searchParams.set("paymentState", state);
       if (bookingMode === "now") {
@@ -184,13 +220,13 @@
       } else if (state === "paid") {
         if (bookingMode === "now") {
           if (bookingState === "created") {
-            navigate("12-service-order-detail.html", {
+            navigate("10-service-order-detail.html", {
               paymentState: "paid",
               booking: "created",
               bookingResult: "created",
             });
           } else if (bookingState === "conflict") {
-            navigate("12-service-order-detail.html", {
+            navigate("10-service-order-detail.html", {
               paymentState: "paid",
               booking: "none",
               bookingResult: "conflict",

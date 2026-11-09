@@ -4,66 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>服务全流程 · Service as Offer</title>
-  <link rel="stylesheet" href="service-system.css">
-  <script src="figma-copy.js" defer></script>
-  <script src="service-journey.js" defer></script>
-  <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; }
-    a { color: inherit; text-underline-offset: 4px; }
-    .workbench { max-width: 1200px; margin: auto; padding: 24px 40px 64px; }
-    .workbench-header { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border-quiet); }
-    .wordmark { color: var(--content-brand); font-size: 18px; font-weight: 700; text-decoration: none; }
-    .workbench-header nav { display: flex; gap: 24px; font-size: 14px; }
-    .workbench-intro { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin: 40px 0 32px; }
-    h1 { margin: 0; font-size: 32px; line-height: 48px; }
-    .workbench-intro p { max-width: 44em; margin: 8px 0 0; color: var(--content-quiet); font-size: 16px; line-height: 24px; }
-    .start { flex: none; display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 24px; background: var(--content-brand); color: white; font-size: 16px; font-weight: 700; text-decoration: none; }
-    .journey-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: white; border: 1px solid var(--border-quiet); }
-    .lane { min-width: 0; padding: 24px; }
-    .lane + .lane { border-left: 1px solid var(--border-quiet); }
-    .lane h2 { margin: -24px -24px 24px; padding: 16px 24px; background: var(--content-brand); color: white; font-size: 20px; line-height: 30px; }
-    .lane ol { margin: 0 0 0 7px; padding: 0 0 0 20px; border-left: 2px solid var(--border-quiet); list-style: none; }
-    .lane li { position: relative; padding-bottom: 24px; }
-    .lane li:last-child { padding-bottom: 0; }
-    .lane li::before { position: absolute; top: 9px; left: -26px; width: 10px; height: 10px; border: 2px solid var(--content-brand); border-radius: 50%; background: white; content: ""; }
-    .node { display: block; min-height: 32px; font-size: 16px; line-height: 24px; font-weight: 700; text-decoration: none; }
-    .node:hover { color: var(--content-brand); text-decoration: underline; }
-    .lane p { margin: 4px 0 0; color: var(--content-quiet); font-size: 14px; line-height: 20px; }
-    .lane .branch { margin-top: 12px; padding: 12px; background: var(--container-commercial-light); color: var(--content-brand); font-size: 12px; line-height: 18px; }
-    .branch a { display: inline-block; min-height: 28px; padding: 4px 0; font-weight: 700; }
-    .entry-paths { margin-top: 32px; }
-    .entry-paths h2, .handoff h2 { margin: 0 0 16px; font-size: 24px; line-height: 36px; }
-    .entry-path { display: grid; grid-template-columns: 144px 1fr; align-items: baseline; gap: 16px; padding: 16px 0; border-top: 1px solid var(--border-quiet); font-size: 14px; line-height: 24px; }
-    .entry-path h3 { margin: 0; font-size: 16px; line-height: 24px; }
-    .entry-path p { margin: 0; }
-    .path-link { display: inline-block; min-height: 32px; padding: 4px 0; color: var(--content-brand); }
-    .path-connector { padding: 0 12px; color: var(--content-quiet); }
-    .handoff { margin-top: 32px; padding: 24px; background: white; border: 1px solid var(--border-quiet); }
-    .handoff dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 0; font-size: 14px; line-height: 20px; }
-    .handoff dt { margin-bottom: 8px; font-weight: 700; }
-    .handoff dd { margin: 0; color: var(--content-quiet); }
-    .handoff details { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-quiet); font-size: 14px; line-height: 20px; }
-    .handoff summary { min-height: 32px; cursor: pointer; }
-    .handoff li { margin: 8px 0; }
-    footer { padding-top: 24px; color: var(--content-quiet); font-size: 12px; line-height: 18px; }
-    @media (max-width: 760px) {
-      .workbench { padding: 20px 16px 32px; }
-      .workbench-header { align-items: start; }
-      .workbench-header nav { flex-direction: column; gap: 8px; }
-      .workbench-intro { align-items: start; flex-direction: column; gap: 20px; margin: 24px 0; }
-      .journey-board, .handoff dl { grid-template-columns: 1fr; }
-      .lane + .lane { border-left: 0; border-top: 1px solid var(--border-quiet); }
-      .entry-path { grid-template-columns: 1fr; gap: 4px; }
-      .path-connector { padding: 0 4px; }
-    }
-  </style>
+  <script src="service-journey.js?v=20261104-one-css" defer></script>
+  <link rel="stylesheet" href="index.css?v=20261104-one-css">
+  <link rel="stylesheet" href="store-time-picker.css?v=20261106-shared-picker">
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <script src="figma-capture-toolbar.js" defer></script>
 </head>
 <body class="vitamin-app">
   <main class="workbench">
     <header class="workbench-header">
       <a class="wordmark" href="01-service-entry.html">迪卡侬官方服务</a>
-      <nav aria-label="设计资料"><a href="../prd/service-as-offer-ux-spec.html#journey">需求与流程说明</a><a href="../design/design.md">Vitamin C 规范</a></nav>
+      <nav aria-label="设计资料"><a href="../design/service-as-offer-ux-spec.html#journey">需求与流程说明</a><a href="../design/design-guide/design.md">Vitamin C 规范</a></nav>
     </header>
     <section class="workbench-intro">
       <div><h1>服务全流程</h1><p>从选服务到预约、到店和服务完成。主线连续操作，权益、维修和取消分支在对应节点接入。</p></div>
@@ -82,34 +33,33 @@
       <section class="lane">
         <h2>预约服务</h2>
         <ol>
-          <li><a class="node" href="06-store-selection.html">选择门店</a><p>按城市查看可承接当前服务的门店。</p></li>
-          <li><a class="node" href="07-date-time-selection.html">选择日期与时段</a><p>区分可约、约满和不可约。</p></li>
-          <li><a class="node" href="12-service-order-detail.html?booking=created">服务订单 · 预约状态</a><p>预约结果是订单状态而非独立流程节点；结果待确认时在订单状态栏说明，并可在订单内查看结果弹窗。预约时间属于同一服务订单；不提供更换预约，扫码前取消需二次确认。</p></li>
+          <li><a class="node" href="10-service-order-detail.html?selectBooking=1">选择门店与时间</a><p>在共享选择弹框中按城市查看门店，选择可约日期与时段。</p></li>
+          <li><a class="node" href="10-service-order-detail.html?booking=created">服务订单 · 预约状态</a><p>预约结果是订单状态而非独立流程节点；结果待确认时在订单状态栏说明，并可在订单内查看结果弹窗。预约时间属于同一服务订单；不提供更换预约，扫码前取消需二次确认。</p></li>
         </ol>
       </section>
       <section class="lane">
         <h2>到店与完成</h2>
         <ol>
-          <li><a class="node" href="12-service-order-detail.html?demoState=queued">服务单详情 · 扫码后排队</a><p>到店扫码成功后，在订单详情查看门店排队号。</p><div class="branch">其他订单状态<br><a href="12-service-order-detail.html?booking=created">查看预约信息</a> / <a href="12-service-order-detail.html?paymentState=unpaid">待付款服务单</a></div></li>
-          <li><a class="node" href="12-service-order-detail.html?demoState=completed">服务完成与记录</a><p>在订单详情查看已完成的服务记录。</p></li>
+          <li><a class="node" href="10-service-order-detail.html?demoState=queued">服务单详情 · 扫码后排队</a><p>到店扫码成功后，在订单详情查看门店排队号。</p><div class="branch">其他订单状态<br><a href="10-service-order-detail.html?booking=created">查看预约信息</a> / <a href="10-service-order-detail.html?paymentState=unpaid">待付款服务单</a></div></li>
+          <li><a class="node" href="10-service-order-detail.html?demoState=completed">服务完成与记录</a><p>在订单详情查看已完成的服务记录。</p></li>
           <li><a class="node" href="my-orders.html">我的订单</a><p>查看历史记录或再次购买服务。</p></li>
         </ol>
       </section>
     </div>
     <section class="entry-paths" aria-labelledby="entry-title">
       <h2 id="entry-title">其他入口，接回同一条主线</h2>
-      <div class="entry-path"><h3>购买商品赠送权益</h3><p><a class="path-link" href="01-service-entry.html?entry=scan">购后扫码进入</a> / <a class="path-link" href="03-benefit-detail.html?entry=order&amp;sourceOrder=810263">商品订单跳转权益</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="06-store-selection.html?context=benefit&amp;benefit=inspection&amp;name=安全检查&amp;equipment=Rockrider%20ST%20530">选择门店与时间</a>，无需再次支付。扫码不执行装备绑定。</p></div>
+      <div class="entry-path"><h3>购买商品赠送权益</h3><p><a class="path-link" href="01-service-entry.html?entry=scan">购后扫码进入</a> / <a class="path-link" href="03-benefit-detail.html?entry=order&amp;sourceOrder=810263">商品订单跳转权益</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="10-service-order-detail.html?selectBooking=1&amp;context=benefit&amp;benefit=inspection&amp;name=安全检查&amp;equipment=Rockrider%20ST%20530">选择门店与时间</a>，无需再次支付。扫码不执行装备绑定。</p></div>
       <div class="entry-path"><h3>浏览其他商品或服务</h3><p><a class="path-link" href="01-service-entry.html?entry=product">其他商品页面进入</a> / <a class="path-link" href="01-service-entry.html?entry=service">服务入口进入</a>，在同一首页浏览服务。</p></div>
-      <div class="entry-path"><h3>不确定维修项目</h3><p><a class="path-link" href="04-repair-request.html">描述维修需求</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="06-store-selection.html?name=自行车维修&amp;category=bike&amp;context=repair">查看服务门店</a>，项目与报价由门店确认。</p></div>
-      <div class="entry-path"><h3>继续已有服务</h3><p><a class="path-link" href="my-orders.html">我的订单</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="12-service-order-detail.html">对应服务单</a>，按当前状态继续付款、预约或查看进度。</p></div>
-      <div class="entry-path"><h3>从消息返回</h3><p><a class="path-link" href="15-message-landing.html">服务消息</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="12-service-order-detail.html">关联服务单</a>，保留原服务与预约上下文。</p></div>
+      <div class="entry-path"><h3>不确定维修项目</h3><p><a class="path-link" href="04-repair-request.html">描述维修需求</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="10-service-order-detail.html?selectBooking=1&amp;name=自行车维修&amp;category=bike&amp;context=repair">查看服务门店</a>，项目与报价由门店确认。</p></div>
+      <div class="entry-path"><h3>继续已有服务</h3><p><a class="path-link" href="my-orders.html">我的订单</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="10-service-order-detail.html">对应服务单</a>，按当前状态继续付款、预约或查看进度。</p></div>
+      <div class="entry-path"><h3>从消息返回</h3><p><a class="path-link" href="13-message-landing.html">服务消息</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="10-service-order-detail.html">关联服务单</a>，保留原服务与预约上下文。</p></div>
     </section>
     <section class="handoff" aria-labelledby="handoff-title">
       <h2 id="handoff-title">统一设计与交互约定</h2>
       <dl>
         <div><dt>同一套组件</dt><dd>Vitamin C 品牌蓝、直角容器、统一文字与间距。按钮、列表、表单、状态反馈和底栏由共享样式管理。</dd></div>
         <div><dt>同一笔服务</dt><dd>跨页保留服务、费用、装备、服务单、门店与时间。取消预约后保留服务单，重新预约不再购买。</dd></div>
-        <div><dt>05–13 交互约定</dt><dd>支付未知时后台轮询演示并展示 loading toast；拒绝定位默认上海并弹窗。日历展示未来一周，预约无响应回到同一订单，将结果说明置于订单状态栏；结果弹窗只是订单状态反馈，不是单独流程节点。未查明时无成功二维码。取消预约二次确认，不提供更换预约。08 / 09 / 10 旧入口均回到 12。</dd></div>
+        <div><dt>05–13 交互约定</dt><dd>支付未知时后台轮询演示并展示 loading toast；拒绝定位默认上海并弹窗。日历展示未来一周，预约无响应回到同一订单，将结果说明置于订单状态栏；结果弹窗只是订单状态反馈，不是单独流程节点。未查明时无成功二维码。取消预约二次确认，不提供更换预约。预约结果和预约信息归入服务单。</dd></div>
         <div><dt>界面与说明分离</dt><dd>手机内只保留业务信息和可操作的下一步。每页右侧提供同一套流程导航，设计说明与演示状态默认折叠。</dd></div>
       </dl>
       <details><summary>未确认的能力与演示边界</summary><ul>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#3643ba">
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <script src="../figma-capture-toolbar.js" defer></script>
+  <title>服务首页 · 权益态 · Figma 1126:16388 · Service as Offer</title>
+  <link rel="stylesheet" href="../01-service-entry-figma-1126-16388.css">
+  <script src="../service-catalog.js" defer></script>
+  <script src="../01-service-entry-figma-1126-16388.js" defer></script>
+</head>
+<body>
+  <main class="figma-preview">
+    <section class="device" aria-label="服务首页手机画板">
+      <div class="device-screen" data-figma-artboard>
+        <div class="app-scroll" id="app-scroll">
+          <header class="hero">
+            <div class="status-bar" aria-hidden="true"><span>9:41</span><span class="status-right"><span class="signal"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"><i></i></span></span></div>
+            <img class="wechat-capsule" src="../assets/figma/navbar-wechat-capsule.svg" alt="" aria-hidden="true">
+            <img class="hero-cut" src="../assets/banner2.png" alt="装备养护，装备随行更自由；专业保养，让每一次出发都更安心。自行车、羽毛球与滑雪装备线稿插画。">
+            <a class="hero-link" href="#service-directory">了解服务 <span aria-hidden="true">›</span></a>
+          </header>
+          <div class="page-body">
+          <div class="trust-strip" aria-label="服务保障">
+            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path fill="currentColor" d="M16 3.5 27 7.6v7.1c0 6.9-4.6 11.9-11 15.3-6.4-3.4-11-8.4-11-15.3V7.6Z"/><path fill="#fff" d="m14.6 20.4-4-4 1.9-1.9 2.1 2.1 5.4-5.4 1.9 1.9Z"/></svg></span><span>官方服务</span></div>
+            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.9 6.6a6.4 6.4 0 0 0-8.2 8.2L5.5 22l4.5 4.5 7.2-7.2a6.4 6.4 0 0 0 8.2-8.2l-3.9 3.9-3.5-3.5Z"/><path d="m21.5 4.5 6 6"/></g></svg></span><span>专业技师</span></div>
+            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path fill="currentColor" d="M8 4h16v24l-8-5.4L8 28Z"/><path fill="#fff" d="M13 9.5h6v2.6h-2.1v6.4h-1.8V12.1H13Z"/></svg></span><span>透明收费</span></div>
+          </div>
+          <section class="personal" aria-label="我的装备与服务">
+            <button type="button" class="equipment" data-action="equipment">
+              <span class="equipment-img"><img src="../assets/figma/device-rockrider.png" alt=""></span>
+              <span class="equipment-copy"><strong>Rockrider ST 530 山地自行车</strong><small>已使用 3个月12天</small></span>
+              <img class="chevron" src="../assets/figma/chevron.svg" alt="" aria-hidden="true">
+            </button>
+            <section class="personal-order" aria-labelledby="order-heading" hidden>
+              <h2 class="personal-heading" id="order-heading"><span></span>我的订单</h2>
+              <div class="order-card">
+                <div class="order-head"><strong>自行车基础保养</strong><span class="order-status">已预约</span></div>
+                <div class="order-details">
+                  <p>上海徐汇店｜10月24日 周六 14:00</p>
+                  <button type="button" class="order-action" data-action="appointment">查看预约 <img src="../assets/figma/chevron.svg" alt="" aria-hidden="true"></button>
+                </div>
+              </div>
+            </section>
+            <div class="personal-benefits">
+              <h2 class="personal-heading"><span></span>专属权益</h2>
+              <div class="benefit-list">
+                <article class="benefit-card"><img src="../assets/service-bike.svg" alt=""><div class="benefit-copy"><strong>新车安全检查</strong><small>有效期至 2026年12月30日</small></div><button type="button" class="benefit-action" data-benefit="inspection" aria-label="预约新车安全检查">去预约</button></article>
+                <article class="benefit-card"><img src="../assets/service-bike.svg" alt=""><div class="benefit-copy"><strong>6 个月免费安全检查</strong><small>有效期至 2026年12月30日</small></div><button type="button" class="benefit-action" data-benefit="six-month" aria-label="预约 6 个月免费安全检查">去预约</button></article>
+              </div>
+            </div>
+            <section class="recommendations" aria-labelledby="recommendations-heading" hidden>
+              <h2 class="personal-heading" id="recommendations-heading"><span></span>建议为装备做这些养护</h2>
+              <div id="recommended-services"></div>
+            </section>
+          </section>
+          <section class="directory" id="service-directory" aria-label="服务目录">
+            <nav class="category-nav" aria-label="服务分类" role="tablist">
+              <button type="button" class="category is-active" role="tab" aria-selected="true" data-category="all"><span>全部服务</span></button>
+              <button type="button" class="category" role="tab" aria-selected="false" data-category="bike"><span>自行车</span></button>
+              <button type="button" class="category" role="tab" aria-selected="false" data-category="badminton"><span>羽毛球 / 网球</span></button>
+              <button type="button" class="category" role="tab" aria-selected="false" data-category="ski"><span>滑雪</span></button>
+            </nav>
+            <div id="service-groups"></div>
+          </section>
+          </div>
+        </div>
+        <nav class="tabbar" aria-label="主导航">
+          <button type="button" class="tab is-current" id="home-tab" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-6 8 6v11h-6v-7h-4v7Z"/></svg><span>官方服务</span></button>
+          <a class="tab" href="../my-orders.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM14 4h6v7h-6zM4 14h7v6H4zM14 14h6v6h-6z"/></svg><span>我的订单</span></a>
+        </nav>
+      </div>
+    </section>
+
+    <aside class="journey-panel" aria-labelledby="journey-title">
+      <a class="journey-home" href="../index.html">完整流程</a>
+      <h1 id="journey-title">服务首页 · 场景预览</h1>
+      <p class="panel-intro">切换示例场景，查看订单、权益及推荐服务的展示方式。</p>
+      <div class="scenario-options" role="group" aria-label="切换首页场景">
+        <button type="button" data-scenario="all" aria-pressed="false">订单与权益</button>
+        <button type="button" data-scenario="orders" aria-pressed="false">只有订单</button>
+        <button type="button" data-scenario="benefits" aria-pressed="true">只有权益</button>
+        <button type="button" data-scenario="recommendations" aria-pressed="false">无订单 / 权益</button>
+      </div>
+      <details class="design-notes" open>
+        <summary>设计说明与来源</summary>
+        <div class="design-note-content">
+          <h2>Figma 1126:16388</h2>
+          <p>基于权益态首页，按场景展示订单、权益或推荐服务；下方保留完整服务目录。示例数据，不代表真实订单或权益资格。</p>
+          <a class="panel-link" href="../01-service-entry-figma-1094-13021.html">查看订单与权益态首页</a>
+          <a class="panel-link" href="../01-service-entry.html">查看原首页，对比设计</a>
+        </div>
+      </details>
+      <nav class="flow-nav" aria-label="服务流程">
+        <section class="flow-group"><h2>选服务与下单</h2><ol class="flow-steps"><li><a href="../01-service-entry-figma-1126-16388.html" aria-current="page">服务首页 · 权益态</a></li><li><a href="../02-service-detail.html">服务详情</a></li><li><a href="../05-order-checkout.html">确认订单</a></li><li><a href="../05-payment-result.html">支付结果</a></li></ol></section>
+        <section class="flow-group"><h2>预约到店</h2><ol class="flow-steps"><li><a href="../05-order-checkout.html?bookingMode=later">选择门店与时间</a></li><li><a href="../10-service-order-detail.html">订单详情</a></li></ol></section>
+        <section class="flow-group"><h2>权益、维修与其他入口</h2><ol class="flow-steps"><li><a href="../equipment-library.html">我的装备</a></li><li><a href="../03-benefit-detail.html">权益详情</a></li><li><a href="../04-repair-request.html">描述维修需求</a></li><li><a href="../my-orders.html">我的订单</a></li><li><a href="../13-message-landing.html">服务消息</a></li></ol></section>
+      </nav>
+      <div class="panel-tools"><a href="../../design/service-as-offer-ux-spec.html">需求与流程说明</a><a href="../../design/rule.md">Vitamin C 规范</a></div>
+      <p class="copy-help">复制当前画板的高清图片与 HTML，切换到 Figma 后按 ⌘V 粘贴。图片保留样式但不是可编辑图层；请通过 localhost 打开。</p>
+      <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+      <p class="disclaimer">交互原型：数据为示例，不发起真实支付、兑换、签到或退款。</p>
+    </aside>
+  </main>
+  <div class="live-region" id="live-region" aria-live="polite"></div>
+</body>
+</html>

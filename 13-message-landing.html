@@ -4,11 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Service as Offer 15：微信消息落地页评审原型">
-  <title>15 · 微信消息落地 · Service as Offer</title>
-  <link rel="stylesheet" href="remaining-pages.css">
-  <link rel="stylesheet" href="service-system.css">
-  <script src="figma-copy.js" defer></script>
-  <script src="service-journey.js" defer></script>
+  <title>13 · 微信消息落地 · Service as Offer</title>
+  <link rel="stylesheet" href="13-message-landing.css?v=20261104-one-css">
+  <link rel="stylesheet" href="store-time-picker.css?v=20261106-shared-picker">
+  <script src="service-journey.js?v=20261104-one-css" defer></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <script src="figma-capture-toolbar.js" defer></script>
 </head>
 <body class="gray-section-layout">
   <main class="page-presentation">
@@ -40,11 +41,11 @@
         </section>
       </div>
       <div class="page-foot">
-        <a class="page-button" id="message-order-link" data-fresh-start href="12-service-order-detail.html" style="display:block;text-decoration:none">查看这笔服务订单</a>
+        <a class="page-button" id="message-order-link" data-fresh-start href="10-service-order-detail.html" style="display:block;text-decoration:none">查看这笔服务订单</a>
       </div>
     </article>
     <aside class="page-annotation">
-      <p class="page-annotation-kicker">UX SPEC 15 · REQ-015</p>
+      <p class="page-annotation-kicker">UX SPEC 13 · REQ-015</p>
       <h1>微信消息落地</h1>
       <p>只示意消息点开后的服务上下文，不设计微信模板、不复用历史邮件方案，也不增加短信兜底承诺。</p>
       <section class="prototype-controls">
@@ -62,8 +63,8 @@
       <ul><li>六类事件已确认；临近时间阈值、模板、订阅授权与消息字段仍待补。</li><li>进入同一服务订单，不存在独立预约单。</li><li>失效链接、跨账号与发送失败恢复仍待确认；原型不发送真实微信消息。</li></ul>
       <p class="page-status warning">GAP-019 · 事件已确认，不承诺通知必达；服务完成不等同核销或入账。</p>
       <nav class="page-flow-nav" aria-label="页面原型导航">
-        <a href="my-orders.html">我的订单</a><a aria-current="page" href="15-message-landing.html">15 消息落地</a>
-        <a href="12-service-order-detail.html">12 服务单详情</a><a href="01-service-entry.html">01 服务首页</a>
+        <a href="my-orders.html">我的订单</a><a aria-current="page" href="13-message-landing.html">13 消息落地</a>
+        <a href="10-service-order-detail.html">10 服务单详情</a><a href="01-service-entry.html">01 服务首页</a>
       </nav>
     </aside>
   </main>

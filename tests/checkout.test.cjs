@@ -4,14 +4,16 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const html = fs.readFileSync(path.join(__dirname, '../05-order-checkout.html'), 'utf8');
-const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
-const script = scripts.find(match => match[1].includes('const renderPayment'))[1];
+const script = fs.readFileSync(path.join(__dirname, '../05-order-checkout.js'), 'utf8');
+assert.ok(script.includes('const renderPayment'), '05-order-checkout.js should contain renderPayment');
+assert.match(html, /05-order-checkout\.js/, 'checkout page should load the extracted script');
 
 function setup(query = '') {
 	const elements = new Map();
 	function element(key) {
 		if (!elements.has(key)) elements.set(key, {
 			textContent: '', hidden: false, value: '', checked: false, href: '', attrs: {}, events: {},
+			querySelector(selector) { return element(`${key} ${selector}`); },
 			setAttribute(name, value) { this.attrs[name] = value; },
 			addEventListener(name, callback) { this.events[name] = callback; },
 		});
@@ -34,7 +36,13 @@ function setup(query = '') {
 	};
 	const location = {search: query, href: `http://localhost/prototype/05-order-checkout.html${query}`};
 	const timer = {callback: null, cleared: false};
-	vm.runInNewContext(script, {document, location, URL, URLSearchParams, StoreTimePicker,
+	const window = {StoreTimePicker};
+	document.createElement = () => ({src: '', addEventListener(name, callback) { this[name] = callback; }});
+	document.head = {append(scriptElement) {
+		if (scriptElement.src.includes('store-time-picker.js')) window.StoreTimePicker = StoreTimePicker;
+		scriptElement.onload();
+	}};
+	vm.runInNewContext(script, {document, window, location, URL, URLSearchParams,
 		setTimeout(callback) { timer.callback = callback; return timer; },
 		clearTimeout() { timer.cleared = true; },
 	});
@@ -69,6 +77,18 @@ async function main() {
 	assert.equal(target.searchParams.get('bookingResult'), 'created');
 	assert.equal(target.searchParams.get('time'), '10:30');
 	assert.equal(now.element('#payment-action').attrs['aria-disabled'], 'false');
+
+	const preselected = setup('?city=shanghai&store=测试门店&storeId=sh-yangpu&date=2026-11-05&time=14%3A00');
+	assert.equal(preselected.modes.find(input => input.value === 'now').checked, true);
+	assert.equal(preselected.element('#booking-selection').textContent, '测试门店 · 2026-11-05 14:00');
+	assert.equal(new URL(preselected.element('#payment-action').href).searchParams.get('storeId'), 'sh-yangpu');
+	const explicitLater = setup('?bookingMode=later&store=测试门店&date=2026-11-05&time=14%3A00');
+	assert.equal(explicitLater.modes.find(input => input.value === 'later').checked, true);
+	assert.equal(new URL(explicitLater.element('#payment-action').href).searchParams.has('time'), false);
+	assert.ok(html.indexOf('class="booking-options"') < html.indexOf('class="service"'));
+	assert.ok(html.indexOf('class="service"') < html.indexOf('class="section booking-section"'));
+	assert.ok(html.indexOf('class="section booking-section"') < html.indexOf('class="related-products"'));
+	assert.doesNotMatch(html, /class="booking-title"/);
 
 	later.payments[0].checked = true;
 	later.payments[1].checked = false;

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="运动装备 AI 维修咨询对话演示">
+<title>04 · AI 维修咨询 · Service as Offer</title>
+<style>
+:root{color-scheme:light;--ink:#13151a;--muted:#656c77;--blue:#3643ba;--border:#e2e5eb;--bg:#f4f5f8;--light-blue:#e9ecff}
+*{box-sizing:border-box}html{min-width:320px}body{margin:0;background:#edeef3;color:var(--ink);font-family:"Decathlon Text","Source Han Sans CN",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.5}button,textarea{font:inherit}button{cursor:pointer}button,a{touch-action:manipulation}button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid #5965db;outline-offset:3px}[hidden]{display:none!important}
+.presentation{display:grid;grid-template-columns:375px minmax(260px,330px);justify-content:center;align-items:start;gap:52px;max-width:1080px;margin:auto;padding:28px 24px}.phone{display:flex;flex-direction:column;width:375px;height:min(812px,calc(100vh - 56px));min-height:650px;overflow:hidden;background:var(--bg);box-shadow:0 20px 64px #10102424}.statusbar{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#fff;font-size:14px;font-weight:650}.status-icons{font-size:11px;letter-spacing:2px}.nav{height:52px;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:0 16px;background:#fff;border-bottom:1px solid var(--border);flex:none}.back{display:flex;align-items:center;min-height:44px;color:inherit;text-decoration:none;font-size:27px}.nav-title{text-align:center;font-size:16px;font-weight:700}.nav-more{text-align:right;font-size:20px;letter-spacing:2px}
+.chat{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:22px 16px 24px;scrollbar-width:thin}.intro-time{margin:0 0 17px;color:#7a8089;text-align:center;font-size:11px}.message{display:flex;align-items:flex-start;gap:9px;margin-bottom:18px}.message.user{justify-content:flex-end}.avatar{display:grid;place-items:center;flex:none;width:32px;height:32px;background:var(--blue);border-radius:11px;color:#fff}.avatar svg{width:18px;height:18px;fill:currentColor}.message-content{min-width:0;max-width:calc(100% - 41px)}.speaker{margin:1px 0 6px;color:#676d78;font-size:11px}.bubble{padding:13px 15px;border-radius:4px 16px 16px 16px;background:#fff;font-size:14px;line-height:1.65;overflow-wrap:anywhere}.bubble p{margin:0}.bubble p+p{margin-top:9px}.user .bubble{border-radius:16px 4px 16px 16px;background:var(--blue);color:#fff;white-space:pre-wrap}.welcome{font-size:15px;font-weight:700}.message-image-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.message-image-list img{width:78px;height:78px;object-fit:cover;border-radius:6px;background:#e8eaf0}.bubble .message-image-list:last-child{margin-bottom:0}.bubble .caution{margin-top:12px;padding:9px 10px;border-left:3px solid #dc8b19;background:#fff6e8;color:#71501c;font-size:12px}.message-note{margin-top:9px;color:#666e79;font-size:11px;line-height:1.6}.quick-prompts{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 0}.quick{min-height:36px;padding:6px 10px;border:1px solid #d5daef;border-radius:18px;background:#fff;color:#3543a3;font-size:12px}.service-heading{margin:14px 0 8px;font-size:13px;font-weight:700}.service{padding:12px;margin-top:8px;border:1px solid var(--border);border-radius:9px;background:#fff}.service-tag{display:inline-block;margin-bottom:5px;color:#246540;font-size:11px;font-weight:700}.service h3{margin:0;font-size:14px}.service p{margin:5px 0 0;color:#626974;font-size:12px;line-height:1.5}.service-bottom{display:flex;align-items:end;justify-content:space-between;gap:8px;margin-top:12px}.price{font-size:17px;font-weight:750;line-height:1}.price-note{display:block;margin-top:5px;color:#747b85;font-size:10px}.service-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 12px;border:1px solid var(--blue);border-radius:4px;color:var(--blue);font-size:12px;font-weight:700;text-decoration:none}.service-link.primary{background:var(--blue);color:#fff}.typing{display:flex;align-items:center;gap:5px;min-height:43px}.typing span{width:6px;height:6px;border-radius:50%;background:#a2a9bf}.typing span:nth-child(2){background:#6e79bb}.typing span:nth-child(3){background:#3643ba}
+.composer-wrap{flex:none;padding:10px 12px max(14px,env(safe-area-inset-bottom));border-top:1px solid var(--border);background:#fff}.draft-images{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.draft-item{position:relative;width:64px;height:64px}.draft-item img{width:100%;height:100%;object-fit:cover;border-radius:5px}.remove{position:absolute;right:0;top:0;width:28px;height:28px;padding:0;border:0;border-radius:0 5px 0 5px;background:#101010bd;color:white;font-size:20px;line-height:1}.composer{border:1px solid #cfd3dd;border-radius:12px;background:#f8f9fb;overflow:hidden}.composer:focus-within{border-color:#6570cd}.composer textarea{display:block;width:100%;min-height:48px;max-height:120px;padding:13px 13px 4px;border:0;outline:0;resize:none;background:transparent;color:var(--ink);font-size:16px;line-height:1.45}.composer textarea::placeholder{color:#858c98}.composer-actions{display:flex;align-items:center;gap:4px;padding:2px 6px 6px}.icon-button{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:8px;background:transparent;color:#4f5868}.icon-button:active,.icon-button.active{background:#e8eaff;color:var(--blue)}.icon-button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.send{margin-left:auto;background:var(--blue);color:white}.send:active{background:#27339f}.send:disabled{background:#d9dce4;color:#7b818d;cursor:not-allowed}.file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.composer-hint{min-height:17px;margin:7px 3px 0;color:#737b86;font-size:10px;line-height:1.5}.composer-hint.error{color:#a52a31}.annotation{padding-top:56px}.annotation-kicker{color:var(--blue);font-size:12px;font-weight:700}.annotation h2{margin:8px 0 12px;font-size:24px}.annotation p,.annotation li{color:#60656d;font-size:13px;line-height:1.7}.annotation h3{margin:24px 0 8px;font-size:14px}.annotation ul{padding-left:18px}.annotation a{color:var(--blue)}
+/* A workshop-inspired, quiet visual language keeps the conversation in focus. */
+:root{--ink:#101010;--muted:#616161;--border:#e1e0df;--bg:#f8f8f8;--light-blue:#f0f1ff}
+.phone{background:var(--bg)}
+.statusbar{background:#fff}
+.nav{border-color:#ededed}
+.nav-title{font-size:16px;letter-spacing:.01em}
+.nav-more{color:#333;letter-spacing:1px}
+.chat{padding:16px 16px 24px;background:#f8f8f8}
+.intro-time{margin:0 0 14px;text-align:left;color:#616161;font-size:12px;line-height:18px}
+.consult-intro{position:relative;overflow:hidden;min-height:150px;margin-bottom:24px;padding:20px;background:#f0f1ff}
+.consult-intro-copy{position:relative;z-index:1;max-width:225px}
+.consult-intro-label{display:flex;align-items:center;gap:6px;margin:0 0 11px;color:#3643ba;font-size:12px;font-weight:700;line-height:18px}
+.consult-intro-label svg{width:15px;height:15px;fill:currentColor}
+.consult-intro h1{margin:0;color:#101010;font-size:20px;font-weight:750;line-height:28px;letter-spacing:-.3px}
+.consult-intro p{margin:8px 0 0;color:#555c71;font-size:12px;line-height:18px}
+.consult-illustration{position:absolute;right:-18px;bottom:-38px;width:152px;height:152px;color:#c5cbf1;pointer-events:none}
+.message{gap:10px;margin-bottom:20px}
+.avatar{width:32px;height:32px;border-radius:50%;background:#3643ba}
+.message-content{max-width:calc(100% - 42px)}
+.speaker{margin:0 0 8px;color:#616161;font-size:12px;line-height:18px;font-weight:600}
+.bubble{padding:14px 16px;border:1px solid #ededed;border-radius:0;background:#fff;color:#222;font-size:14px;line-height:22px}
+.bubble p+p{margin-top:8px}
+.welcome{font-size:14px;font-weight:700}
+.user .bubble{border:0;border-radius:0;background:#3643ba;color:#fff}
+.quick-prompts{gap:8px;margin-top:12px}
+.quick{min-height:40px;padding:8px 10px;border:1px solid #e1e0df;border-radius:0;background:#fff;color:#3643ba;font-size:12px;line-height:18px}
+.quick:active{background:#f0f1ff}
+.message-note{margin:10px 0 0;color:#616161;font-size:12px;line-height:18px}
+.message-image-list img,.draft-item img{border-radius:0}
+.bubble .caution{border-color:#db6900;background:#fff7e8;color:#70470f}
+.service-heading{display:flex;align-items:center;gap:8px;margin:18px 0 10px;font-size:14px;line-height:20px}
+.service-heading:before{content:"";width:3px;height:16px;background:#3643ba}
+.service{padding:14px 12px;border-color:#e1e0df;border-radius:0}
+.service-tag{margin-bottom:8px;padding:2px 6px;background:#f0f1ff;color:#3643ba;font-size:10px;line-height:14px}
+.service h3{font-size:14px;line-height:20px}.service p{color:#616161;font-size:12px;line-height:18px}
+.service-bottom{align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid #ededed}
+.price{font-family:"Decathlon Display","Decathlon Text",sans-serif;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}.price-note{font-size:10px;line-height:14px}
+.service-link{min-height:44px;border-radius:0;font-size:12px}
+.composer-wrap{padding:12px 16px max(14px,env(safe-area-inset-bottom));border-color:#e1e0df;background:#fff}
+.draft-images:empty{display:none}
+.composer{border:1px solid #c8c8c8;border-radius:0;background:#fff}
+.composer:focus-within{border-color:#3643ba}
+.composer textarea{min-height:52px;padding:12px 12px 3px;color:#101010;font-size:16px;line-height:24px}
+.composer textarea::placeholder{color:#777}
+.composer-actions{gap:2px;padding:0 4px 4px}
+.icon-button{border-radius:0;color:#363a43}
+.icon-button svg{width:20px;height:20px}
+.send{background:#3643ba;color:#fff}.send:disabled{background:#eceef3;color:#757b86}
+.composer-hint{margin:8px 0 0;color:#616161;font-size:10px;line-height:14px}
+.remove{border-radius:0}
+/* A friendly workshop companion makes it easier to start a conversation. */
+.consult-intro{min-height:164px;margin-bottom:20px;padding:20px 16px;background:#f0f1ff}
+.consult-intro-copy{max-width:210px}
+.consult-intro-label{margin-bottom:10px}
+.consult-intro h1{font-size:20px;line-height:28px;letter-spacing:-.4px}
+.consult-intro p{max-width:185px;color:#525971;line-height:18px}
+.consult-illustration{right:-2px;bottom:-4px;width:144px;height:144px}
+.message.assistant .bubble{position:relative}
+.welcome{font-size:14px;line-height:20px}
+.prompt-label{margin:14px 0 0;color:#616161;font-size:12px;line-height:18px}
+.quick-prompts{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:8px}
+.quick{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 12px 6px 8px;text-align:left;color:#303caa;font-weight:600}
+.quick-icon{display:grid;place-items:center;flex:none;width:26px;height:26px;background:#f0f1ff;color:#3643ba}
+.quick-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.quick:hover{border-color:#a8afe8;background:#f9f9ff}
+.quick:active{background:#f0f1ff}
+.composer textarea::placeholder{color:#777}
+.composer-actions .icon-button:not(.send){background:#f5f4f5}
+.composer-actions{gap:8px}
+.composer-hint{font-size:10px}
+@media(max-width:760px){body{background:#fff}.presentation{display:block;padding:0}.phone{width:100%;height:100dvh;min-height:0;box-shadow:none}.annotation{display:none}.statusbar{padding-top:env(safe-area-inset-top);height:calc(44px + env(safe-area-inset-top))}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <script src="../figma-capture-toolbar.js" defer></script>
+</head>
+<body>
+<main class="presentation">
+  <article class="phone" aria-label="AI 维修咨询演示">
+    <div class="statusbar" aria-hidden="true"><span>9:41</span><span class="status-icons">● ▮ ▰</span></div>
+    <header class="nav"><a class="back" href="../02-service-detail.html" aria-label="返回服务详情">‹</a><span class="nav-title">AI 维修咨询</span><span class="nav-more" aria-hidden="true">···</span></header>
+    <div class="chat" id="chat" role="log" aria-label="咨询对话" aria-live="polite" aria-relevant="additions">
+      <section class="consult-intro" aria-label="装备服务咨询">
+        <div class="consult-intro-copy"><div class="consult-intro-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 14.6 9.4 22.5 12l-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6L12 1.5Z"/></svg>你的装备搭档</div><h1>装备闹脾气了？<br>说来听听。</h1><p>不用懂维修，说说哪里不对劲就好。</p></div>
+        <svg class="consult-illustration" viewBox="0 0 144 144" fill="none" aria-hidden="true"><circle cx="94" cy="104" r="34" fill="#fff" stroke="#a8afe8" stroke-width="2"/><circle cx="94" cy="104" r="25" stroke="#d5daf6" stroke-width="1.5"/><circle cx="94" cy="104" r="4" fill="#a8afe8"/><path d="M94 70v30m0 8v30m-34-34h30m8 0h30M70 80l21 21m6 6 21 21m0-48-21 21m-6 6-21 21" stroke="#d5daf6" stroke-width="1.5"/><path d="M36 46h54v43H36z" fill="#3643ba"/><path d="M31 51h5v15h-5zm59 0h5v15h-5z" fill="#3643ba"/><path d="M48 59h4m19 0h4" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M55 71c4 4 11 4 15 0" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M63 46v-9" stroke="#3643ba" stroke-width="2"/><circle cx="63" cy="34" r="3" fill="#3643ba"/><path d="M48 89v11m30-11v8M40 100h16m16-3h12" stroke="#3643ba" stroke-width="3" stroke-linecap="round"/><path d="M103 35h15m-7.5-7.5v15" stroke="#3643ba" stroke-width="2"/><path d="M21 73h7m-3.5-3.5v7" stroke="#9ca5e5" stroke-width="2"/></svg>
+      </section>
+      <div class="message assistant"><div class="avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1.5 14.6 9.4 22.5 12l-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6L12 1.5Z"/></svg></div><div class="message-content"><div class="speaker">AI 服务助手</div><div class="bubble"><p class="welcome">你好！我是你的装备搭档。</p><p>有异响、手感不对，还是不知道该选什么服务？告诉我，我陪你一起找找方向。</p></div><p class="prompt-label">不知道怎么说？点一个试试：</p><div class="quick-prompts" aria-label="试试这样提问"><button type="button" class="quick" data-example="自行车骑行时后轮有异响，刹车感觉有点软"><span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="m5 17 5-9 4 9H5l7-6 7 6M9 8h4"/></svg></span>骑车时有异响，怎么回事？</button><button type="button" class="quick" data-example="羽毛球拍的线断了，想重新穿线"><span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="10" cy="9" rx="5" ry="6" transform="rotate(-35 10 9)"/><path d="m13 13 6 6m-2-2 2-2M7 6l6 6m-7-2 5-4"/></svg></span>球拍线断了，可以修吗？</button><button type="button" class="quick" data-example="滑雪板板底发白，滑起来不顺畅"><span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 18 16 4c1.5-2 4 0 3 2L8 20c-1.5 2-4 0-3-2ZM9 13l4 3"/></svg></span>雪板不顺滑，要做保养吗？</button></div><p class="message-note">点击示例可编辑后发送。演示回复为本地模拟，照片不会上传或被识别。</p></div></div>
+    </div>
+    <div class="composer-wrap">
+      <div class="draft-images" id="draft-images" aria-label="待发送照片"></div>
+      <form class="composer" id="composer">
+        <textarea id="message" rows="1" maxlength="500" aria-label="输入装备问题" placeholder="说说哪里不对劲…"></textarea>
+        <div class="composer-actions">
+          <input class="file-input" id="photos" type="file" accept="image/*" multiple aria-label="拍照或上传照片">
+          <button type="button" class="icon-button" id="photo-button" aria-label="拍照或上传照片" title="拍照或上传照片"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l1.5-2h7L17 7h3v12H4z"/><circle cx="12" cy="13" r="3"/><path d="M19 3v4M17 5h4"/></svg></button>
+          <button type="button" class="icon-button" id="voice-button" aria-label="语音输入" aria-pressed="false" title="语音输入"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6"/></svg></button>
+          <button type="submit" class="icon-button send" id="send" aria-label="发送消息" title="发送消息" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+        </div>
+      </form>
+      <p class="composer-hint" id="hint" role="status">照片仅本地预览 · 结果仅供参考</p>
+    </div>
+  </article>
+  <aside class="annotation"><p class="annotation-kicker">04 · CONVERSATION DEMO</p><h2>AI 维修咨询</h2><p>通过对话描述装备问题，可组合文字、语音转文字和照片一起发送，查看模拟分析和服务建议。</p><h3>演示说明</h3><ul><li>支持多轮对话；每次最多添加 3 张照片。</li><li>语音转文字依赖浏览器支持和麦克风授权。</li><li>回复基于本地规则，并非真实 AI；照片不上传、不识别。</li><li>服务卡片可进入现有购买流程。</li></ul><p><a href="../04-repair-request.html">查看原版维修需求页</a></p></aside>
+</main>
+<script>
+(() => {
+  const $ = selector => document.querySelector(selector);
+  const chat = $('#chat'), form = $('#composer'), text = $('#message'), photos = $('#photos'), draft = $('#draft-images'), send = $('#send'), hint = $('#hint'), voice = $('#voice-button');
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let images = [], busy = false, recognition = null, listening = false, speechBase = '', previousCategory = '';
+  const avatar = '<div class="avatar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1.5 14.6 9.4 22.5 12l-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6L12 1.5Z"/></svg></div>';
+  const catalog = {
+    inspection:{category:'bike',name:'安全检查',description:'检查主要部件、紧固件并润滑链条',price:'69.90',reason:'先检查关键部件，了解装备当前状态。'},
+    basic:{category:'bike',name:'标准保养',description:'安全检查基础上，增加部件调节与线管润滑',price:'199.90',reason:'适合需要日常检查和基础调节的自行车。'},
+    full:{category:'bike',name:'全面保养',description:'标准保养基础上，增加轮组矫正与轴承养护',price:'299.90',reason:'适合需要进一步检查轮组的自行车。'},
+    stringing:{category:'badminton',name:'48 小时取 · 自带球拍球线',description:'非迪卡侬球拍 + 非迪卡侬球线',price:'40.00',reason:'适合自带球拍和球线、需要重新穿线的情况。'},
+    express:{category:'badminton',name:'2 小时快速穿线',description:'不区分球拍及球线的购买渠道',price:'60.00',reason:'需要更快取拍时，可以了解快速穿线服务。'},
+    wax:{category:'ski',name:'手工打蜡（单层）',description:'检查板底与板刃，完成打蜡及抛光',price:'149.90',reason:'适合了解板底养护及上雪前打蜡服务。'},
+    snowboard:{category:'ski',name:'单板手工保养',description:'单板手工磨刃 + 手工打蜡',price:'199.90',reason:'单板需要板刃和板底一起养护时可参考。'},
+    skis:{category:'ski',name:'双板手工保养',description:'双板手工磨刃 + 手工打蜡',price:'249.90',reason:'双板需要板刃和板底一起养护时可参考。'}
+  };
+  function setHint(message, error = false) { hint.textContent = message; hint.classList.toggle('error', error); }
+  function updateSend() { send.disabled = busy || (!text.value.trim() && !images.length); }
+  function scrollDown() { chat.scrollTo({top:chat.scrollHeight,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}); }
+  function resizeText() { text.style.height = 'auto'; text.style.height = Math.min(text.scrollHeight,120)+'px'; updateSend(); }
+  function renderDraft() {
+    draft.replaceChildren();
+    images.forEach((image,index) => {
+      const item = document.createElement('div'); item.className='draft-item';
+      const img = document.createElement('img'); img.src=image.url; img.alt=`待发送照片 ${index+1}`;
+      const remove = document.createElement('button'); remove.type='button'; remove.className='remove'; remove.textContent='×'; remove.setAttribute('aria-label',`移除待发送照片 ${index+1}`);
+      remove.addEventListener('click',() => { URL.revokeObjectURL(image.url); images.splice(index,1); renderDraft(); setHint('照片仅本地预览 · 结果仅供参考'); });
+      item.append(img,remove); draft.append(item);
+    });
+    updateSend();
+  }
+  $('#photo-button').addEventListener('click',()=>photos.click());
+  photos.addEventListener('change',()=>{
+    const files=Array.from(photos.files||[]), valid=files.filter(file=>file.type.startsWith('image/')), available=3-images.length;
+    valid.slice(0,available).forEach(file=>images.push({url:URL.createObjectURL(file)}));
+    setHint(valid.length!==files.length?'请选择图片文件。':valid.length>available?'每次最多发送 3 张照片。':'照片仅本地预览 · 结果仅供参考',valid.length!==files.length||valid.length>available);
+    photos.value=''; renderDraft();
+  });
+  text.addEventListener('input',resizeText);
+  text.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();if(!send.disabled)form.requestSubmit();}});
+  document.querySelectorAll('[data-example]').forEach(button=>button.addEventListener('click',()=>{const example=button.dataset.example;text.value=text.value.trim()?`${text.value.trim()}\n${example}`:example;text.value=text.value.slice(0,text.maxLength);resizeText();text.focus();}));
+  function voiceState(active){listening=active;voice.classList.toggle('active',active);voice.setAttribute('aria-pressed',String(active));voice.setAttribute('aria-label',active?'停止语音输入':'语音输入');voice.title=active?'停止语音输入':'语音输入';}
+  voice.addEventListener('click',()=>{
+    if(!SpeechRecognition){setHint('当前浏览器不支持语音转文字，请输入文字或上传照片。',true);return;}
+    if(listening){recognition.stop();return;}
+    recognition=new SpeechRecognition();recognition.lang='zh-CN';recognition.interimResults=true;recognition.continuous=false;speechBase=text.value.trim();
+    recognition.onstart=()=>{voiceState(true);setHint('正在听，请说出装备问题；再次点击麦克风可结束。');};
+    recognition.onresult=event=>{let transcript='';for(let i=0;i<event.results.length;i++)transcript+=event.results[i][0].transcript;text.value=[speechBase,transcript].filter(Boolean).join(' ');resizeText();};
+    recognition.onerror=event=>{voiceState(false);const message=event.error==='not-allowed'||event.error==='service-not-allowed'?'无法使用麦克风，请检查浏览器权限，或直接输入文字。':event.error==='no-speech'?'没有听到语音，请重试或直接输入文字。':'语音识别暂不可用，请重试或直接输入文字。';setHint(message,true);};
+    recognition.onend=()=>{if(listening){voiceState(false);setHint('语音已转为文字，可编辑后与照片一起发送。');}};
+    try{recognition.start();}catch{voiceState(false);setHint('语音识别无法启动，请直接输入文字。',true);}
+  });
+  function detectCategory(value){
+    if(/羽毛球|球拍|拍线|球线|穿线/.test(value))return 'badminton';
+    if(/雪板|滑雪|单板|双板|板底|板刃/.test(value))return 'ski';
+    if(/自行车|单车|骑行|骑车|车轮|轮胎|刹车|链条|变速/.test(value))return 'bike';
+    return previousCategory;
+  }
+  function recommend(category,value,hadImages){
+    if(!value) return {finding:'照片已收到，但这个演示不会识别图片。可以再告诉我这是什么装备、哪里出了问题，我会根据文字给出参考建议。',items:[]};
+    if(!category) return {finding:'能再告诉我这是什么装备吗？比如自行车、羽毛球拍或滑雪板。知道装备类型后，我可以给你展示对应的示例服务。',items:[]};
+    let finding='',items=[],safety='';
+    if(category==='bike'){
+      const brake=/刹车|制动|刹不住|刹不动/.test(value),wheel=/轮|胎|异响|响声|噪音/.test(value),maintenance=/链条|变速|保养|生锈|润滑|卡顿/.test(value);
+      finding=brake&&wheel?'刹车手感变化和骑行异响可能涉及刹车、轮组或其他部件，具体原因需要到店检查，暂不能仅凭描述判断。':brake?'刹车手感变化可能与刹车部件或调节状态有关，建议先检查刹车系统，具体原因以技师检查为准。':wheel?'异响或轮组问题可能来自多个部件，建议先检查轮组、紧固件及相关部件，具体原因以技师检查为准。':maintenance?'链条、变速或骑行状态的变化可能需要清洁、润滑或调节，具体情况需要门店检查后确认。':'仅凭这段描述无法确定具体原因，建议先进行安全检查，再由门店确认是否需要进一步维修或保养。';
+      safety=brake?'如果刹车明显失灵或影响安全，请暂停骑行，并尽快联系门店检查。':'';items=wheel?['inspection','full','basic']:['inspection','basic'];
+    } else if(category==='badminton'){
+      finding=/断|松|穿线|拍线|球线/.test(value)?'球线断裂或松弛可能需要重新穿线；球拍和球线状态及适用方案请由门店确认。':'仅凭描述无法确定球拍问题；若需要穿线，可先了解以下服务，球拍状态请由门店确认。';items=['stringing','express'];
+    } else {
+      finding=/白|干|蜡|滑|板底/.test(value)?'板底发白或滑行不顺可能与板底状态有关，可考虑到店检查和养护；具体原因需由门店确认。':'仅凭描述无法确定雪板问题；可先了解板底养护服务，具体项目请由门店检查后确认。';items=/双板/.test(value)?['wax','skis']:/单板/.test(value)?['wax','snowboard']:['wax','snowboard','skis'];
+    }
+    if(hadImages)finding+=' 照片仅供本地预览，未参与分析。';
+    return {finding,items,safety};
+  }
+  function makeUserMessage(value,attached){
+    const row=document.createElement('div');row.className='message user';const content=document.createElement('div');content.className='message-content';const bubble=document.createElement('div');bubble.className='bubble';
+    if(attached.length){const list=document.createElement('div');list.className='message-image-list';attached.forEach((image,index)=>{const img=document.createElement('img');img.src=image.url;img.alt=`发送的照片 ${index+1}`;list.append(img);});bubble.append(list);}
+    if(value){const p=document.createElement('p');p.textContent=value;bubble.append(p);}content.append(bubble);row.append(content);chat.append(row);
+  }
+  function makeAssistantMessage(response){
+    const row=document.createElement('div');row.className='message assistant';row.innerHTML=avatar;const content=document.createElement('div');content.className='message-content';const speaker=document.createElement('div');speaker.className='speaker';speaker.textContent='AI 服务助手';const bubble=document.createElement('div');bubble.className='bubble';const finding=document.createElement('p');finding.textContent=response.finding;bubble.append(finding);
+    if(response.safety){const safety=document.createElement('p');safety.className='caution';safety.textContent=response.safety;bubble.append(safety);}
+    content.append(speaker,bubble);
+    if(response.items.length){const heading=document.createElement('p');heading.className='service-heading';heading.textContent='你可以了解这些服务';content.append(heading);
+      response.items.forEach((id,index)=>{const service=catalog[id],card=document.createElement('article');card.className='service';if(index===0){const tag=document.createElement('span');tag.className='service-tag';tag.textContent='建议先了解';card.append(tag);}const title=document.createElement('h3');title.textContent=service.name;const reason=document.createElement('p');reason.textContent=service.reason;const bottom=document.createElement('div');bottom.className='service-bottom';const priceBox=document.createElement('div');const price=document.createElement('div');price.className='price';price.textContent=`¥${service.price}`;const note=document.createElement('span');note.className='price-note';note.textContent='示例价格';priceBox.append(price,note);const link=document.createElement('a');link.className=`service-link${index===0?' primary':''}`;link.textContent='查看并购买';link.setAttribute('aria-label',`查看并购买${service.name}`);const params=new URLSearchParams({category:service.category,name:service.name,description:service.description,price:service.price,context:'repair'});link.href=`02-service-detail.html?${params}`;bottom.append(priceBox,link);card.append(title,reason,bottom);content.append(card);});
+      const note=document.createElement('p');note.className='message-note';note.textContent='本地模拟结果，并非真实 AI 诊断。实际问题、服务范围与最终费用以门店检查和确认为准。';content.append(note);
+    }
+    row.append(content);chat.append(row);scrollDown();
+  }
+  form.addEventListener('submit',event=>{
+    event.preventDefault();const value=text.value.trim();if(busy||(!value&&!images.length))return;
+    if(listening){recognition.onresult=null;recognition.onerror=null;recognition.onend=null;recognition.abort();voiceState(false);}const attached=images;images=[];makeUserMessage(value,attached);text.value='';resizeText();renderDraft();busy=true;updateSend();setHint('照片仅本地预览 · 结果仅供参考');
+    const category=detectCategory(value);if(category)previousCategory=category;
+    const loading=document.createElement('div');loading.className='message assistant';loading.innerHTML=avatar+'<div class="message-content"><div class="speaker">AI 服务助手</div><div class="bubble typing" aria-label="正在整理建议"><span></span><span></span><span></span></div></div>';chat.append(loading);scrollDown();
+    setTimeout(()=>{loading.remove();makeAssistantMessage(recommend(category,value,attached.length>0));busy=false;updateSend();},500);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+.service-detail .app{height:calc(100% - 44px);font-family:"Decathlon Text","Source Han Sans CN","PingFang SC","Microsoft YaHei",sans-serif}
+.service-detail .app .body-scroll{padding:0 0 24px;scroll-behavior:smooth;overscroll-behavior:contain}
+.service-detail .app .nav{grid-template-columns:40px minmax(0,1fr) 87px;padding:0 8px 0 12px}
+.service-detail .app .nav>button:first-child{width:44px;height:44px;text-align:left}
+.service-detail .app .hero{margin:0;border:0;background:#fff}
+.service-detail .service-cover{position:relative;height:240px;overflow:hidden;background:var(--soft)}
+.service-detail .service-cover img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 56%}
+.service-detail .service-cover.is-illustration img{object-fit:contain}
+.service-detail .service-cover span{position:absolute;right:12px;bottom:10px;padding:3px 7px;background:#ffffffed;color:var(--mid);font-size:10px;line-height:16px}
+.service-detail .app .hero-copy{padding:12px 16px }
+.service-detail .app .hero-copy h1{font-size:20px;line-height:28px;margin:0 0 8px}
+.service-detail .app .service-summary{font-size:14px;line-height:22px;color:var(--mid)}
+.service-detail .service-attributes{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;color:var(--mid);font-size:12px;line-height:20px}
+.service-detail .service-attributes span{display:inline-flex;align-items:center;gap:5px}
+.service-detail .service-attributes img{width:15px;height:15px}
+.service-detail .app :is(.service-switcher,.store-selection,.process-section,.maintenance-guide,.arrival-notes,.service-help){margin:0;padding:20px;border:0;border-top:8px solid var(--background-alternative);background:#fff}
+.service-detail .app :is(.service-switcher h2,.store-selection h2,.section-title,.maintenance-heading){margin:0;font-size:16px;line-height:24px;font-weight:700}
+.service-detail .app .service-switcher-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.service-detail .service-switcher-head>span{color:var(--mid);font-size:12px;white-space:nowrap}
+.service-detail .app .service-options{gap:10px}
+.service-detail .app .service-option{position:relative;min-height:104px;gap:6px;padding:12px;border:1px solid var(--line);box-shadow:none;background:#fff}
+.service-detail .app .service-option[aria-pressed="true"]{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand);background:var(--container-commercial-light)}
+.service-detail .app .service-option[aria-pressed="true"]:after{content:"";position:absolute;right:0;bottom:0;width:18px;height:18px;background:var(--brand) url("assets/figma/selection-check.svg") center/18px 18px no-repeat}
+.service-detail .app .service-option-name{font-size:14px;line-height:20px;font-weight:700}
+.service-detail .app .service-option-price{font-size:20px;line-height:24px;color:var(--ink);font-variant-numeric:tabular-nums}
+.service-detail .app .service-option[aria-pressed="true"] .service-option-price{color:var(--brand)}
+.service-detail .app .service-option-blurb{font-size:12px;line-height:18px;padding-right:4px}
+.service-detail .app .compare-toggle{min-height:44px;justify-content:space-between;padding:0;margin-top:8px;font-size:13px}
+.service-detail .app .compare-chevron{transform:none}
+.service-detail .app .store-selection{gap:12px}
+.service-detail .app .store-summary-more{min-height:32px;font-size:13px}
+.service-detail .app .store-summary-card{display:block;min-height:0}
+.service-detail .app .store-summary-title{display:block;padding-bottom:4px}
+.service-detail .app .store-summary-name{display:block;white-space:normal;font-size:14px;line-height:22px}
+.service-detail .app .store-summary-address{white-space:normal;overflow:visible;font-size:12px;line-height:20px}
+.service-detail .store-summary-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
+.service-detail .store-summary-bottom>span{color:var(--mid);font-size:12px;line-height:20px}
+.service-detail .app .store-summary-card .store-contact-button{min-height:36px;padding:0 14px;font-size:13px}
+.service-detail .store-summary-surface{padding:10px 10px;border:1px solid #ebebef;background:#f8f8fb}
+.service-detail .store-summary-surface .store-summary-title{margin:0 0 2px}
+.service-detail .store-summary-surface .store-summary-address{margin:0;color:var(--mid);font-size:12px;line-height:16px}
+.service-detail .store-date-rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(58px,1fr);gap:6px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
+.service-detail .store-date-rail::-webkit-scrollbar{display:none}
+.service-detail .store-date-card{min-height:54px;padding:5px 4px;border:1px solid #dddfe8;background:#fff;text-align:center;color:#3a3a44;font-size:10px;line-height:13px}
+.service-detail .store-date-card strong{display:block;margin-top:1px;font-size:17px;line-height:20px;font-weight:700;color:#181826}
+.service-detail .store-date-card small{display:block;margin-top:1px;color:#7c7d89;font-size:10px;line-height:13px}
+.service-detail .store-date-card.is-selected{border-color:var(--brand);background:#eef0ff;color:var(--brand)}
+.service-detail .store-date-card.is-selected small,.service-detail .store-date-card.is-selected strong{color:var(--brand)}
+.service-detail .store-date-card:disabled{color:var(--muted);background:var(--soft);cursor:not-allowed}
+.service-detail .store-date-card:disabled strong{color:var(--muted)}
+.service-detail .store-summary-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:8px}
+.service-detail .store-summary-foot-text{margin:0;color:var(--mid);font-size:11px;line-height:16px}
+.service-detail .app .store-summary-heading{display:none}
+.service-detail .store-summary-surface{display:grid;gap:12px;padding:0;border:0;border-radius:0!important;background:transparent}
+.service-detail .store-summary-copy{gap:4px}
+.service-detail .store-summary-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0!important}
+.service-detail .app .store-summary-name{font-size:16px;line-height:22px;font-weight:700}
+.service-detail .store-summary-distance{flex:none;color:var(--brand);font-size:12px;line-height:18px;font-weight:650}
+.service-detail .app .store-summary-address{font-size:12px;line-height:18px}
+.service-detail .store-summary-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--mid);font-size:11px;line-height:16px}
+.service-detail .store-summary-meta button{padding:0;border:0;background:transparent;color:var(--brand);font-size:12px;white-space:nowrap}
+.service-detail .store-date-section{padding-top:10px;border-top:1px solid var(--line)}
+.service-detail .store-date-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:13px;line-height:18px;font-weight:650}
+.service-detail .store-date-heading span{color:var(--mid);font-size:11px;font-weight:400}
+.service-detail .store-date-rail{grid-auto-columns:minmax(0,1fr);gap:6px;margin:0;overflow:hidden}
+.service-detail .store-date-card{min-height:62px;padding:6px 3px;border:0;border-left:1px solid var(--line);border-radius:0!important;background:transparent;color:#73737a;font-size:10px;line-height:14px}
+.service-detail .store-date-card strong{margin-top:0;font-size:15px;line-height:20px}
+.service-detail .store-date-card small{margin-top:2px;color:#777;font-size:9px;line-height:12px;white-space:nowrap}
+.service-detail .store-date-card.is-selected{background:transparent;color:#73737a}
+.service-detail .store-date-card.is-selected strong{color:var(--ink)}
+.service-detail .store-date-card.is-selected small{color:var(--brand)}
+.service-detail .store-date-more{min-height:62px;padding:5px 2px;border:0;border-left:1px solid var(--line);border-radius:0!important;background:transparent;color:#666;font-size:11px;line-height:15px}
+.service-detail .store-summary-foot{align-items:center;margin:0}
+.service-detail .store-summary-foot-text{font-size:11px;line-height:16px}
+.service-detail .store-summary-foot .store-icon-actions{gap:0}
+.service-detail .store-date-card:focus-visible,.service-detail .store-date-more:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.service-detail .app .store-summary-surface{display:grid;gap:12px}
+.service-detail .app .store-summary-title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.service-detail .store-summary-copy{gap:6px}
+.service-detail .store-summary-meta{min-height:44px;padding-bottom:8px;border-bottom:1px solid var(--line);font-size:12px;line-height:20px}
+.service-detail .store-summary-meta button{min-height:44px;margin:-12px 0;padding:0 0 0 8px;font-size:12px;font-weight:650}
+.service-detail .app .store-summary-address{margin:0;color:var(--mid);font-size:12px;line-height:20px}
+/* 地址+营业时间合并为大栏位；门店操作按钮（导航/联系）居右、居下对齐 */
+.service-detail .store-summary-hours-row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:2px}
+.service-detail .store-summary-hours-row .store-summary-copy{flex:1;min-width:0;display:grid;gap:2px}
+.service-detail .store-summary-hours-row .store-summary-hours{min-width:0;margin:0}
+.service-detail .store-summary-hours-row .store-icon-actions{flex:none;align-self:flex-end;margin:0 -8px 0 0;gap:0}
+.service-detail .store-summary-hours-row .store-icon-button{width:44px;min-width:44px;height:44px;min-height:44px}
+.service-detail .store-date-section{padding-top:12px}
+.service-detail .store-date-heading{font-size:14px;line-height:20px}
+.service-detail .store-date-heading span{font-size:12px}
+.service-detail .store-date-card:first-child{border-left:0}
+.service-detail .store-date-card small{font-size:10px}
+.service-detail .store-summary-foot{margin-top:8px}
+.service-detail .store-summary-foot-text{font-size:12px;line-height:18px}
+.service-detail .app .section-heading{margin:0 0 16px}
+.service-detail .app .section-heading .section-title{padding:0}
+.service-detail .app .section-heading .section-title:before{display:none}
+.service-detail .app .section-heading p{margin-top:6px;font-size:12px;line-height:20px;color:var(--mid)}
+.service-detail .service-content-summary{margin:12px 0 16px!important;padding:12px;background:var(--container-commercial-light);font-size:14px;line-height:22px}
+.service-detail .service-step-list{list-style:none;margin:0;padding:0;counter-reset:service-step}
+.service-detail .service-step-list li{position:relative;padding:0 0 20px 38px;counter-increment:service-step}
+.service-detail .service-step-list li:before{content:counter(service-step);position:absolute;left:0;top:0;width:24px;height:24px;background:var(--container-commercial-light);color:var(--brand);text-align:center;font-size:12px;line-height:24px;font-weight:700}
+.service-detail .service-step-list li:not(:last-child):after{content:"";position:absolute;left:11px;top:30px;bottom:6px;width:1px;background:var(--line)}
+.service-detail .service-step-list li:last-child{padding-bottom:0}
+.service-detail .service-step-list strong{font-size:14px;line-height:24px}
+.service-detail .service-step-list p{margin:4px 0 0;color:var(--mid);font-size:12px;line-height:20px}
+.service-detail .app .maintenance-guide{padding-top:8px;padding-bottom:8px}
+.service-detail .service-disclosure{border-bottom:1px solid var(--border-quiet)}
+.service-detail .service-disclosure:last-of-type{border-bottom:0}
+.service-detail .service-disclosure summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:56px;list-style:none;cursor:pointer;font-size:14px;line-height:22px;font-weight:700}
+.service-detail .service-disclosure summary::-webkit-details-marker{display:none}
+.service-detail .service-disclosure summary:after{content:"+";font-size:20px;font-weight:400;color:var(--mid)}
+.service-detail .service-disclosure[open] summary:after{content:"−"}
+.service-detail .app .maintenance-reasons{gap:16px;padding:4px 0 20px}
+.service-detail .app .maintenance-reason{padding:0;border:0}
+.service-detail .app .maintenance-icon{width:32px;height:32px;padding:7px;background:var(--container-commercial-light)}
+.service-detail .app .maintenance-card{padding:0 0 16px;border:0}
+.service-detail .app .maintenance-system-head strong{font-size:14px;line-height:22px}
+.service-detail .app .maintenance-system ul{font-size:12px;line-height:20px}
+.service-detail .app .maintenance-outcome-list{padding:0 0 16px;border:0;gap:12px}
+.service-detail .app .maintenance-outcome{font-size:13px;line-height:20px}
+.service-detail .app .maintenance-notice{padding:14px;margin:8px 0 12px;border:0;background:var(--background-alternative)}
+.service-detail .app .maintenance-notice p{font-size:12px;line-height:20px;color:var(--mid)}
+.service-detail .app .maintenance-notice-title{font-size:13px;line-height:20px;color:var(--ink)}
+.service-detail .app .arrival-notes .section-title{margin-bottom:12px}
+.service-detail .app .arrival-notes .row{font-size:13px;line-height:22px}
+.service-detail .service-help>a{display:flex;align-items:center;justify-content:space-between;min-height:24px;border:0;color:var(--brand);font-size:14px}
+.service-detail .service-help-label{display:inline-flex;align-items:center;gap:8px}
+.service-detail .service-help-icon{width:18px;height:18px;flex:none;background-color:var(--brand);-webkit-mask:url("assets/figma/maintain-repair.svg") center/contain no-repeat;mask:url("assets/figma/maintain-repair.svg") center/contain no-repeat}
+.service-detail .app .supplemental-section{margin:12px 0 0;padding:12px 0 0;border:0;border-top:1px solid var(--line)}
+.service-detail .app .supplemental-section .product-guide{margin:12px 0}
+.service-detail .app .supplemental-section .text-action{width:100%;min-height:32px}
+.service-detail .app .footer{display:flex;align-items:center;gap:16px;padding:12px 20px max(16px,var(--safe));border-top:1px solid var(--line);box-shadow:0 -4px 16px #10101006}
+.service-detail .app .footer.benefit-footer{display:grid;grid-template-columns:1fr;gap:8px}
+.service-detail .purchase-summary{flex:1;min-width:0;display:grid;gap:2px}
+.service-detail .purchase-summary small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mid);font-size:11px;line-height:18px}
+.service-detail .purchase-summary strong{color:var(--brand);font-size:24px;line-height:28px;font-variant-numeric:tabular-nums}
+.service-detail .app .footer .primary{width:160px;flex:none;min-height:48px;display:grid;place-content:center;gap:2px;font-size:15px;line-height:22px}
+.service-detail .app .footer .primary small{font-size:10px;line-height:14px;font-weight:400}
+.service-detail .app .footer .primary.benefit-purchase{width:100%;font-size:14px}
+.service-detail .app .sheet-close{width:44px;height:44px;flex:none}
+.service-detail .app .compare-sheet-backdrop{transition:opacity .2s}
+.service-detail .app .compare-sheet-note{padding:10px 12px;margin:0 20px 12px;background:var(--background-alternative);font-size:12px;line-height:18px}
+.service-detail .app .compare-sheet-hint{color:var(--mid);margin:0 20px 12px}
+.service-detail .app .compare-sheet-head{padding:0 20px 12px}
+.service-detail .app .compare-table th,.service-detail .app .compare-table td{width:140px;padding:12px}
+.service-detail .app .compare-package-name{font-size:13px;line-height:20px}
+.service-detail .app .wechat-dialog-close{min-height:44px}
+.service-detail .app .wechat-phone-unavailable{margin:12px 0 0;padding:12px;background:var(--background-alternative);font-size:12px;line-height:20px;color:var(--mid)}
+.service-detail .app :is(button,a,summary,[tabindex]):focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+/* Figma 1049:247: compact package selection and store availability. */
+.service-detail .app :is(.service-switcher,.store-selection,.process-section,.maintenance-guide,.arrival-notes,.service-help){padding-left:16px;padding-right:16px}
+.service-detail .app .service-switcher{padding-top:12px;padding-bottom:12px}
+.service-detail .app .service-options{gap:8px}
+.service-detail .app .service-option{min-height:91px;gap:4px;padding:8px 12px}
+.service-detail .app .store-selection{padding-top:12px;padding-bottom:12px}
+.service-detail .app .store-summary-surface{min-width:0;grid-template-columns:minmax(0,1fr);gap:0}
+.service-detail .store-summary-title{min-width:0}
+.service-detail .app .store-summary-name{min-width:0;overflow-wrap:anywhere}
+.service-detail .store-nearby-link,.service-detail .store-date-heading button{flex:none;min-height:32px;display:inline-flex;align-items:center;font-weight:bold;justify-content:flex-end;gap:2px;padding:0 0 0 8px;border:0;background:transparent;color:var(--brand);font-size:12px;line-height:20px;white-space:nowrap}
+.service-detail .store-nearby-link img,.service-detail .store-date-heading button img{display:block;width:16px;height:16px;flex:none}
+.service-detail .store-summary-copy{gap:0}
+/* 营业时间独立成行，宽度随内容自适配（占满卡片宽度），超出一行省略 */
+.service-detail .store-summary-hours{margin:2px 0 0;color:var(--mid);font-size:12px;line-height:20px}
+.service-detail .app .store-summary-hours{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.service-detail .store-date-section{min-width:0;margin-top:12px;padding-top:0}
+.service-detail .store-date-heading{min-height:44px;margin:0}
+.service-detail .store-date-rail{display:grid;min-width:0;width:100%;grid-auto-flow:column;grid-auto-columns:60px;gap:4px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+.service-detail .store-date-card{min-height:64px;padding:5px 3px;border:1px solid var(--line);background:#fff;font-size:11px;line-height:17px}
+.service-detail .store-date-card:first-child{border-left:1px solid var(--line)}
+.service-detail .store-date-card strong{font-size:16px;line-height:20px}
+.service-detail .store-date-card.is-selected{border-color:var(--brand);background:var(--container-commercial-light);color:var(--brand)}
+.service-detail .store-date-card.is-selected strong{color:var(--brand)}
+.service-detail .store-date-card:disabled{color:var(--muted);background:var(--soft);cursor:not-allowed}
+.service-detail .store-date-card:disabled strong{color:var(--muted)}
+.service-detail .store-summary-foot{margin-top:8px}
+@media(max-width:600px){
+ .service-detail .stage{display:block;padding:0;min-height:100dvh}
+ .service-detail .phone{width:100%;max-width:none;height:100dvh;min-height:0;box-shadow:none}
+ .service-detail .design-panel{display:none}
+ .service-detail .app .compare-sheet-backdrop{position:absolute}
+}
+@media(max-width:360px){
+ .service-detail .app :is(.hero-copy,.service-switcher,.store-selection,.process-section,.maintenance-guide,.arrival-notes,.service-help){padding-left:16px;padding-right:16px}
+ .service-detail .app .service-option{padding:10px}
+ .service-detail .app .service-option-name{font-size:13px}
+ .service-detail .app .footer{padding-left:16px;padding-right:16px;gap:10px}
+ .service-detail .app .footer .primary{width:144px}
+}
+@media(prefers-reduced-motion:reduce){
+ .service-detail .app .body-scroll{scroll-behavior:auto}
+ .service-detail .app *{transition:none!important}
+}

@@ -4,11 +4,29 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const base = path.join(__dirname, '..');
+for (const htmlFile of fs.readdirSync(base).filter(file => file.endsWith('.html'))) {
+  const html = fs.readFileSync(path.join(base, htmlFile), 'utf8');
+  const stylesheetLinks = [...html.matchAll(/<link\b[^>]*rel="stylesheet"[^>]*>/g)];
+  const pageStylesheet = stylesheetLinks.find(([link]) => new RegExp(htmlFile.replace(/\.html$/, '\\.css')).test(link));
+  assert.ok(pageStylesheet, `${htmlFile} should link its page stylesheet`);
+  assert.ok(fs.existsSync(path.join(base, htmlFile.replace(/\.html$/, '.css'))), `${htmlFile} should have a matching CSS file`);
+  if (htmlFile !== '01-service-entry.html') {
+    assert.ok(stylesheetLinks.some(([link]) => /(?:\.\.\/)?store-time-picker\.css/.test(link)), `${htmlFile} should link shared picker styles`);
+  }
+  assert.doesNotMatch(html, /<script[^>]+src="store-time-picker\.js/, `${htmlFile} should load the picker on demand`);
+}
+const pickerScriptSource = fs.readFileSync(path.join(base, 'store-time-picker.js'), 'utf8');
+assert.doesNotMatch(pickerScriptSource, /createElement\(['"]link['"]\)/, 'picker script should not inject a stylesheet');
+const pickerStylesheet = fs.readFileSync(path.join(base, 'store-time-picker.css'), 'utf8');
+assert.match(pickerStylesheet, /\.stp-overlay\s*\{/);
+const pickerStyleFiles = fs.readdirSync(base).filter(file => file.endsWith('.css'));
+for (const cssFile of pickerStyleFiles.filter(file => file !== 'store-time-picker.css')) {
+  assert.doesNotMatch(fs.readFileSync(path.join(base, cssFile), 'utf8'), /\.stp-overlay\s*\{/, `${cssFile} should not duplicate picker styles`);
+}
+assert.equal(fs.readFileSync(path.join(base, 'legacy/store-time-picker.css'), 'utf8').trim(), '@import "../store-time-picker.css";');
 const context = vm.createContext({
   URL, window: {},
   document: {
-    currentScript: {src: 'http://localhost/prototype/store-time-picker.js'},
-    createElement: () => ({}), head: {append() {}},
   },
 });
 vm.runInContext(fs.readFileSync(path.join(base, 'booking-fixtures.js'), 'utf8'), context);

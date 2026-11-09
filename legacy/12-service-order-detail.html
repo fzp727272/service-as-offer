@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Service as Offer：统一订单详情，展示预约时间、门店与到店二维码">
+  <title>订单详情 · Service as Offer</title>
+  <link rel="stylesheet" href="../10-service-order-detail.css?v=20261104-one-css">
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <script src="../figma-capture-toolbar.js" defer></script>
+  <script src="../booking-fixtures.js?v=20261103-picker" defer></script>
+  <script src="../service-journey.js?v=20261104-one-css" defer></script>
+</head>
+<body class="order-detail">
+  <main class="page-presentation">
+    <article class="page-artboard" aria-label="服务单详情评审原型">
+      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
+      <header class="page-nav"><a class="page-back" href="../my-orders.html" aria-label="返回我的订单">‹</a><span class="page-nav-title">订单详情</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <div class="order-toast" id="order-toast" role="status" aria-live="polite" hidden></div>
+      <div class="page-body">
+        <header class="page-intro">
+          <span class="page-tag blue" id="order-status-tag">待预约</span>
+          <h1 class="page-heading" id="order-status-heading">已支付，待预约</h1>
+          <p class="order-status-message" id="order-status-message" role="status" aria-live="polite" hidden></p>
+          <span class="order-status-symbol" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="16" rx="2"/>
+              <path d="M7 3v4m10-4v4M3 11h18m-9 3v4m-2-2h4"/>
+            </svg>
+          </span>
+          <p class="page-lede" id="booking-cancelled-note" hidden></p>
+        </header>
+        <section class="ticket-code" id="appointment-qr" aria-label="到店预约码" hidden>
+          <div class="ticket-qr" role="img" aria-label="到店二维码示意，不可扫码核销">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <g fill="none" stroke="currentColor" stroke-width="6">
+                <path d="M9 9h30v30H9zM81 9h30v30H81zM9 81h30v30H9z"/>
+                <path d="M51 9v18h12V9M51 39h18v18H51v18H9V51h18v12M81 51h30v18H93v18h18v24H81V93H63v18H51V87h18V69"/>
+              </g>
+              <path fill="currentColor" d="M18 18h12v12H18zM90 18h12v12H90zM18 90h12v12H18zM33 51h6v6h-6zM57 57h6v6h-6zM75 63h6v12h-6zM99 93h6v12h-6z"/>
+            </svg>
+            <span>示意码</span>
+          </div>
+          <div class="ticket-copy">
+            <!-- <strong></strong> -->
+            <p>到店请让门店工作人员扫码签到</p>
+            <!-- <small>原型示意，不可用于实际签到或核销</small> -->
+          </div>
+        </section>
+        <section class="store-queue-result" id="store-queue-result" aria-labelledby="store-queue-title" aria-live="polite" hidden>
+          <h2 id="store-queue-title">门店排队号</h2>
+          <strong class="store-queue-number" id="store-queue-number">A-023</strong>
+          <p class="store-queue-status">预计等待</p>
+          <p class="store-queue-wait" id="store-queue-wait">预计等待约 20 分钟</p>
+          <p class="store-queue-note">排队号和等待时间为原型示例，实际以门店系统为准。</p>
+        </section>
+        <section class="page-section order-store-details" id="order-store-details" aria-labelledby="order-booking-title" hidden>
+          <h2 class="page-section-title" id="order-booking-title">预约信息</h2>
+          <div class="order-store-card">
+            <p class="order-store-label">预约门店</p>
+            <div class="order-store-head">
+              <strong id="order-store-name"></strong>
+            </div>
+            <a class="order-store-address-row" id="order-store-map-link" href="https://map.qq.com/" target="_blank" rel="noopener noreferrer" aria-label="在微信地图中查看门店">
+              <p class="order-store-address"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span id="order-store-address"></span></p>
+              <span class="order-store-map-chevron" aria-hidden="true"></span>
+            </a>
+            <div class="order-store-actions">
+              <span class="order-store-hours" id="order-store-hours"></span>
+              <div class="store-icon-actions" role="group" aria-label="门店操作">
+                <a class="store-icon-button is-navigation" id="order-store-navigation-link" href="https://map.qq.com/" target="_blank" rel="noopener noreferrer" aria-label="导航到门店" title="导航到门店"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21 3-7 18-3-8-8-3L21 3Z"/></svg></a>
+                <button class="order-store-contact store-icon-button is-message" type="button" data-open-dialog="store-contact-dialog" aria-label="联系门店" title="联系门店" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 11.5a8 8 0 0 1-8 8H5l-3 3v-11a9 9 0 0 1 18 0Z"/><path d="M7 10h8M7 14h5"/></svg></button>
+              </div>
+            </div>
+            <p class="order-booking-contact"><span>预约人</span><strong id="order-booking-contact">XXX 131****7162</strong></p>
+            <div class="order-store-appointment">
+              <span>预约时间</span>
+              <strong id="order-store-appointment-time"></strong>
+            </div>
+            <div class="appointment-actions" id="cancel-appointment-action" hidden>
+              <button type="button" data-open-dialog="cancel-dialog">取消本次预约</button>
+            </div>
+          </div>
+        </section>
+        <p class="page-status" id="cancel-feedback" role="status" hidden></p>
+        <section class="page-section" id="order-service-details">
+          <h2 class="page-section-title">服务项目</h2>
+          <div class="order-detail-card">
+          <div class="page-service">
+            <div class="page-thumb" aria-label="服务封面待提供">
+              <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#616161" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8"/></g></svg>
+            </div>
+            <div class="page-service-copy"><strong>自行车标准保养套餐</strong><small>服务单 SO-2601024 · 评审示例</small></div>
+          </div>
+          <div class="page-row"><span>装备</span><strong id="order-equipment">未指定，到店时确认</strong></div>
+          <div class="page-row"><span>服务来源</span><strong id="order-source">线上购买</strong></div>
+          </div>
+        </section>
+        <section class="page-section">
+          <h2 class="page-section-title">费用与支付</h2>
+          <div class="order-detail-card">
+          <div class="page-row"><span>交易状态</span><strong id="order-transaction-status">已支付</strong></div>
+          <div class="page-row order-payment-total"><span id="order-amount-label">实付金额</span><strong id="order-amount">¥199.90</strong></div>
+          </div>
+        </section>
+        <section class="page-section" id="booking-summary">
+          <h2 class="page-section-title">预约信息</h2>
+          <div class="order-detail-card">
+          <div class="page-row"><span>预约状态</span><strong id="order-appointment-status">尚未创建</strong></div>
+          <div class="page-row"><span>门店 / 时间</span><strong id="order-appointment-location">选择后显示</strong></div>
+          </div>
+        </section>
+        <section class="page-section" id="order-fulfillment">
+          <h2 class="page-section-title">服务进程</h2>
+          <div class="order-detail-card">
+          <div class="page-timeline" id="order-timeline" aria-label="服务阶段">
+            <div class="page-timeline-item current"><strong>待预约</strong><p>选择服务门店和时间。</p></div>
+            <div class="page-timeline-item"><strong>已预约，待到店</strong><p>按预约时间前往服务门店。</p></div>
+            <div class="page-timeline-item"><strong>扫码成功，排队中</strong><p>门店扫码签到后查看排队号和预计等待时间。</p></div>
+            <div class="page-timeline-item"><strong>服务中</strong><p>门店正在处理服务项目。</p></div>
+            <div class="page-timeline-item"><strong>已完成</strong><p>查看本次服务记录。</p></div>
+          </div>
+          </div>
+        </section>
+        <section class="page-section" id="service-record" hidden>
+          <h2 class="page-section-title">服务记录</h2>
+          <div class="order-detail-card">
+          <div class="page-row"><span>服务项目</span><strong>自行车标准保养套餐</strong></div>
+          <div class="page-row"><span>服务结果</span><strong>服务已完成</strong></div>
+          <div class="page-row"><span>完成时间</span><strong>以门店服务记录为准</strong></div>
+          </div>
+        </section>
+        <section class="page-section order-information" id="order-information" aria-labelledby="order-information-title">
+          <h2 class="page-section-title" id="order-information-title">订单信息</h2>
+          <div class="order-detail-card">
+            <div class="page-row">
+              <span>订单编号</span>
+              <div class="order-number-value">
+                <strong id="order-number">SO-2601024</strong>
+                <button class="order-number-copy" id="order-number-copy" type="button">复制</button>
+              </div>
+            </div>
+            <div class="page-row"><span>下单时间</span><strong id="order-created-at">2026-10-24 10:30</strong></div>
+            <div class="page-row"><span>支付方式</span><strong id="order-payment-method">微信支付</strong></div>
+          </div>
+        </section>
+      </div>
+      <div class="page-foot">
+        <div class="page-foot-actions single-action" id="order-foot-actions">
+          <button class="page-button secondary" id="order-cancel-action" type="button" data-open-dialog="cancel-order-dialog" hidden>取消服务单</button>
+          <a class="page-button" id="order-primary-action" href="../10-service-order-detail.html?selectBooking=1">选择门店与时段</a>
+        </div>
+      </div>
+    </article>
+    <aside class="page-annotation">
+      <p class="page-annotation-kicker">UX SPEC 10 · REQ-012</p>
+      <h1>订单详情</h1>
+      <p>以门店服务凭证为视觉主线：顶部浅品牌色将当前状态、排队号与等待时间连成一个重点区域。白色内容区之间以浅灰分区，不增加卡片描边；金额使用深色强调，避免与当前进度争夺注意。排队中不显示底部操作按钮，其他状态按流程展示下一步操作。</p>
+      <p>顶部状态图标随订单状态切换，统一使用付款、日历、时钟、进度和确认等通用线性符号，不使用特定装备元素，适用于不同服务品类。</p>
+      <p>预约成功直接进入此订单。门店与时间统一归入预约信息：待到店、排队中置于服务项目上方，已完成置于服务项目下方，已取消置于服务履约下方。预约时间优先以单行展示，窄屏可换行，门店信息随后；导航与消息图标并排放置在营业时间右侧，分别打开地图与联系门店弹窗。待到店时居中展示放大的预约码，签到提示置于二维码下方；内容区统一收紧标题间距与字段行高，保留操作入口的点击区域。到店后由工作人员扫码签到，再显示排队号与预计等待时间。二维码与排队数据均为原型示例。</p>
+      <section class="arrival-flow" aria-labelledby="arrival-flow-title">
+        <h2 id="arrival-flow-title">预约到店流程</h2>
+        <ol>
+          <li><strong>完成预约</strong><span>订单显示门店与到店时间</span></li>
+          <li><strong>到店出示二维码</strong><span>由门店工作人员扫码签到</span></li>
+          <li><strong>扫码成功，进入排队</strong><span>查看排队号与预计等待时间</span></li>
+        </ol>
+      </section>
+      <section class="prototype-controls" aria-labelledby="order-state-heading">
+        <h2 id="order-state-heading">订单状态切换</h2>
+        <p>切换查看不同订单状态下的详情、预约信息与下一步操作。仅用于原型演示，不会变更真实订单。</p>
+        <div class="state-options" role="group" aria-label="订单状态">
+          <button class="state-option" type="button" data-order-state="unpaid" aria-pressed="false">待付款</button>
+          <button class="state-option" type="button" data-order-state="pending" aria-pressed="false">待预约</button>
+          <button class="state-option" type="button" data-order-state="booked" aria-pressed="false">待到店</button>
+          <button class="state-option" type="button" data-order-state="queued" aria-pressed="false">排队中</button>
+          <button class="state-option" type="button" data-order-state="booking-cancelled" aria-pressed="false">预约已取消</button>
+          <button class="state-option" type="button" data-order-state="active" aria-pressed="false">服务中</button>
+          <button class="state-option" type="button" data-order-state="completed" aria-pressed="false">已完成</button>
+          <button class="state-option" type="button" data-order-state="cancelled" aria-pressed="false">订单已取消</button>
+          <button class="state-option" type="button" data-order-state="payment-unknown" aria-pressed="false">支付待确认</button>
+          <button class="state-option" type="button" data-order-state="booking-unknown" aria-pressed="false">预约待确认</button>
+        </div>
+        <p class="control-feedback" id="order-state-feedback" role="status" aria-live="polite"></p>
+        <h3 id="booking-preview-heading">预约资源与结果</h3>
+        <p>在待预约状态下选择演示场景，再打开门店与时间选择；弹窗打开时也可切换。仅用于原型演示，不调用真实接口。</p>
+        <div class="state-options" role="group" aria-labelledby="booking-preview-heading">
+          <button class="state-option" type="button" data-booking-preview="available" aria-pressed="true">正常成功</button>
+          <button class="state-option" type="button" data-booking-preview="empty" aria-pressed="false">无可约时段</button>
+          <button class="state-option" type="button" data-booking-preview="conflict" aria-pressed="false">时段冲突</button>
+          <button class="state-option" type="button" data-booking-preview="timeout-success" aria-pressed="false">无响应后查询成功</button>
+          <button class="state-option" type="button" data-booking-preview="timeout-failure" aria-pressed="false">无响应后查询失败</button>
+          <button class="state-option" type="button" data-booking-preview="timeout-unknown" aria-pressed="false">无响应且结果未知</button>
+        </div>
+        <p class="control-feedback" id="booking-preview-feedback" role="status" aria-live="polite"></p>
+      </section>
+      <section class="prototype-controls" aria-labelledby="expiry-preview-title">
+        <h2 id="expiry-preview-title">预约当日 23:59 检查</h2>
+        <p>先切换为“待到店”，再模拟预约当天 23:59。无记录更新才取消本次预约，服务订单回退待预约；有更新时不命中此规则。这里只演示判定结果，不运行后台任务。</p>
+        <div class="state-options" role="group" aria-label="预约当日更新情况">
+          <button class="state-option" type="button" data-expiry-preview="unchanged">23:59 无记录更新</button>
+          <button class="state-option" type="button" data-expiry-preview="updated">23:59 已有记录更新</button>
+        </div>
+        <p class="control-feedback" id="expiry-preview-feedback" role="status"></p>
+      </section>
+      <h2>内容边界</h2>
+      <ul><li>示例状态是已支付、待预约，不代表生产状态映射已确认。</li><li>服务图只帮助识别项目，不代替维修过程照片或检测报告。</li><li>无工单服务仍能查看服务单状态。</li></ul>
+      <p class="page-status warning">状态文案按 Spec 暂行映射展示；权威来源与同步 SLA 未定。无独立预约单，不提供更换预约；签收核销与资金处置暂缓。</p>
+      <nav class="page-flow-nav" aria-label="页面原型导航">
+        <a aria-current="page" href="../10-service-order-detail.html">10 服务单</a><a href="../13-message-landing.html">13 消息落地</a>
+      </nav>
+    </aside>
+  </main>
+  <dialog class="page-modal" id="cancel-dialog" aria-labelledby="cancel-dialog-title">
+    <h2 id="cancel-dialog-title">取消本次预约？</h2>
+    <p>仅取消本次门店和时段安排，保留服务订单。此操作不申请退款。</p>
+    <p id="cancel-appointment-summary"></p>
+    <div class="page-modal-actions">
+      <button class="page-button danger" type="button" data-cancel-appointment>确认取消预约</button>
+      <button class="page-button secondary" type="button" data-close-dialog autofocus>保留预约</button>
+    </div>
+  </dialog>
+  <dialog class="page-modal" id="booking-result-dialog" aria-labelledby="booking-result-title">
+    <h2 id="booking-result-title">预约结果待确认</h2>
+    <p id="booking-result-description"></p>
+    <p id="booking-result-summary"></p>
+    <div class="page-modal-actions">
+      <button class="page-button" type="button" data-close-dialog autofocus>查看当前订单</button>
+    </div>
+  </dialog>
+  <dialog class="page-modal" id="booking-unavailable-dialog" aria-labelledby="booking-unavailable-title">
+    <h2 id="booking-unavailable-title">不提供更换预约</h2>
+    <p>预约时间属于这笔服务订单。当前不提供直接更换预约；请在订单内查看已有预约安排。</p>
+    <div class="page-modal-actions"><button class="page-button" type="button" data-close-dialog autofocus>返回订单</button></div>
+  </dialog>
+  <dialog class="page-modal" id="cancel-order-dialog" aria-labelledby="cancel-order-dialog-title">
+    <h2 id="cancel-order-dialog-title">取消这笔服务单？</h2>
+    <p>仅待支付的服务单可在此取消。支付成功后，预约建立且到店扫码前可取消本次预约；扫码签到后不再提供取消预约入口。</p>
+    <div class="page-modal-actions">
+      <button class="page-button danger" type="button" data-cancel-order>确认取消服务单</button>
+      <button class="page-button secondary" type="button" data-close-dialog autofocus>暂不取消</button>
+    </div>
+  </dialog>
+  <dialog class="page-modal" id="store-navigation-dialog" aria-labelledby="store-navigation-dialog-title">
+    <h2 id="store-navigation-dialog-title">前往服务门店</h2>
+    <p id="store-navigation-address">请确认门店信息后打开地图导航。</p>
+    <div class="page-modal-actions">
+      <a class="page-button" id="wechat-navigation-link" href="#" target="_blank" rel="noopener noreferrer">在腾讯地图中搜索门店</a>
+      <button class="page-button secondary" type="button" data-close-dialog>暂不前往</button>
+    </div>
+  </dialog>
+  <dialog class="page-modal wechat-dialog" id="store-contact-dialog" aria-labelledby="store-contact-dialog-title">
+    <h2 id="store-contact-dialog-title">联系服务门店</h2>
+    <p class="wechat-dialog-store"><strong id="store-contact-name"></strong></p>
+    <p class="wechat-phone-unavailable">门店电话暂未接入，当前无法拨打。</p>
+    <div class="wechat-qr-placeholder" role="img" aria-label="企业微信二维码待门店提供">企业微信二维码<br>待门店提供</div>
+    <p class="wechat-dialog-note">点击长按添加门店服务人员微信</p>
+    <button class="wechat-dialog-close" type="button" data-close-dialog autofocus>关闭</button>
+  </dialog>
+  <script src="../remaining-pages.js"></script>
+</body>
+</html>

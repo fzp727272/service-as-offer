@@ -4,300 +4,143 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light">
-  <title>01 · 服务首页视觉优化 · Service as Offer</title>
-  <script src="figma-copy.js" defer></script>
-  <script src="service-journey.js" defer></script>
-  <style>
-    :root { color-scheme: light; font-family: "Decathlon Text", "Source Han Sans CN", -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; color: #101010; --brand: #3643ba; --ink: #101010; --muted: #616161; --line: #e1e0df; --soft: #f0f1ff; --bg: #f8f8f8; }
-    * { box-sizing: border-box; }
-    body { margin: 0; min-width: 320px; background: #e9eaf1; line-height: 1.5; }
-    button, a { font: inherit; }
-    button { color: inherit; cursor: pointer; }
-    a { color: inherit; }
-    button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid #3643ba; outline-offset: 3px; }
-    .preview { min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; gap: 48px; padding: 28px 20px; }
-    .device { width: 375px; height: 812px; flex: none; overflow: hidden; background: white; box-shadow: 0 18px 55px #10102426; }
-    .screen { display: flex; flex-direction: column; height: 100%; }
-    .app { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; background: var(--bg); }
-    .app::-webkit-scrollbar { display: none; }
-    .hero { position: relative; flex: none; overflow: hidden; background: var(--brand); color: white; }
-    .hero-visual { position: relative; width: 100%; aspect-ratio: 375 / 234; overflow: hidden; }
-    .hero-visual img { display: block; width: 100%; height: 100%; object-fit: cover; }
-    .status { height: 44px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; font-size: 15px; font-weight: 700; letter-spacing: -.3px; }
-    .status-right { display: flex; align-items: center; gap: 5px; }
-    .signal { display: inline-flex; height: 11px; align-items: end; gap: 2px; }
-    .signal i { width: 3px; background: currentColor; border-radius: 2px; }
-    .signal i:nth-child(1) { height: 4px; } .signal i:nth-child(2) { height: 6px; } .signal i:nth-child(3) { height: 8px; } .signal i:nth-child(4) { height: 10px; }
-    .battery { position: relative; width: 18px; height: 9px; border: 1px solid currentColor; border-radius: 3px; padding: 1px; }
-    .battery::after { content: ""; position: absolute; right: -3px; top: 2px; width: 2px; height: 4px; background: currentColor; }
-    .battery i { display: block; width: 70%; height: 100%; background: currentColor; }
-    .mini-nav { height: 48px; display: grid; grid-template-columns: 87px 1fr 87px; align-items: center; padding: 0 12px; }
-    .mini-nav-title { grid-column: 2; text-align: center; font-size: 18px; line-height: 26px; font-weight: 700; }
-    .capsule { width: 87px; height: 32px; background: url("assets/figma/navbar-wechat-capsule.svg") center / 100% 100% no-repeat; }
-    .personal { position: relative; margin: 0; padding: 12px 16px 0; background: #fff; }
-    .equipment { display: flex; align-items: center; width: 100%; min-height: 60px; gap: 12px; padding: 0 12px; border: 0; background: var(--bg); text-align: left; }
-    .equipment img { flex: none; width:16px; height:16px; object-fit: cover; }
-    .equipment .device{width:40px; height:40px;}
-    .equipment-copy { flex: 1; min-width: 0; }
-    .equipment-copy strong { display: block; font-size: 14px; line-height: 20px; }
-    .chevron { display: block; flex: none; width: 16px; height: 16px; }
-    .personal-content { padding: 0; }
-    .appointment { padding: 12px 0 8px 0;}
-    .appointment-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-    .appointment-head strong { font-size: 16px; line-height: 24px; }
-    .status-pill { padding: 2px 6px; background: var(--brand); color: white; font-size: 12px; line-height: 18px; }
-    .appointment-body { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; }
-    .appointment-meta { color: var(--muted); font-size: 12px; line-height: 20px; white-space: nowrap; }
-    .text-action { display: inline-flex; align-items: center; justify-content: center; min-height: 28px; padding: 0 4px; border: 0; background: none; color: var(--brand); font-size: 12px; font-weight: 500; white-space: nowrap; }
-    .text-action img { display: block; width: 16px; height: 16px; margin-left: 2px; }
-    .benefits { display: grid; grid-template-rows: repeat(2, minmax(45px, 1fr)); gap: 12px; min-height: 127px; border-top: 1px solid #ededed; padding: 8px 0 12px 0; }
-    .benefit-row { display: flex; align-items: center; gap: 12px; min-height: 45px; padding: 0; }
-    .benefit-copy { flex: 1; min-width: 0; }
-    .benefit-row strong { display: block; font-size: 16px; line-height: 24px; }
-    .benefit-row small { display: block; margin-top: 1px; color: var(--muted); font-size: 12px; line-height: 18px; }
-    .benefit-action { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 64px; min-height: 34px; padding: 0 12px; border: 1px solid var(--brand); background: transparent; color: var(--brand); font-size: 12px; font-weight: 500; }
-    .entry-context { margin: 16px 16px 0; padding: 12px 16px; background: var(--soft); color: var(--brand); font-size: 13px; }
-    .entry-context p { margin: 4px 0 0; color: var(--muted); }
-    .directory { padding: 0 0 32px; background: var(--bg); }
-    .directory-title { display: none; }
-    .directory-title h2 { margin: 0; font-size: 24px; line-height: 36px; }
-    .directory-title span { color: var(--muted); font-size: 12px; }
-    .category-nav { position: sticky; z-index: 3; top: 0; margin: 8px 0 0; padding: 0; background: white; border-bottom: 1px solid #ededed; }
-    .categories { display: grid;grid-template-columns: repeat(4, 1fr); gap: 2px; }
-    .category { position: relative; min-width: 0; min-height: 48px; padding: 0 2px; border: 0; background: none; color: var(--muted); font-size: 14px; white-space: nowrap; }
-    .category[aria-current="location"] { color: var(--brand); font-weight: 700; }
-    .category[aria-current="location"]::after { position: absolute; content: ""; height: 3px; bottom: 0; left: 25%; right: 25%; background: var(--brand); }
-    .group { padding: 12px 12px 8px; scroll-margin-top: 48px; }
-    .group:last-child { min-height: var(--group-min-height, 0px); }
-    .group-heading { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
-    .group-heading h3 { margin: 0; font-size: 18px; line-height: 26px; }
-    .group-heading span { color: var(--muted); font-size: 12px; }
-    .service-list { display: grid; gap: 8px; padding: 0; background: white; }
-    .service { display: flex; width: 100%; min-height: 110px; gap: 10px; padding: 12px; border: 0; background: #fff; text-align: left; }
-    .service img { flex: none; width: 72px; height: 80px; background: #f5f4f5; object-fit: cover; }
-    .service-copy { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
-    .service-name { font-size: 14px; line-height: 20px; font-weight: 700; }
-    .service-description { margin-top: 2px; color: var(--muted); font-size: 12px; line-height: 18px; }
-    .service-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
-    .service-tag { padding: 1px 4px; background: #f5f4f5; color: var(--muted); font-size: 10px; line-height: 14px; }
-    .service-tag:first-child { background: var(--soft); color: var(--brand); }
-    .service-price { display: flex; align-items: baseline; gap: 4px; margin-top: auto; padding-top: 8px; color: var(--brand); white-space: nowrap; }
-    .service-price .price-label { margin-right: 1px; color: var(--muted); font-size: 12px; line-height: 20px; font-weight: 400; }
-    .price-value { display: inline-flex; align-items: baseline; gap: 0; }
-    .price-value .currency, .price-value .decimal { font-family: "Decathlon Display", "Decathlon Text", sans-serif; font-size: 16px; line-height: 16px; font-weight: 600; }
-    .price-value .major { font-family: "Decathlon Display", "Decathlon Text", sans-serif; font-size: 24px; line-height: 24px; font-weight: 600; }
-    .price-value .unit { margin-left: 2px; font-size: 10px; line-height: 14px; font-weight: 400; }
-    .directory-note { margin: 16px 0 0; color: var(--muted); font-size: 12px; line-height: 18px; }
-    .tabbar { display: grid; grid-template-columns: 1fr 1fr; flex: none; min-height: 68px; padding: 4px 4px max(4px, env(safe-area-inset-bottom)); border-top: 1px solid #ededed; background: white; }
-    .tab { min-height: 58px; display: grid; align-content: center; justify-items: center; gap: 4px; border: 0; background: none; text-decoration: none; color: var(--muted); font-size: 12px; }
-    .tab[aria-current="page"] { color: var(--brand); font-weight: 700; }
-    .tab svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-    .equipment:active, .service:active { background: #f0f1ff; }
-    .text-action:active, .benefit-action:active, .category:active, .tab:active { opacity: .65; }
-    .scenario-panel { width: 320px; padding: 24px; background: white; border: 1px solid var(--line); }
-    .scenario-panel h2 { margin: 0; font-size: 18px; }
-    .scenario-panel p { color: var(--muted); font-size: 13px; line-height: 1.6; }
-    .scenario-options { display: grid; gap: 8px; margin: 18px 0; }
-    .scenario-option { min-height: 48px; padding: 10px 12px; border: 1px solid var(--line); background: white; text-align: left; font-size: 14px; }
-    .scenario-option[aria-pressed="true"] { border-color: var(--brand); background: var(--soft); color: var(--brand); font-weight: 700; }
-    .panel-link { display: inline-flex; min-height: 44px; align-items: center; color: var(--brand); font-size: 14px; }
-    /* Match the shared review panel without changing the homepage artboard. */
-    .journey-panel { position: sticky; top: 32px; width: min(440px, 100%); max-height: calc(100vh - 64px); padding: 24px; overflow: auto; border: 1px solid var(--line); background: #fff; color: var(--ink); font-size: 14px; line-height: 20px; }
-    .journey-panel a { color: inherit; text-decoration: none; }
-    .journey-panel .journey-home { display: inline-flex; align-items: center; min-height: 32px; color: var(--brand); }
-    .journey-panel > h2 { margin: 12px 0 8px; font-size: 24px; line-height: 36px; }
-    .journey-panel > p { margin: 8px 0 20px; color: var(--muted); }
-    .journey-details { padding: 16px 0 0; border-top: 1px solid var(--line); }
-    .journey-details summary { min-height: 44px; cursor: pointer; font-weight: 700; }
-    .journey-details > div { padding: 8px 0; color: var(--muted); font-size: 12px; line-height: 18px; }
-    .journey-details h2 { margin: 0; color: var(--ink); font-size: 18px; line-height: 26px; }
-    .journey-details p { margin: 8px 0; }
-    .journey-details .panel-link { color: var(--brand); }
-    .journey-group { padding: 12px 0; border-top: 1px solid var(--line); }
-    .journey-group h3 { margin: 0 0 8px; font-size: 14px; line-height: 20px; }
-    .journey-steps { margin: 0 0 0 7px; padding: 0 0 0 16px; border-left: 2px solid var(--line); list-style: none; }
-    .journey-steps li { position: relative; margin: 0; }
-    .journey-steps li::before { content: ""; position: absolute; top: 17px; left: -23px; width: 8px; height: 8px; border: 2px solid var(--line); border-radius: 50%; background: #fff; box-sizing: content-box; }
-    .journey-steps li:has([aria-current="page"])::before { border-color: var(--brand); background: var(--brand); }
-    .journey-steps a { display: flex; align-items: center; min-height: 44px; padding: 8px 12px; }
-    .journey-steps a[aria-current="page"] { background: var(--soft); color: var(--brand); font-weight: 700; }
-    .journey-steps a:hover { text-decoration: underline; text-underline-offset: 4px; }
-    .journey-tools { display: flex; flex-wrap: wrap; gap: 8px 16px; padding-top: 16px; border-top: 1px solid var(--line); }
-    .journey-tools a { min-height: 32px; color: var(--brand); font-size: 12px; }
-    .figma-copy-button { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: center; margin-top: 16px; padding: 12px 16px; border: 0; background: var(--brand); color: #fff; font-weight: 700; }
-    .figma-copy-button:hover { background: #29359e; }
-    .figma-copy-button:disabled { cursor: progress; opacity: .7; }
-    .figma-copy-help, .figma-copy-status { display: block; margin-top: 8px; color: var(--muted); font-size: 12px; line-height: 18px; }
-    .figma-copy-status:not(:empty) { color: var(--brand); }
-    .live { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-    @media (max-width: 900px) { .preview { flex-direction: column; align-items: center; gap: 24px; } .scenario-panel, .journey-panel { position: static; width: min(375px, 100%); max-height: none; } }
-    @media (max-width: 480px) { body { background: var(--bg); } .preview { padding: 0; gap: 24px; } .device { width: 100%; height: 100dvh; box-shadow: none; } .scenario-panel { width: calc(100% - 32px); margin-bottom: 16px; } .journey-panel { width: 100%; padding: 20px 16px; border-width: 1px 0 0; } }
-    @media (max-width: 350px) { .category { font-size: 12px; } .service img { width: 80px; height: 88px; } .hero-art { right: -55px; opacity: .7; } }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }
-  </style>
+  <meta name="theme-color" content="#3643ba">
+  <title>服务首页 · Service as Offer</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <script src="figma-capture-toolbar.js" defer></script>
+  <link rel="stylesheet" href="01-service-entry.css?v=20261106-empty-equipment-copy">
+  <script src="service-catalog.js" defer></script>
+  <script src="equipment-data.js?v=20261106-equipment-selection" defer></script>
+  <script src="01-service-entry.js?v=20261106-benefit-recommendations" defer></script>
 </head>
 <body>
-  <main class="preview">
-    <div class="device" aria-label="服务首页视觉优化画板">
-      <div class="screen">
-        <div class="app" id="app">
+  <main class="figma-preview">
+    <section class="device" aria-label="服务首页手机画板">
+      <div class="device-screen" data-figma-artboard>
+        <div class="app-scroll" id="app-scroll">
           <header class="hero">
-            <div class="status" aria-hidden="true"><span>9:41</span><span class="status-right"><span class="signal"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"><i></i></span></span></div>
-            <div class="mini-nav"><span class="mini-nav-title">运动服务</span><div class="capsule" aria-hidden="true"></div></div>
-            <div class="hero-visual"><img src="assets/figma/service-home-banner-v2@3x.png" alt="装备养护，为下一次出发；装备随行，更自由。官方服务、专业技师、透明收费。"></div>
+            <div class="status-bar" aria-hidden="true"><span>9:41</span><span class="status-right"><span class="signal"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"><i></i></span></span></div>
+            <img class="wechat-capsule" src="assets/figma/navbar-wechat-capsule.svg" alt="" aria-hidden="true">
+            <img class="hero-cut" src="assets/banner2.png" alt="装备养护，装备随行更自由；专业保养，让每一次出发都更安心。自行车、羽毛球与滑雪装备线稿插画。">
+            <a class="hero-link" href="#service-directory">了解服务 <span aria-hidden="true">›</span></a>
           </header>
-          <div id="entry-context"></div>
-          <div id="personal"></div>
-          <section class="directory" id="directory" aria-labelledby="directory-title">
-            <div class="directory-title"><h2 id="directory-title">全部服务</h2><span id="service-count"></span></div>
-            <div class="category-nav"><nav class="categories" aria-label="服务分类">
-              <button type="button" class="category" data-category="all" aria-current="location">全部服务</button>
-              <button type="button" class="category" data-category="bike">自行车</button>
-              <button type="button" class="category" data-category="badminton">羽毛球 / 网球</button>
-              <button type="button" class="category" data-category="ski">滑雪</button>
-            </nav></div>
-            <div id="groups"></div>
+          <div class="page-body">
+          <div class="trust-strip" aria-label="服务保障">
+            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path fill="currentColor" d="M16 3.5 27 7.6v7.1c0 6.9-4.6 11.9-11 15.3-6.4-3.4-11-8.4-11-15.3V7.6Z"/><path fill="#fff" d="m14.6 20.4-4-4 1.9-1.9 2.1 2.1 5.4-5.4 1.9 1.9Z"/></svg></span><span>官方服务</span></div>
+            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.9 6.6a6.4 6.4 0 0 0-8.2 8.2L5.5 22l4.5 4.5 7.2-7.2a6.4 6.4 0 0 0 8.2-8.2l-3.9 3.9-3.5-3.5Z"/><path d="m21.5 4.5 6 6"/></g></svg></span><span>专业技师</span></div>
+            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path fill="currentColor" d="M8 4h16v24l-8-5.4L8 28Z"/><path fill="#fff" d="M13 9.5h6v2.6h-2.1v6.4h-1.8V12.1H13Z"/></svg></span><span>透明收费</span></div>
+          </div>
+            <section class="personal personal-order" aria-label="当前订单" aria-labelledby="order-heading" hidden>
+              <h2 class="personal-heading" id="order-heading">当前订单</h2>
+              <div class="order-card">
+                <div class="order-head"><strong>自行车基础保养</strong><span class="order-status is-booked" id="order-status">待到店</span></div>
+                <div class="order-details">
+                  <p id="order-detail">上海徐汇店｜10月24日 周六 14:00</p>
+                  <button type="button" class="order-action" data-action="appointment" id="order-action"><span id="order-action-label">查看预约</span> <img src="assets/figma/chevron.svg" alt="" aria-hidden="true"></button>
+                </div>
+              </div>
+            </section>
+          <section class="directory" id="service-directory" aria-label="服务目录">
+            <nav class="category-nav" aria-label="服务分类" role="tablist">
+              <button type="button" class="category is-active" role="tab" aria-selected="true" data-category="all"><span>装备/权益</span></button>
+              <button type="button" class="category" role="tab" aria-selected="false" data-category="bike"><span>自行车</span></button>
+              <button type="button" class="category" role="tab" aria-selected="false" data-category="badminton"><span>羽毛球 / 网球</span></button>
+              <button type="button" class="category" role="tab" aria-selected="false" data-category="ski"><span>滑雪</span></button>
+            </nav>
+            <section class="personal directory-personal" aria-label="我的装备与服务">
+              <button type="button" class="equipment" data-action="equipment" id="equipment-bar">
+                <span class="equipment-img"><img src="assets/figma/device-rockrider.png" alt="" id="equipment-image"></span>
+                <span class="equipment-copy"><strong id="equipment-name">Rockrider ST 530 山地自行车</strong><small id="equipment-note">已使用 3个月12天</small></span>
+                <span class="equipment-hint" id="equipment-hint" hidden></span>
+                <img class="chevron" src="assets/figma/chevron.svg" alt="" aria-hidden="true">
+              </button>
+              <button type="button" class="equipment equipment-empty" data-action="equipment" id="equipment-empty-bar" hidden>
+                <span class="equipment-empty-text">关联装备，获取专属服务推荐</span>
+                <span class="equipment-empty-action">添加装备<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6.424 12.426 5.576 11.578 9.151 8 5.576 4.425l.848-.849L10.849 8z"/></svg></span>
+              </button>
+              <div class="personal-benefits">
+                <h2 class="personal-heading"><span></span>专属权益</h2>
+                <div class="benefit-list">
+                  <article class="benefit-card"><img src="assets/service-bike.svg" alt=""><div class="benefit-copy"><strong>新车安全检查</strong><small>有效期至 2026年12月30日</small></div><button type="button" class="benefit-action" data-benefit="inspection" aria-label="预约新车安全检查">去预约</button></article>
+                  <article class="benefit-card"><img src="assets/service-bike.svg" alt=""><div class="benefit-copy"><strong>6 个月免费安全检查</strong><small>有效期至 2026年12月30日</small></div><button type="button" class="benefit-action" data-benefit="six-month" aria-label="预约 6 个月免费安全检查">去预约</button></article>
+                </div>
+              </div>
+              <section class="recommendations" aria-labelledby="recommendations-heading" hidden>
+                <h2 class="personal-heading" id="recommendations-heading"><span></span>建议为装备做这些养护</h2>
+                <div id="recommended-services"></div>
+              </section>
+            </section>
+            <div id="service-groups"></div>
           </section>
+          </div>
         </div>
         <nav class="tabbar" aria-label="主导航">
-          <button type="button" class="tab" aria-current="page" id="home-tab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-6 8 6v11h-6v-7h-4v7Z"/></svg><span>官方服务</span></button>
+          <button type="button" class="tab is-current" id="home-tab" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-6 8 6v11h-6v-7h-4v7Z"/></svg><span>官方服务</span></button>
           <a class="tab" href="my-orders.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM14 4h6v7h-6zM4 14h7v6H4zM14 14h6v6h-6z"/></svg><span>我的订单</span></a>
         </nav>
       </div>
-    </div>
-    <aside class="scenario-panel" aria-labelledby="scenario-title">
-      <h2 id="scenario-title">首页视觉优化</h2>
-      <p>保留原有信息结构，调整品牌区域、个人服务面板与目录视觉。以下场景为示例数据。</p>
+    </section>
+
+    <aside class="journey-panel" aria-labelledby="journey-title">
+      <a class="journey-home" href="index.html">完整流程</a>
+      <h1 id="journey-title">服务首页 · 场景预览</h1>
+      <p class="panel-intro">切换示例场景，查看订单、权益及推荐服务的展示方式。</p>
       <div class="scenario-options" role="group" aria-label="切换首页场景">
-        <button type="button" class="scenario-option" data-scenario="all" aria-pressed="true">订单与权益</button>
-        <button type="button" class="scenario-option" data-scenario="orders" aria-pressed="false">只有订单</button>
-        <button type="button" class="scenario-option" data-scenario="benefits" aria-pressed="false">只有权益</button>
-        <button type="button" class="scenario-option" data-scenario="recommendations" aria-pressed="false">无订单 / 权益</button>
+        <button type="button" data-scenario="all" aria-pressed="false">订单与权益</button>
+        <button type="button" data-scenario="orders" aria-pressed="false">只有订单</button>
+        <button type="button" data-scenario="benefits" aria-pressed="true">只有权益</button>
+        <button type="button" data-scenario="recommendations" aria-pressed="false">无订单 / 权益</button>
       </div>
-      <a class="panel-link" href="01-service-entry.html">查看原首页，对比设计</a>
+      <h2 class="panel-subheading" id="equipment-state-heading">装备栏状态</h2>
+      <div class="scenario-options" role="group" aria-labelledby="equipment-state-heading">
+        <button type="button" data-equipment-state="has" aria-pressed="true">有装备</button>
+        <button type="button" data-equipment-state="none" aria-pressed="false">无装备</button>
+      </div>
+      <h2 class="panel-subheading" id="home-order-state-heading">当前订单状态</h2>
+      <div class="scenario-options" role="group" aria-labelledby="home-order-state-heading">
+        <button type="button" data-order-state="pending" aria-pressed="false">待预约</button>
+        <button type="button" data-order-state="booked" aria-pressed="true">待到店</button>
+        <button type="button" data-order-state="queued" aria-pressed="false">排队中</button>
+      </div>
+      <details class="design-notes" open>
+        <summary>设计说明与来源</summary>
+        <div class="design-note-content">
+          <h2>首页定位与信息层级</h2>
+          <p>以 Figma 1126:16388 权益态为基础，首页依次呈现品牌介绍、服务保障、我的装备、个人服务信息和完整服务目录，让用户先发现与自己相关的服务，再浏览其他项目。</p>
+          <h3>四种示例场景</h3>
+          <ul>
+            <li><strong>订单与权益：</strong>同时展示已预约订单和两项安全检查权益。</li>
+            <li><strong>只有订单：</strong>展示预约订单；有装备时同时展示推荐服务。</li>
+            <li><strong>只有权益：</strong>默认场景，展示两项安全检查权益。</li>
+            <li><strong>无订单 / 权益：</strong>有装备时展示对应品类的示例推荐。</li>
+          </ul>
+          <p>四种场景均保留装备信息和完整目录；切换后手机画板回到顶部，并将场景写入地址，方便分享或刷新后继续预览。</p>
+          <h3>装备栏与订单状态</h3>
+          <ul>
+            <li><strong>无装备：</strong>装备栏显示「关联装备，获取专属服务推荐」提示，右侧「添加装备」入口，点击进入装备库。</li>
+            <li><strong>有装备：</strong>显示装备总数，点击装备栏进入装备库选择，确认后返回首页。</li>
+            <li><strong>订单状态：</strong>待预约用警告橙、待到店用品牌蓝、排队中用正向绿；详情行文案与操作按钮随状态切换，分别跳转预约选择、预约详情与订单详情。</li>
+          </ul>
+          <h3>入口与跳转</h3>
+          <ul>
+            <li>点击装备进入装备库；「查看预约」进入预约详情；权益的「去预约」先进入权益详情。</li>
+            <li>「了解服务」定位至目录；点击推荐项或目录服务进入对应服务详情，底部「我的订单」进入订单页。</li>
+            <li>分类栏用于定位而非筛选：滚动时同步高亮并吸顶，也可用方向键、Home 和 End 切换。</li>
+          </ul>
+          <h3>内容与原型边界</h3>
+          <p>目录参考价取该服务各方案中的最低价格并标注「起」，具体方案以服务详情为准。推荐、装备、订单和权益均为示例数据，不代表真实订单、个人推荐结果或权益资格；本原型不进行真实支付或权益兑换。</p>
+          <a class="panel-link" href="../docs/figma-1126-16388-implementation-diff.md">查看权益态初始设计记录（历史方案）</a>
+        </div>
+      </details>
+      <nav class="flow-nav" aria-label="服务流程">
+        <section class="flow-group"><h2>选服务与下单</h2><ol class="flow-steps"><li><a href="01-service-entry.html" aria-current="page">服务首页</a></li><li><a href="02-service-detail.html">服务详情</a></li><li><a href="05-order-checkout.html">确认订单</a></li><li><a href="05-payment-result.html">支付结果</a></li></ol></section>
+        <section class="flow-group"><h2>预约到店</h2><ol class="flow-steps"><li><a href="05-order-checkout.html?bookingMode=later">选择门店与时间</a></li><li><a href="10-service-order-detail.html">订单详情</a></li></ol></section>
+        <section class="flow-group"><h2>权益、维修与其他入口</h2><ol class="flow-steps"><li><a href="equipment-library.html">我的装备</a></li><li><a href="03-benefit-detail.html">权益详情</a></li><li><a href="04-repair-request.html">描述维修需求</a></li><li><a href="my-orders.html">我的订单</a></li><li><a href="13-message-landing.html">服务消息</a></li></ol></section>
+      </nav>
+      <div class="panel-tools"><a href="../design/service-as-offer-ux-spec.html">需求与流程说明</a><a href="../design/rule.md">Vitamin C 规范</a></div>
+      <p class="disclaimer">交互原型：数据为示例，不发起真实支付、兑换、签到或退款。</p>
     </aside>
   </main>
-  <div class="live" id="live" aria-live="polite"></div>
-  <script src="service-catalog.js?v=20261103-price"></script>
-  <script>
-    const app = document.querySelector('#app');
-    const personal = document.querySelector('#personal');
-    const groups = document.querySelector('#groups');
-    const live = document.querySelector('#live');
-    const params = new URLSearchParams(location.search);
-    const entries = {
-      service: null,
-      scan: ['购买商品附带的服务权益', '请核对赠送权益与来源商品，再选择服务。'],
-      product: ['为装备找到合适的服务', '从商品页面继续了解检查、保养与维修服务。'],
-      order: ['商品订单 810263 的赠送权益', '查看来源商品和附带权益，无需再次购买服务。']
-    };
-    const entry = Object.hasOwn(entries, params.get('entry')) ? params.get('entry') : 'service';
-    const scenarios = ['all', 'orders', 'benefits', 'recommendations'];
-    let scenario = scenarios.includes(params.get('scenario')) ? params.get('scenario') : (entry === 'scan' || entry === 'order' ? 'benefits' : 'all');
-    const categories = [{ id: 'bike', name: '自行车' }, { id: 'badminton', name: '羽毛球 / 网球' }, { id: 'ski', name: '滑雪' }];
-    const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
-
-    function renderPersonal() {
-      const hasOrder = scenario === 'all' || scenario === 'orders';
-      const hasBenefits = scenario === 'all' || scenario === 'benefits';
-      if (!hasOrder && !hasBenefits) { personal.innerHTML = ''; return; }
-      personal.innerHTML = `<section class="personal" aria-label="我的装备与服务">
-        <button class="equipment" type="button" data-action="equipment" aria-label="查看我的装备：Rockrider ST 530 山地自行车">
-          <img class="device" src="assets/figma/device-rockrider.png" alt=""><span class="equipment-copy"><strong>Rockrider ST 530 山地自行车</strong></span><img class="chevron" src="assets/figma/chevron.svg" alt="" aria-hidden="true">
-        </button>
-        <div class="personal-content">
-          ${hasOrder ? `<div class="appointment"><div class="appointment-head"><strong>自行车基础保养</strong><span class="status-pill">已预约</span></div><div class="appointment-body"><div class="appointment-meta">上海徐汇店｜10月24日 周六 14:00</div><button class="text-action" type="button" data-action="appointment">查看预约 <img src="assets/figma/chevron.svg" alt="" aria-hidden="true"></button></div></div>` : ''}
-          ${hasBenefits ? `<div class="benefits"><div class="benefit-row"><span class="benefit-copy"><strong>新车安全检查</strong><small>有效期至 2026年12月30日</small></span><button class="benefit-action" type="button" data-benefit="inspection" aria-label="预约新车安全检查">去预约</button></div><div class="benefit-row"><span class="benefit-copy"><strong>6 个月免费安全检查</strong><small>有效期至 2026年12月30日</small></span><button class="benefit-action" type="button" data-benefit="six-month" aria-label="预约 6 个月免费安全检查">去预约</button></div></div>` : ''}
-        </div>
-      </section>`;
-    }
-
-    function renderDirectory() {
-      document.querySelector('#service-count').textContent = `${serviceCatalog.length} 项服务`;
-      groups.innerHTML = categories.map(category => {
-        const services = serviceCatalog.filter(service => service.category === category.id);
-        return `<section class="group" id="category-${category.id}" data-group="${category.id}" aria-labelledby="heading-${category.id}"><div class="group-heading"><h3 id="heading-${category.id}">${category.name}</h3><span>${services.length} 项服务</span></div><div class="service-list">${services.map(service => {
-          const price = Math.min(...service.options.map(option => option.price));
-          const image = service.id === 'tennis-stringing' ? 'tennis' : service.category;
-          const tags = service.id === 'bike-inspection' ? ['为你推荐', ...service.tags] : service.id === 'bike-maintenance' ? ['为你推荐', ...service.tags] : service.tags;
-          const [major, decimal] = formatServicePrice(price).split('.');
-          return `<button type="button" class="service" data-service="${escapeHTML(service.id)}" aria-label="${escapeHTML(service.title)}，参考价 ${formatServicePrice(price)} 元起"><img src="assets/service-${image}.svg" alt=""><span class="service-copy"><span class="service-name">${escapeHTML(service.title)}</span><span class="service-description">${escapeHTML(service.detail)}</span><span class="service-tags">${tags.map(tag => `<span class="service-tag">${escapeHTML(tag)}</span>`).join('')}</span><span class="service-price"><span class="price-label">参考价</span><span class="price-value"><span class="currency">¥</span><span class="major">${major}</span>${decimal ? `<span class="decimal">.${decimal}</span>` : ''}<span class="unit">起</span></span></span></span></button>`;
-        }).join('')}</div></section>`;
-      }).join('');
-      updateGroupHeight();
-    }
-
-    function updateGroupHeight() {
-      const navigation = document.querySelector('.category-nav');
-      groups.style.setProperty('--group-min-height', `${Math.max(0, app.clientHeight - navigation.offsetHeight - 48)}px`);
-    }
-    function markCategory(id) {
-      document.querySelectorAll('[data-category]').forEach(button => {
-        if (button.dataset.category === id) button.setAttribute('aria-current', 'location');
-        else button.removeAttribute('aria-current');
-      });
-    }
-    function syncCategory() {
-      const nav = document.querySelector('.category-nav');
-      const boundary = app.getBoundingClientRect().top + nav.offsetHeight + 3;
-      let active = 'all';
-      document.querySelectorAll('[data-group]').forEach(group => { if (group.getBoundingClientRect().top <= boundary) active = group.dataset.group; });
-      markCategory(active);
-    }
-    function selectCategory(id) {
-      const target = id === 'all' ? document.querySelector('#directory') : document.querySelector(`#category-${id}`);
-      if (!target) return;
-      const offset = id === 'all' ? 0 : document.querySelector('.category-nav').offsetHeight;
-      app.scrollTop += target.getBoundingClientRect().top - app.getBoundingClientRect().top - offset;
-      markCategory(id);
-      live.textContent = id === 'all' ? '已回到全部服务。' : `已滚动到${categories.find(category => category.id === id).name}服务。`;
-    }
-    function navigate(path, values) {
-      const url = new URL(path, location.href);
-      Object.entries(values).forEach(([key, value]) => url.searchParams.set(key, value));
-      location.assign(url);
-    }
-    function setScenario(next) {
-      scenario = next;
-      renderPersonal();
-      app.scrollTop = 0;
-      markCategory('all');
-      document.querySelectorAll('[data-scenario]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.scenario === scenario)));
-      live.textContent = `已切换至${document.querySelector(`[data-scenario="${scenario}"]`).textContent}场景。`;
-    }
-    if (entries[entry]) document.querySelector('#entry-context').innerHTML = `<div class="entry-context"><strong>${entries[entry][0]}</strong><p>${entries[entry][1]}</p></div>`;
-    renderDirectory();
-    setScenario(scenario);
-    document.querySelector('.scenario-options').addEventListener('click', event => { const button = event.target.closest('[data-scenario]'); if (button) setScenario(button.dataset.scenario); });
-    app.addEventListener('click', event => {
-      const category = event.target.closest('[data-category]');
-      if (category) { selectCategory(category.dataset.category); return; }
-      const benefit = event.target.closest('[data-benefit]');
-      if (benefit) { navigate('03-benefit-detail.html', { benefit: benefit.dataset.benefit, entry, sourceOrder: '810263' }); return; }
-      const serviceButton = event.target.closest('[data-service]');
-      if (serviceButton) {
-        const service = serviceCatalog.find(item => item.id === serviceButton.dataset.service);
-        if (service) navigate('02-service-detail.html', { entry, category: service.category, name: service.title, group: service.id, description: service.detail, price: Math.min(...service.options.map(option => option.price)) });
-        return;
-      }
-      const action = event.target.closest('[data-action]')?.dataset.action;
-      if (action === 'equipment') navigate('equipment-library.html', { return: location.href });
-      if (action === 'appointment') navigate('09-appointment-detail-cancel.html', { booking: 'created', date: '2026-10-24', time: '14:00', category: 'bike', equipment: 'Rockrider ST 530', order: 'SO-2601024' });
-    });
-    app.addEventListener('keydown', event => {
-      const button = event.target.closest('[data-category]');
-      if (!button || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-      event.preventDefault();
-      const buttons = [...document.querySelectorAll('[data-category]')];
-      const index = buttons.indexOf(button);
-      const next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length;
-      buttons[next].focus({ preventScroll: true });
-      selectCategory(buttons[next].dataset.category);
-    });
-    document.querySelector('#home-tab').addEventListener('click', () => { app.scrollTop = 0; markCategory('all'); });
-    let scrollFrame = 0;
-    app.addEventListener('scroll', () => { if (!scrollFrame) scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; syncCategory(); }); }, { passive: true });
-    new ResizeObserver(updateGroupHeight).observe(app);
-  </script>
+  <div class="live-region" id="live-region" aria-live="polite"></div>
 </body>
 </html>

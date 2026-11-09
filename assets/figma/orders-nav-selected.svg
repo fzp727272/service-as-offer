@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Sort">
+<g id="Vector">
+<path d="M2 2V10.8889H10.8889V2H2Z" fill-rule="evenodd" clip-rule="evenodd" fill="#101010"/>
+<path d="M2 13.1111V22H10.8889V13.1111H2Z" fill-rule="evenodd" clip-rule="evenodd" fill="#101010"/>
+<path d="M13.1111 2V10.8889H22V2H13.1111Z" fill-rule="evenodd" clip-rule="evenodd" fill="#101010"/>
+<path d="M17 13.9444C15.3125 13.9444 13.9444 15.3125 13.9444 17C13.9444 18.6875 15.3125 20.0556 17 20.0556C18.6875 20.0556 20.0556 18.6875 20.0556 17C20.0556 15.3125 18.6875 13.9444 17 13.9444ZM12.2778 17C12.2778 14.392 14.392 12.2778 17 12.2778C19.608 12.2778 21.7222 14.392 21.7222 17C21.7222 19.608 19.608 21.7222 17 21.7222C14.392 21.7222 12.2778 19.608 12.2778 17Z" fill-rule="evenodd" clip-rule="evenodd" fill="#101010"/>
+<path d="M21.0303 22L19.1885 20.367L20.367 19.1885L22 21.0303L21.0303 22Z" fill-rule="evenodd" clip-rule="evenodd" fill="#101010"/>
+</g>
+</g>
+</svg>

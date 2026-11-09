@@ -1,0 +1,7 @@
+const equipmentItems = [
+  { id: "rockrider", category: "bike", source: "迪卡侬设备", name: "Rockrider 山地自行车", homeName: "Rockrider ST 530 山地自行车", homeNote: "已使用 3个月12天", detail: "ST 530 / 灰色", date: "2026.03 购买 · 账号自动同步", image: "device-rockrider.png", status: "建议进行基础保养", note: "已使用约 6 个月", action: "查看推荐服务", tone: "brand", synced: true },
+  { id: "riverside", category: "bike", source: "迪卡侬设备", name: "Riverside Touring 自行车", homeNote: "1 次新车安装权益可用", detail: "经典旅行系列 / 蓝色", date: "2026.08 购买 · 账号自动同步", image: "device-riverside.png", status: "1 次新车安装权益可用", note: "新车专享服务", action: "预约安装", tone: "positive", synced: true },
+  { id: "wedze", category: "ski", source: "迪卡侬设备", name: "WEDZE 单板滑雪板", homeNote: "雪季提醒", detail: "All Mountain / 黑色全能款", date: "2025.11 购买 · 账号自动同步", image: "device-wedze.png", status: "雪季开始，可以准备开板养护了", note: "雪季提醒", action: "查看雪板保养", tone: "neutral", synced: true },
+  { id: "perfly", category: "racket", source: "迪卡侬设备", name: "PERFLY 羽毛球拍", homeName: "PERFLY BR 990 羽毛球拍", homeNote: "上次穿线：2026.05", detail: "BR 990 / 碳纤维专业级", date: "2025.12 购买 · 账号自动同步", image: "device-perfly.png", status: "上次穿线：2026.05", note: "拉线张力：26磅", action: "查看设备详情", tone: "neutral", synced: true },
+  { id: "specialized", category: "other", source: "其他品牌", name: "Specialized Allez 公路车", homeNote: "支持线下门店预约", detail: "SPECIALIZED / 红色款", date: "2026.06 手动添加", image: "device-specialized.png", status: "可使用迪卡侬自行车维修与保养服务", note: "支持线下门店预约", action: "查看可用服务", tone: "neutral" }
+];

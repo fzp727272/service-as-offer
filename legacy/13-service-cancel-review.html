@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Service as Offer 13：服务单取消评审原型">
-  <title>13 · 服务单取消 · Service as Offer</title>
-  <link rel="stylesheet" href="remaining-pages.css">
-  <link rel="stylesheet" href="service-system.css">
-  <script src="figma-copy.js" defer></script>
-  <script src="service-journey.js" defer></script>
+  <title>11 · 服务单取消 · Service as Offer</title>
+  <link rel="stylesheet" href="../11-service-cancel-review.css?v=20261104-one-css">
+  <script src="../service-journey.js?v=20261104-one-css" defer></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <script src="../figma-capture-toolbar.js" defer></script>
 </head>
 <body class="gray-section-layout">
   <main class="page-presentation">
     <article class="page-artboard" aria-label="服务单取消评审原型">
       <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
-      <header class="page-nav"><a class="page-back" href="12-service-order-detail.html" aria-label="返回服务单详情">‹</a><span class="page-nav-title">取消服务单</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <header class="page-nav"><a class="page-back" href="../10-service-order-detail.html" aria-label="返回服务单详情">‹</a><span class="page-nav-title">取消服务单</span><span class="page-nav-more" aria-hidden="true">···</span></header>
       <div class="page-body">
         <header class="page-intro">
           <h1 class="page-heading">取消待付款服务单</h1>
@@ -38,21 +38,21 @@
       </div>
       <div class="page-foot">
         <div class="page-foot-actions">
-          <a class="page-button secondary" style="display:block;text-decoration:none" href="12-service-order-detail.html">返回服务单</a>
+          <a class="page-button secondary" style="display:block;text-decoration:none" href="../10-service-order-detail.html">返回服务单</a>
           <button class="page-button danger" type="button" data-open-dialog="service-cancel-dialog">取消服务单</button>
         </div>
       </div>
     </article>
     <aside class="page-annotation">
-      <p class="page-annotation-kicker">UX SPEC 13 · REQ-013</p>
+      <p class="page-annotation-kicker">UX SPEC 11 · REQ-013</p>
       <h1>服务单取消</h1>
       <p>演示仅允许顾客取消尚未支付的服务单。支付后，顾客在预约成功、门店尚未扫码签到前可以取消本次预约；不在此取消已支付服务单。</p>
       <h2>原型边界</h2>
       <ul><li>取消按钮仅用于待支付状态。</li><li>预约取消后保留服务单；门店扫码签到后不显示取消预约操作。</li><li>实际取消、资金处理及失败恢复仍需接入业务规则。</li></ul>
       <p class="page-status warning">支付后整单取消不在本次原型范围内。</p>
       <nav class="page-flow-nav" aria-label="页面原型导航">
-        <a href="12-service-order-detail.html">12 服务单</a><a aria-current="page" href="13-service-cancel-review.html">13 取消服务单</a>
-        <a href="09-appointment-detail-cancel.html">09 取消预约</a><a href="15-message-landing.html">15 消息落地</a>
+        <a href="../10-service-order-detail.html">10 服务单</a><a aria-current="page" href="../11-service-cancel-review.html">11 取消服务单</a>
+        <a href="../07-appointment-detail-cancel.html">07 取消预约</a><a href="../13-message-landing.html">13 消息落地</a>
       </nav>
     </aside>
   </main>
@@ -64,6 +64,6 @@
       <button class="page-button secondary" type="button" data-close-dialog autofocus>保留服务单</button>
     </div>
   </dialog>
-  <script src="remaining-pages.js"></script>
+  <script src="../remaining-pages.js"></script>
 </body>
 </html>

@@ -55,7 +55,12 @@
     background.append(clonedArtboard);
     document.body.append(background);
     try {
-      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      // Wait two frames for layout to settle; rAF never fires in hidden/background
+      // tabs, so race with a timeout to avoid hanging the copy flow there.
+      await Promise.race([
+        new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+        new Promise(resolve => setTimeout(resolve, 120)),
+      ]);
       await rendererReady;
       const rendered = await window.html2canvas(background.firstElementChild, { width, height, scale, backgroundColor: "#fff", useCORS: true, logging: false, windowWidth: width });
       return await new Promise((resolve, reject) => rendered.toBlob(blob => {
@@ -68,7 +73,7 @@
   };
 
   window.copyCurrentArtboardToFigma = async () => {
-    const artboard = document.querySelector(".artboard, .page-artboard, .device, .phone");
+    const artboard = document.querySelector("[data-figma-artboard], .artboard, .page-artboard, .device, .phone");
     if (!artboard) throw new Error("当前页面没有可复制的手机画板。");
     if (!navigator.clipboard?.write || typeof ClipboardItem === "undefined") {
       throw new Error("浏览器不支持 HTML 剪贴板，请使用最新版 Chrome 并通过 localhost 打开页面。");
@@ -99,4 +104,5 @@
       "text/plain": new Blob(["Service as Offer · 手机界面（含样式的画板图片）"], { type: "text/plain" }),
     })]);
   };
+
 })();
