@@ -67,7 +67,7 @@ const params = new URLSearchParams(location.search);
     });
     const ensureStoreTimePicker = () => pickerReady ||= window.StoreTimePicker
       ? Promise.resolve(window.StoreTimePicker)
-      : loadScript('booking-fixtures.js').then(() => loadScript('store-time-picker.js')).then(() => window.StoreTimePicker);
+      : loadScript('booking-fixtures.js').then(() => loadScript('components/store-time-picker.js')).then(() => window.StoreTimePicker);
     const chooseBooking = async () => {
       const picker = await ensureStoreTimePicker();
       selection = picker.normalize(selection);

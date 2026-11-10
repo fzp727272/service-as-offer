@@ -5,18 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Service as Offer：统一订单详情，展示预约时间、门店与到店二维码">
   <title>订单详情 · Service as Offer</title>
-  <link rel="stylesheet" href="10-service-order-detail.css?v=figma-1155-4263">
-  <link rel="stylesheet" href="store-time-picker.css?v=20261106-shared-picker">
+  <link rel="stylesheet" href="10-service-order-detail.css?v=20261110-status-message">
+  <link rel="stylesheet" href="components/store-time-picker.css?v=20261109-rule-alignment">
+  <link rel="stylesheet" href="journey-panel.css?v=20261109">
   <script src="booking-fixtures.js?v=20261103-picker" defer></script>
-  <script src="service-journey.js?v=figma-1155-4263" defer></script>
+  <script src="journey-map.js?v=20261109" defer></script>
+  <script src="service-journey.js?v=20261110-status-message" defer></script>
+  <script src="components/prototype-nav.js?v=20261109-shared-nav" defer></script>
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <script src="figma-capture-toolbar.js" defer></script>
 </head>
-<body class="order-detail">
+<body class="order-detail order-detail-inline-status">
   <main class="page-presentation">
     <article class="page-artboard" aria-label="服务单详情评审原型">
-      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
-      <header class="page-nav"><a class="page-back" href="my-orders.html" aria-label="返回我的订单">‹</a><span class="page-nav-title">订单详情</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <prototype-nav title="订单详情" back-href="my-orders.html" back-label="返回我的订单"></prototype-nav>
       <div class="order-toast" id="order-toast" role="status" aria-live="polite" hidden></div>
       <div class="page-body">
         <header class="page-intro">
@@ -62,21 +64,22 @@
               </div>
               <p class="order-booking-contact"><span>预约人</span><strong id="order-booking-contact">XXX 131****7162</strong></p>
             </div>
+            <div class="order-store-location">
             <div class="order-store-head">
               <strong id="order-store-name"></strong>
+            </div>
+            <div class="order-store-actions">
+              <div class="order-store-copy">
+                <a class="order-store-address-row" id="order-store-map-link" href="https://map.qq.com/" target="_blank" rel="noopener noreferrer" aria-label="在微信地图中查看门店">
+                  <p class="order-store-address"><span class="order-store-distance" id="order-store-distance"></span><span id="order-store-address"></span></p>
+                </a>
+                <span class="order-store-hours" id="order-store-hours"></span>
+              </div>
               <div class="store-icon-actions" role="group" aria-label="门店操作">
                 <a class="store-icon-button is-navigation" id="order-store-navigation-link" href="https://map.qq.com/" target="_blank" rel="noopener noreferrer" aria-label="导航到门店" title="导航到门店"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21 3-7 18-3-8-8-3L21 3Z"/></svg></a>
                 <button class="order-store-contact store-icon-button is-message" type="button" data-open-dialog="store-contact-dialog" aria-label="联系门店" title="联系门店" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 11.5a8 8 0 0 1-8 8H5l-3 3v-11a9 9 0 0 1 18 0Z"/><path d="M7 10h8M7 14h5"/></svg></button>
               </div>
             </div>
-            <a class="order-store-address-row" id="order-store-map-link" href="https://map.qq.com/" target="_blank" rel="noopener noreferrer" aria-label="在微信地图中查看门店">
-              <p class="order-store-address"><span class="order-store-distance" id="order-store-distance"></span><span id="order-store-address"></span></p>
-            </a>
-            <div class="order-store-actions">
-              <span class="order-store-hours" id="order-store-hours"></span>
-            </div>
-            <div class="appointment-actions" id="cancel-appointment-action" hidden>
-              <button type="button" data-open-dialog="cancel-dialog">取消本次预约</button>
             </div>
           </div>
         </section>
@@ -146,6 +149,7 @@
       <div class="page-foot">
         <div class="page-foot-actions single-action" id="order-foot-actions">
           <button class="page-button secondary" id="order-cancel-action" type="button" data-open-dialog="cancel-order-dialog" hidden>取消服务单</button>
+          <button class="page-button secondary" id="cancel-appointment-action" type="button" data-open-dialog="cancel-dialog" hidden>取消本次预约</button>
           <a class="page-button" id="order-primary-action" href="10-service-order-detail.html?selectBooking=1">选择门店与时段</a>
         </div>
       </div>
@@ -255,6 +259,7 @@
     <p class="wechat-dialog-note">点击长按添加门店服务人员微信</p>
     <button class="wechat-dialog-close" type="button" data-close-dialog autofocus>关闭</button>
   </dialog>
+  <script src="components/dialog.js"></script>
   <script src="remaining-pages.js"></script>
 </body>
 </html>

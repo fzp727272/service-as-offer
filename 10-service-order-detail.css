@@ -55,36 +55,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   background: #fff;
   box-shadow: 0 20px 64px #10102424;
 }
-.page-statusbar {
-  height: 44px;
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 22px;
-  font-size: 14px;
-  font-weight: 650;
-}
-.page-status-icons { font-size: 11px; letter-spacing: 2px; }
-.page-nav {
-  height: 48px;
-  flex: none;
-  display: grid;
-  grid-template-columns: 44px 1fr 44px;
-  align-items: center;
-  padding: 0 16px;
-  border-bottom: 1px solid var(--page-line);
-}
-.page-back {
-  display: flex;
-  min-height: 44px;
-  align-items: center;
-  font-size: 26px;
-  font-weight: 300;
-  text-decoration: none;
-}
-.page-nav-title { text-align: center; font-size: 16px; font-weight: 650; }
-.page-nav-more { text-align: right; font-size: 20px; letter-spacing: 2px; }
 .page-body {
   min-height: 0;
   flex: 1;
@@ -802,6 +772,7 @@ body[data-page="schedule"] .booking-store-divider {
 }
 
 .order-store-card { background: var(--container-neutral); }
+.order-detail .order-store-location { padding: 8px 12px; background: var(--background-alternative); }
 .order-store-label { margin: 0 0 8px; color: var(--content-quiet); font-size: 14px; line-height: 20px; }
 .order-store-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .order-store-head > strong { min-width: 0; font-size: 16px; line-height: 22px; }
@@ -1728,6 +1699,23 @@ body.order-detail {
   font-size: 12px;
   line-height: 18px;
 }
+.order-detail-inline-status .order-status-message:not([hidden]) {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.order-detail-inline-status .order-status-message::before {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  background: url("assets/figma/info.svg") center / contain no-repeat;
+  content: "";
+}
 .vitamin-app.purchase-flow.order-detail .page-section {
   margin: 0;
   padding: 12px 16px;
@@ -1809,13 +1797,12 @@ body.order-detail {
 .order-detail .order-store-meta {
   display: flex;
   flex-direction: column;
-  margin-bottom: 12px;
-  border-bottom: 1px solid var(--page-line);
+  margin-bottom: 8px;
 }
 .order-detail .order-store-meta .order-store-appointment {
   order: 0;
   margin: 0;
-  padding: 9px 12px;
+  padding: 8px 12px;
 }
 .order-detail .order-store-meta .order-booking-contact {
   margin: 0;
@@ -1852,8 +1839,9 @@ body.order-detail {
   line-height: 18px;
 }
 .order-detail .order-store-head {
+  display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
 }
 .order-detail .order-store-head > strong {
@@ -1876,7 +1864,7 @@ body.order-detail {
   font-weight: 500;
 }
 .order-detail .order-store-address-row {
-  margin-top: 4px;
+  margin-top: 0;
 }
 .order-detail .order-store-address > span:first-child.order-store-distance {
   flex: none;
@@ -1943,8 +1931,12 @@ body.order-detail {
   height: 18px;
 }
 .order-detail .order-store-address {
-  font-size: 13px;
+  gap: 0;
+  font-size: 12px;
   line-height: 20px;
+}
+.order-detail .order-store-distance:not([hidden])::after {
+  content: "｜";
 }
 .order-detail .order-store-address-row .order-store-address {
   flex: 1;
@@ -1963,33 +1955,31 @@ body.order-detail {
 }
 .order-detail .order-store-actions {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 2px;
   justify-content: space-between;
 }
-.order-detail .order-store-hours,
-    .order-detail .order-store-contact {
-  display: inline-flex;
-  min-height: 32px;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  background: var(--container-neutral);
+.order-detail .order-store-copy {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.order-detail .order-store-hours {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
   color: var(--content-quiet);
   font-size: 12px;
-  line-height: 18px;
+  line-height: 20px;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
-.order-detail .order-store-contact {
-  /* gap: 5px; */
-  padding: 0 12px;
-  border: 1px solid var(--page-line);
-  color: var(--content-brand);
-  font: inherit;
-  font-size: 12px;
-  cursor: pointer;
+.order-detail .order-store-actions .store-icon-actions {
+  align-self: flex-end;
+  gap: 0;
+  margin-right: -8px;
 }
 .order-detail .wechat-dialog {
   width: min(300px, calc(100% - 40px));
@@ -2089,17 +2079,6 @@ body.order-detail {
   font-weight: 650;
   text-align: left;
   font-variant-numeric: tabular-nums;
-}
-.order-detail .appointment-actions {
-  gap: 8px;
-  margin-top: 8px;
-  padding-top: 0;
-}
-.order-detail .appointment-actions :is(a, button) {
-  font-size: 12px;
-}
-.order-detail .appointment-actions button {
-  color: var(--content-quiet);
 }
 .order-detail .ticket-code {
   display: grid;
@@ -2232,6 +2211,40 @@ body.order-detail {
 }
 .vitamin-app.order-detail .page-foot .page-button {
   border-radius: 0px;
+}
+.order-detail .page-foot {
+  padding: 12px 16px max(24px, env(safe-area-inset-bottom)) 12px;
+  background: #fff;
+}
+.order-detail .page-foot-actions,
+.order-detail .page-foot-actions.single-action {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.order-detail .page-foot-actions .page-button {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  width: auto;
+  min-width: 80px;
+  height: 40px;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border: 0;
+  background: var(--page-blue);
+  color: #fff;
+  font-size: 12px;
+  line-height: 20px;
+  text-decoration: none;
+}
+.order-detail .page-foot-actions .page-button.secondary,
+.order-detail .page-foot-actions .page-button.brand-outline {
+  border: 1px solid var(--border-quiet);
+  background: #fff;
+  color: var(--content-neutral);
 }
 .order-detail .page-foot:has(.page-foot-actions[hidden]) {
   display: none;

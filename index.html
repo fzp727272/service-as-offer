@@ -4,9 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>服务全流程 · Service as Offer</title>
-  <script src="service-journey.js?v=20261104-one-css" defer></script>
+  <script src="journey-map.js?v=20261109-entry-paths" defer></script>
+  <script src="service-journey.js?v=20261109-journey-map" defer></script>
+  <script src="journey-repair-switch.js?v=20261109" defer></script>
   <link rel="stylesheet" href="index.css?v=20261104-one-css">
-  <link rel="stylesheet" href="store-time-picker.css?v=20261106-shared-picker">
+  <link rel="stylesheet" href="components/store-time-picker.css?v=20261109-rule-alignment">
+  <link rel="stylesheet" href="journey-panel.css?v=20261109">
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <script src="figma-capture-toolbar.js" defer></script>
 </head>
@@ -20,39 +23,9 @@
       <div><h1>服务全流程</h1><p>从选服务到预约、到店和服务完成。主线连续操作，权益、维修和取消分支在对应节点接入。</p></div>
       <a class="start" href="01-service-entry.html?scenario=all">从服务首页开始</a>
     </section>
-    <div class="journey-board" aria-label="购买至完成的主流程">
-      <section class="lane">
-        <h2>发现与购买</h2>
-        <ol>
-          <li><a class="node" href="01-service-entry.html?scenario=all">服务首页</a><p>先看进行中服务与装备权益，再浏览服务目录。</p></li>
-          <li><a class="node" href="02-service-detail.html?category=bike">服务详情</a><p>确认服务内容、关联商品与价格。</p><div class="branch">无法判断维修项目<br><a href="04-repair-request.html">描述维修需求</a></div></li>
-          <li><a class="node" href="05-order-checkout.html">确认订单</a><p>核对金额，选择微信支付或燃值抵扣。</p></li>
-          <li><a class="node" href="05-payment-result.html">支付结果</a><p>确认支付结果后，成功可立即预约。</p></li>
-        </ol>
-      </section>
-      <section class="lane">
-        <h2>预约服务</h2>
-        <ol>
-          <li><a class="node" href="10-service-order-detail.html?selectBooking=1">选择门店与时间</a><p>在共享选择弹框中按城市查看门店，选择可约日期与时段。</p></li>
-          <li><a class="node" href="10-service-order-detail.html?booking=created">服务订单 · 预约状态</a><p>预约结果是订单状态而非独立流程节点；结果待确认时在订单状态栏说明，并可在订单内查看结果弹窗。预约时间属于同一服务订单；不提供更换预约，扫码前取消需二次确认。</p></li>
-        </ol>
-      </section>
-      <section class="lane">
-        <h2>到店与完成</h2>
-        <ol>
-          <li><a class="node" href="10-service-order-detail.html?demoState=queued">服务单详情 · 扫码后排队</a><p>到店扫码成功后，在订单详情查看门店排队号。</p><div class="branch">其他订单状态<br><a href="10-service-order-detail.html?booking=created">查看预约信息</a> / <a href="10-service-order-detail.html?paymentState=unpaid">待付款服务单</a></div></li>
-          <li><a class="node" href="10-service-order-detail.html?demoState=completed">服务完成与记录</a><p>在订单详情查看已完成的服务记录。</p></li>
-          <li><a class="node" href="my-orders.html">我的订单</a><p>查看历史记录或再次购买服务。</p></li>
-        </ol>
-      </section>
-    </div>
-    <section class="entry-paths" aria-labelledby="entry-title">
+    <div class="journey-board" data-journey-board aria-label="购买至完成的主流程"></div>
+    <section class="entry-paths" data-entry-paths aria-labelledby="entry-title">
       <h2 id="entry-title">其他入口，接回同一条主线</h2>
-      <div class="entry-path"><h3>购买商品赠送权益</h3><p><a class="path-link" href="01-service-entry.html?entry=scan">购后扫码进入</a> / <a class="path-link" href="03-benefit-detail.html?entry=order&amp;sourceOrder=810263">商品订单跳转权益</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="10-service-order-detail.html?selectBooking=1&amp;context=benefit&amp;benefit=inspection&amp;name=安全检查&amp;equipment=Rockrider%20ST%20530">选择门店与时间</a>，无需再次支付。扫码不执行装备绑定。</p></div>
-      <div class="entry-path"><h3>浏览其他商品或服务</h3><p><a class="path-link" href="01-service-entry.html?entry=product">其他商品页面进入</a> / <a class="path-link" href="01-service-entry.html?entry=service">服务入口进入</a>，在同一首页浏览服务。</p></div>
-      <div class="entry-path"><h3>不确定维修项目</h3><p><a class="path-link" href="04-repair-request.html">描述维修需求</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="10-service-order-detail.html?selectBooking=1&amp;name=自行车维修&amp;category=bike&amp;context=repair">查看服务门店</a>，项目与报价由门店确认。</p></div>
-      <div class="entry-path"><h3>继续已有服务</h3><p><a class="path-link" href="my-orders.html">我的订单</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="10-service-order-detail.html">对应服务单</a>，按当前状态继续付款、预约或查看进度。</p></div>
-      <div class="entry-path"><h3>从消息返回</h3><p><a class="path-link" href="13-message-landing.html">服务消息</a><span class="path-connector" aria-label="然后">→</span><a class="path-link" href="10-service-order-detail.html">关联服务单</a>，保留原服务与预约上下文。</p></div>
     </section>
     <section class="handoff" aria-labelledby="handoff-title">
       <h2 id="handoff-title">统一设计与交互约定</h2>

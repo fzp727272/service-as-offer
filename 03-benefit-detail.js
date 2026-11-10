@@ -20,7 +20,7 @@ const params = new URLSearchParams(location.search);
     const successConfirm = document.getElementById("success-confirm");
     let trigger = null;
     const icon = name => `<svg aria-hidden="true"><use href="#${name}"/></svg>`;
-    const lockTargets = () => [content, document.querySelector(".nav"), document.querySelector(".footer"), document.querySelector(".journey-panel")].filter(Boolean);
+    const lockTargets = () => [content, document.querySelector("prototype-nav"), document.querySelector(".footer"), document.querySelector(".journey-panel")].filter(Boolean);
     const setInert = value => lockTargets().forEach(el => { el.inert = value; });
     if (!valid) {
       content.innerHTML = '<section class="benefit-intro"><h2>无法展示此权益</h2><p>权益链接中的信息无效，请返回首页重新选择权益。</p></section>';

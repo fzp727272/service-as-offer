@@ -1,7 +1,8 @@
 .service-detail .app{height:calc(100% - 44px);font-family:"Decathlon Text","Source Han Sans CN","PingFang SC","Microsoft YaHei",sans-serif}
-.service-detail .app .body-scroll{padding:0 0 24px;scroll-behavior:smooth;overscroll-behavior:contain}
-.service-detail .app .nav{grid-template-columns:40px minmax(0,1fr) 87px;padding:0 8px 0 12px}
-.service-detail .app .nav>button:first-child{width:44px;height:44px;text-align:left}
+.service-detail .app{height:100%;font-family:"Decathlon Text","Source Han Sans CN","PingFang SC","Microsoft YaHei",sans-serif}
+.service-detail .app .body-scroll{padding:0;scroll-behavior:smooth;overscroll-behavior:contain;display:flex;flex-direction:column;gap:8px;background:var(--background-alternative)}
+.service-detail .app .body-scroll > .section{margin:0;padding:12px 16px;border:0;border-radius:0;background:#fff}
+.service-detail .app .body-scroll > .hero{padding:0}
 .service-detail .app .hero{margin:0;border:0;background:#fff}
 .service-detail .service-cover{position:relative;height:240px;overflow:hidden;background:var(--soft)}
 .service-detail .service-cover img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 56%}
@@ -13,7 +14,7 @@
 .service-detail .service-attributes{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;color:var(--mid);font-size:12px;line-height:20px}
 .service-detail .service-attributes span{display:inline-flex;align-items:center;gap:5px}
 .service-detail .service-attributes img{width:15px;height:15px}
-.service-detail .app :is(.service-switcher,.store-selection,.process-section,.maintenance-guide,.arrival-notes,.service-help){margin:0;padding:20px;border:0;border-top:8px solid var(--background-alternative);background:#fff}
+.service-detail .app :is(.service-switcher,.store-selection,.process-section,.maintenance-guide,.arrival-notes,.service-help){margin:0;padding:20px;border:0;background:#fff}
 .service-detail .app :is(.service-switcher h2,.store-selection h2,.section-title,.maintenance-heading){margin:0;font-size:16px;line-height:24px;font-weight:700}
 .service-detail .app .service-switcher-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
 .service-detail .service-switcher-head>span{color:var(--mid);font-size:12px;white-space:nowrap}
@@ -31,8 +32,8 @@
 .service-detail .app .store-summary-more{min-height:32px;font-size:13px}
 .service-detail .app .store-summary-card{display:block;min-height:0}
 .service-detail .app .store-summary-title{display:block;padding-bottom:4px}
-.service-detail .app .store-summary-name{display:block;white-space:normal;font-size:14px;line-height:22px}
-.service-detail .app .store-summary-address{white-space:normal;overflow:visible;font-size:12px;line-height:20px}
+.service-detail .app .store-summary-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;line-height:22px}
+.service-detail .app .store-summary-address{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;line-height:20px}
 .service-detail .store-summary-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
 .service-detail .store-summary-bottom>span{color:var(--mid);font-size:12px;line-height:20px}
 .service-detail .app .store-summary-card .store-contact-button{min-height:36px;padding:0 14px;font-size:13px}
@@ -42,7 +43,7 @@
 .service-detail .store-date-rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(58px,1fr);gap:6px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
 .service-detail .store-date-rail::-webkit-scrollbar{display:none}
 .service-detail .store-date-card{min-height:54px;padding:5px 4px;border:1px solid #dddfe8;background:#fff;text-align:center;color:#3a3a44;font-size:10px;line-height:13px}
-.service-detail .store-date-card strong{display:block;margin-top:1px;font-size:17px;line-height:20px;font-weight:700;color:#181826}
+.service-detail .store-date-card strong{display:block;margin-top:1px;font-size:16px;line-height:20px;font-weight:700;color:#181826}
 .service-detail .store-date-card small{display:block;margin-top:1px;color:#7c7d89;font-size:10px;line-height:13px}
 .service-detail .store-date-card.is-selected{border-color:var(--brand);background:#eef0ff;color:var(--brand)}
 .service-detail .store-date-card.is-selected small,.service-detail .store-date-card.is-selected strong{color:var(--brand)}
@@ -57,29 +58,29 @@
 .service-detail .app .store-summary-name{font-size:16px;line-height:22px;font-weight:700}
 .service-detail .store-summary-distance{flex:none;color:var(--brand);font-size:12px;line-height:18px;font-weight:650}
 .service-detail .app .store-summary-address{font-size:12px;line-height:18px}
-.service-detail .store-summary-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--mid);font-size:11px;line-height:16px}
+.service-detail .store-summary-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--mid);font-size:12px;line-height:18px}
 .service-detail .store-summary-meta button{padding:0;border:0;background:transparent;color:var(--brand);font-size:12px;white-space:nowrap}
 .service-detail .store-date-section{padding-top:10px;border-top:1px solid var(--line)}
 .service-detail .store-date-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:13px;line-height:18px;font-weight:650}
-.service-detail .store-date-heading span{color:var(--mid);font-size:11px;font-weight:400}
+.service-detail .store-date-heading span{color:var(--mid);font-size:12px;font-weight:400}
 .service-detail .store-date-rail{grid-auto-columns:minmax(0,1fr);gap:6px;margin:0;overflow:hidden}
-.service-detail .store-date-card{min-height:62px;padding:6px 3px;border:0;border-left:1px solid var(--line);border-radius:0!important;background:transparent;color:#73737a;font-size:10px;line-height:14px}
+.service-detail .store-date-card{min-height:62px;padding:6px 3px;border:0;border-left:1px solid var(--line);border-radius:0!important;background:transparent;color:#73737a;font-size:12px;line-height:18px}
 .service-detail .store-date-card strong{margin-top:0;font-size:15px;line-height:20px}
-.service-detail .store-date-card small{margin-top:2px;color:#777;font-size:9px;line-height:12px;white-space:nowrap}
+.service-detail .store-date-card small{margin-top:2px;color:#777;font-size:10px;line-height:14px;white-space:nowrap}
 .service-detail .store-date-card.is-selected{background:transparent;color:#73737a}
 .service-detail .store-date-card.is-selected strong{color:var(--ink)}
 .service-detail .store-date-card.is-selected small{color:var(--brand)}
-.service-detail .store-date-more{min-height:62px;padding:5px 2px;border:0;border-left:1px solid var(--line);border-radius:0!important;background:transparent;color:#666;font-size:11px;line-height:15px}
+.service-detail .store-date-more{min-height:62px;padding:5px 2px;border:0;border-left:1px solid var(--line);border-radius:0!important;background:transparent;color:#666;font-size:12px;line-height:18px}
 .service-detail .store-summary-foot{align-items:center;margin:0}
-.service-detail .store-summary-foot-text{font-size:11px;line-height:16px}
+.service-detail .store-summary-foot-text{font-size:12px;line-height:18px}
 .service-detail .store-summary-foot .store-icon-actions{gap:0}
-.service-detail .store-date-card:focus-visible,.service-detail .store-date-more:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.service-detail .store-date-card:focus-visible,.service-detail .store-date-more:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
 .service-detail .app .store-summary-surface{display:grid;gap:12px}
 .service-detail .app .store-summary-title{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .service-detail .store-summary-copy{gap:6px}
 .service-detail .store-summary-meta{min-height:44px;padding-bottom:8px;border-bottom:1px solid var(--line);font-size:12px;line-height:20px}
 .service-detail .store-summary-meta button{min-height:44px;margin:-12px 0;padding:0 0 0 8px;font-size:12px;font-weight:650}
-.service-detail .app .store-summary-address{margin:0;color:var(--mid);font-size:12px;line-height:20px}
+.service-detail .app .store-summary-address{min-width:0;max-width:100%;overflow:hidden;margin:0;color:var(--mid);font-size:12px;line-height:20px;text-overflow:ellipsis;white-space:nowrap}
 /* 地址+营业时间合并为大栏位；门店操作按钮（导航/联系）居右、居下对齐 */
 .service-detail .store-summary-hours-row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:2px}
 .service-detail .store-summary-hours-row .store-summary-copy{flex:1;min-width:0;display:grid;gap:2px}
@@ -125,16 +126,16 @@
 .service-detail .app .maintenance-notice-title{font-size:13px;line-height:20px;color:var(--ink)}
 .service-detail .app .arrival-notes .section-title{margin-bottom:12px}
 .service-detail .app .arrival-notes .row{font-size:13px;line-height:22px}
-.service-detail .service-help>a{display:flex;align-items:center;justify-content:space-between;min-height:24px;border:0;color:var(--brand);font-size:14px}
-.service-detail .service-help-label{display:inline-flex;align-items:center;gap:8px}
-.service-detail .service-help-icon{width:18px;height:18px;flex:none;background-color:var(--brand);-webkit-mask:url("assets/figma/maintain-repair.svg") center/contain no-repeat;mask:url("assets/figma/maintain-repair.svg") center/contain no-repeat}
+.service-detail .repair-consult-float{position:absolute;right:16px;bottom:calc(100% + 12px);z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:56px;height:56px;border:1px solid var(--line);border-radius:50%!important;background:#fff;box-shadow:0 3px 12px #10101038;color:var(--brand);text-decoration:none;font-size:10px;font-weight:700;line-height:14px}
+.service-detail .repair-consult-float svg{width:20px;height:20px;fill:currentColor}
+.service-detail .repair-consult-float:active{opacity:.75}
 .service-detail .app .supplemental-section{margin:12px 0 0;padding:12px 0 0;border:0;border-top:1px solid var(--line)}
 .service-detail .app .supplemental-section .product-guide{margin:12px 0}
 .service-detail .app .supplemental-section .text-action{width:100%;min-height:32px}
-.service-detail .app .footer{display:flex;align-items:center;gap:16px;padding:12px 20px max(16px,var(--safe));border-top:1px solid var(--line);box-shadow:0 -4px 16px #10101006}
+.service-detail .app .footer{position:relative;display:flex;align-items:center;gap:16px;padding:12px 20px calc(12px + var(--safe));border-top:1px solid #ededed;background:#fff}
 .service-detail .app .footer.benefit-footer{display:grid;grid-template-columns:1fr;gap:8px}
 .service-detail .purchase-summary{flex:1;min-width:0;display:grid;gap:2px}
-.service-detail .purchase-summary small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mid);font-size:11px;line-height:18px}
+.service-detail .purchase-summary small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mid);font-size:12px;line-height:18px}
 .service-detail .purchase-summary strong{color:var(--brand);font-size:24px;line-height:28px;font-variant-numeric:tabular-nums}
 .service-detail .app .footer .primary{width:160px;flex:none;min-height:48px;display:grid;place-content:center;gap:2px;font-size:15px;line-height:22px}
 .service-detail .app .footer .primary small{font-size:10px;line-height:14px;font-weight:400}
@@ -145,7 +146,7 @@
 .service-detail .app .compare-sheet-hint{color:var(--mid);margin:0 20px 12px}
 .service-detail .app .compare-sheet-head{padding:0 20px 12px}
 .service-detail .app .compare-table th,.service-detail .app .compare-table td{width:140px;padding:12px}
-.service-detail .app .compare-package-name{font-size:13px;line-height:20px}
+.service-detail .app .compare-package-name{font-size:14px;line-height:20px}
 .service-detail .app .wechat-dialog-close{min-height:44px}
 .service-detail .app .wechat-phone-unavailable{margin:12px 0 0;padding:12px;background:var(--background-alternative);font-size:12px;line-height:20px;color:var(--mid)}
 .service-detail .app :is(button,a,summary,[tabindex]):focus-visible{outline:2px solid var(--brand);outline-offset:3px}
@@ -157,7 +158,7 @@
 .service-detail .app .store-selection{padding-top:12px;padding-bottom:12px}
 .service-detail .app .store-summary-surface{min-width:0;grid-template-columns:minmax(0,1fr);gap:0}
 .service-detail .store-summary-title{min-width:0}
-.service-detail .app .store-summary-name{min-width:0;overflow-wrap:anywhere}
+.service-detail .app .store-summary-name{min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .service-detail .store-nearby-link,.service-detail .store-date-heading button{flex:none;min-height:32px;display:inline-flex;align-items:center;font-weight:bold;justify-content:flex-end;gap:2px;padding:0 0 0 8px;border:0;background:transparent;color:var(--brand);font-size:12px;line-height:20px;white-space:nowrap}
 .service-detail .store-nearby-link img,.service-detail .store-date-heading button img{display:block;width:16px;height:16px;flex:none}
 .service-detail .store-summary-copy{gap:0}
@@ -167,7 +168,7 @@
 .service-detail .store-date-section{min-width:0;margin-top:12px;padding-top:0}
 .service-detail .store-date-heading{min-height:44px;margin:0}
 .service-detail .store-date-rail{display:grid;min-width:0;width:100%;grid-auto-flow:column;grid-auto-columns:60px;gap:4px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
-.service-detail .store-date-card{min-height:64px;padding:5px 3px;border:1px solid var(--line);background:#fff;font-size:11px;line-height:17px}
+.service-detail .store-date-card{min-height:64px;padding:5px 3px;border:1px solid var(--line);background:#fff;font-size:12px;line-height:18px}
 .service-detail .store-date-card:first-child{border-left:1px solid var(--line)}
 .service-detail .store-date-card strong{font-size:16px;line-height:20px}
 .service-detail .store-date-card.is-selected{border-color:var(--brand);background:var(--container-commercial-light);color:var(--brand)}

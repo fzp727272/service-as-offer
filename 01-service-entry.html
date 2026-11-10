@@ -6,12 +6,15 @@
   <meta name="color-scheme" content="light">
   <meta name="theme-color" content="#3643ba">
   <title>服务首页 · Service as Offer</title>
+  <script src="journey-map.js?v=20261109" defer></script>
+  <script src="service-journey.js?v=20261109-journey-map" defer></script>
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <script src="figma-capture-toolbar.js" defer></script>
-  <link rel="stylesheet" href="01-service-entry.css?v=20261106-empty-equipment-copy">
+  <link rel="stylesheet" href="01-service-entry.css?v=20261109-card-clicks">
+  <link rel="stylesheet" href="journey-panel.css?v=20261109">
   <script src="service-catalog.js" defer></script>
   <script src="equipment-data.js?v=20261106-equipment-selection" defer></script>
-  <script src="01-service-entry.js?v=20261106-benefit-recommendations" defer></script>
+  <script src="01-service-entry.js?v=20261109-card-clicks" defer></script>
 </head>
 <body>
   <main class="figma-preview">
@@ -26,13 +29,13 @@
           </header>
           <div class="page-body">
           <div class="trust-strip" aria-label="服务保障">
-            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path fill="currentColor" d="M16 3.5 27 7.6v7.1c0 6.9-4.6 11.9-11 15.3-6.4-3.4-11-8.4-11-15.3V7.6Z"/><path fill="#fff" d="m14.6 20.4-4-4 1.9-1.9 2.1 2.1 5.4-5.4 1.9 1.9Z"/></svg></span><span>官方服务</span></div>
-            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.9 6.6a6.4 6.4 0 0 0-8.2 8.2L5.5 22l4.5 4.5 7.2-7.2a6.4 6.4 0 0 0 8.2-8.2l-3.9 3.9-3.5-3.5Z"/><path d="m21.5 4.5 6 6"/></g></svg></span><span>专业技师</span></div>
-            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path fill="currentColor" d="M8 4h16v24l-8-5.4L8 28Z"/><path fill="#fff" d="M13 9.5h6v2.6h-2.1v6.4h-1.8V12.1H13Z"/></svg></span><span>透明收费</span></div>
+            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><img src="assets/figma/trust-official.svg" alt="" width="22" height="22"></span><span>官方服务</span></div>
+            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><img src="assets/figma/trust-technician.svg" alt="" width="21" height="21"></span><span>专业技师</span></div>
+            <div class="trust-item"><span class="trust-icon" aria-hidden="true"><img src="assets/figma/trust-pricing.svg" alt="" width="22" height="22"></span><span>透明收费</span></div>
           </div>
             <section class="personal personal-order" aria-label="当前订单" aria-labelledby="order-heading" hidden>
               <h2 class="personal-heading" id="order-heading">当前订单</h2>
-              <div class="order-card">
+              <div class="order-card" role="group" tabindex="0" aria-label="订单：自行车基础保养，按回车或空格查看订单详情">
                 <div class="order-head"><strong>自行车基础保养</strong><span class="order-status is-booked" id="order-status">待到店</span></div>
                 <div class="order-details">
                   <p id="order-detail">上海徐汇店｜10月24日 周六 14:00</p>
@@ -42,7 +45,7 @@
             </section>
           <section class="directory" id="service-directory" aria-label="服务目录">
             <nav class="category-nav" aria-label="服务分类" role="tablist">
-              <button type="button" class="category is-active" role="tab" aria-selected="true" data-category="all"><span>装备/权益</span></button>
+              <button type="button" class="category is-active" role="tab" aria-selected="true" data-category="all"><span>权益&推荐</span></button>
               <button type="button" class="category" role="tab" aria-selected="false" data-category="bike"><span>自行车</span></button>
               <button type="button" class="category" role="tab" aria-selected="false" data-category="badminton"><span>羽毛球 / 网球</span></button>
               <button type="button" class="category" role="tab" aria-selected="false" data-category="ski"><span>滑雪</span></button>
@@ -61,8 +64,8 @@
               <div class="personal-benefits">
                 <h2 class="personal-heading"><span></span>专属权益</h2>
                 <div class="benefit-list">
-                  <article class="benefit-card"><img src="assets/service-bike.svg" alt=""><div class="benefit-copy"><strong>新车安全检查</strong><small>有效期至 2026年12月30日</small></div><button type="button" class="benefit-action" data-benefit="inspection" aria-label="预约新车安全检查">去预约</button></article>
-                  <article class="benefit-card"><img src="assets/service-bike.svg" alt=""><div class="benefit-copy"><strong>6 个月免费安全检查</strong><small>有效期至 2026年12月30日</small></div><button type="button" class="benefit-action" data-benefit="six-month" aria-label="预约 6 个月免费安全检查">去预约</button></article>
+                  <article class="benefit-card" role="group" tabindex="0" aria-label="权益：新车安全检查，按回车或空格查看权益详情"><img src="assets/service-bike.svg" alt=""><div class="benefit-copy"><strong>新车安全检查</strong><small>有效期至 2026年12月30日</small></div><button type="button" class="benefit-action" data-benefit="inspection" aria-label="预约新车安全检查">去预约</button></article>
+                  <article class="benefit-card" role="group" tabindex="0" aria-label="权益：6 个月免费安全检查，按回车或空格查看权益详情"><img src="assets/service-bike.svg" alt=""><div class="benefit-copy"><strong>6 个月免费安全检查</strong><small>有效期至 2026年12月30日</small></div><button type="button" class="benefit-action" data-benefit="six-month" aria-label="预约 6 个月免费安全检查">去预约</button></article>
                 </div>
               </div>
               <section class="recommendations" aria-labelledby="recommendations-heading" hidden>
@@ -85,11 +88,16 @@
       <a class="journey-home" href="index.html">完整流程</a>
       <h1 id="journey-title">服务首页 · 场景预览</h1>
       <p class="panel-intro">切换示例场景，查看订单、权益及推荐服务的展示方式。</p>
-      <div class="scenario-options" role="group" aria-label="切换首页场景">
-        <button type="button" data-scenario="all" aria-pressed="false">订单与权益</button>
-        <button type="button" data-scenario="orders" aria-pressed="false">只有订单</button>
-        <button type="button" data-scenario="benefits" aria-pressed="true">只有权益</button>
-        <button type="button" data-scenario="recommendations" aria-pressed="false">无订单 / 权益</button>
+      <a class="panel-link" href="#home-design-notes" id="home-design-notes-link">查看首页设计说明</a>
+      <h2 class="panel-subheading" id="home-benefit-state-heading">权益状态</h2>
+      <div class="scenario-options" role="group" aria-labelledby="home-benefit-state-heading">
+        <button type="button" data-benefit-state="has" aria-pressed="true">有权益</button>
+        <button type="button" data-benefit-state="none" aria-pressed="false">无权益</button>
+      </div>
+      <h2 class="panel-subheading" id="home-order-presence-heading">订单状态</h2>
+      <div class="scenario-options" role="group" aria-labelledby="home-order-presence-heading">
+        <button type="button" data-order-presence="has" aria-pressed="false">有订单</button>
+        <button type="button" data-order-presence="none" aria-pressed="true">无订单</button>
       </div>
       <h2 class="panel-subheading" id="equipment-state-heading">装备栏状态</h2>
       <div class="scenario-options" role="group" aria-labelledby="equipment-state-heading">
@@ -102,23 +110,22 @@
         <button type="button" data-order-state="booked" aria-pressed="true">待到店</button>
         <button type="button" data-order-state="queued" aria-pressed="false">排队中</button>
       </div>
-      <details class="design-notes" open>
-        <summary>设计说明与来源</summary>
+      <details class="design-notes" id="home-design-notes" open>
+        <summary>首页设计说明与来源</summary>
         <div class="design-note-content">
           <h2>首页定位与信息层级</h2>
-          <p>以 Figma 1126:16388 权益态为基础，首页依次呈现品牌介绍、服务保障、我的装备、个人服务信息和完整服务目录，让用户先发现与自己相关的服务，再浏览其他项目。</p>
-          <h3>四种示例场景</h3>
+          <p>首页以装备养护为入口，先建立服务信任，再展示与用户相关的订单、装备和权益，最后提供按运动品类组织的完整服务目录，帮助用户从个人需求进入服务。</p>
+          <h3>权益与订单状态切换</h3>
           <ul>
-            <li><strong>订单与权益：</strong>同时展示已预约订单和两项安全检查权益。</li>
-            <li><strong>只有订单：</strong>展示预约订单；有装备时同时展示推荐服务。</li>
-            <li><strong>只有权益：</strong>默认场景，展示两项安全检查权益。</li>
-            <li><strong>无订单 / 权益：</strong>有装备时展示对应品类的示例推荐。</li>
+            <li><strong>权益：</strong>独立切换「有权益 / 无权益」，控制专属权益卡片是否展示。</li>
+            <li><strong>订单：</strong>独立切换「有订单 / 无订单」，控制当前订单卡片是否展示；有订单时可继续切换订单履约状态。</li>
+            <li><strong>推荐：</strong>无权益且有装备时，展示对应装备品类的养护推荐，不受是否有订单影响；无装备时保留装备关联入口，不展示养护推荐。</li>
           </ul>
-          <p>四种场景均保留装备信息和完整目录；切换后手机画板回到顶部，并将场景写入地址，方便分享或刷新后继续预览。</p>
+          <p>切换权益或订单状态后，手机画板回到顶部；两种状态分别写入地址，方便分享或刷新后继续预览。</p>
           <h3>装备栏与订单状态</h3>
           <ul>
             <li><strong>无装备：</strong>装备栏显示「关联装备，获取专属服务推荐」提示，右侧「添加装备」入口，点击进入装备库。</li>
-            <li><strong>有装备：</strong>显示装备总数，点击装备栏进入装备库选择，确认后返回首页。</li>
+            <li><strong>有装备：</strong>显示当前装备、使用信息和装备总数，点击装备栏进入装备库选择，确认后返回首页；目录中相关服务标记「为你推荐」。</li>
             <li><strong>订单状态：</strong>待预约用警告橙、待到店用品牌蓝、排队中用正向绿；详情行文案与操作按钮随状态切换，分别跳转预约选择、预约详情与订单详情。</li>
           </ul>
           <h3>入口与跳转</h3>
@@ -132,11 +139,7 @@
           <a class="panel-link" href="../docs/figma-1126-16388-implementation-diff.md">查看权益态初始设计记录（历史方案）</a>
         </div>
       </details>
-      <nav class="flow-nav" aria-label="服务流程">
-        <section class="flow-group"><h2>选服务与下单</h2><ol class="flow-steps"><li><a href="01-service-entry.html" aria-current="page">服务首页</a></li><li><a href="02-service-detail.html">服务详情</a></li><li><a href="05-order-checkout.html">确认订单</a></li><li><a href="05-payment-result.html">支付结果</a></li></ol></section>
-        <section class="flow-group"><h2>预约到店</h2><ol class="flow-steps"><li><a href="05-order-checkout.html?bookingMode=later">选择门店与时间</a></li><li><a href="10-service-order-detail.html">订单详情</a></li></ol></section>
-        <section class="flow-group"><h2>权益、维修与其他入口</h2><ol class="flow-steps"><li><a href="equipment-library.html">我的装备</a></li><li><a href="03-benefit-detail.html">权益详情</a></li><li><a href="04-repair-request.html">描述维修需求</a></li><li><a href="my-orders.html">我的订单</a></li><li><a href="13-message-landing.html">服务消息</a></li></ol></section>
-      </nav>
+      <nav class="flow-nav" aria-label="服务流程导航"></nav>
       <div class="panel-tools"><a href="../design/service-as-offer-ux-spec.html">需求与流程说明</a><a href="../design/rule.md">Vitamin C 规范</a></div>
       <p class="disclaimer">交互原型：数据为示例，不发起真实支付、兑换、签到或退款。</p>
     </aside>

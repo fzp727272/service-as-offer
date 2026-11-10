@@ -4,6 +4,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const source = fs.readFileSync(path.join(__dirname, '../service-journey.js'), 'utf8');
+const mapSource = fs.readFileSync(path.join(__dirname, '../journey-map.js'), 'utf8');
 
 function setup(page, query = '', selection = null) {
   const listeners = {};
@@ -49,7 +50,12 @@ function setup(page, query = '', selection = null) {
   const StoreTimePicker = {async open(options) { opened.push(options); return selection; }};
   const window = {StoreTimePicker, clearTimeout() {}, setTimeout() {}};
   const history = {replaceState(_state, _title, url) { current = new URL(url, current); }};
-  vm.runInNewContext(source, {document, location, window, history, StoreTimePicker, URL, URLSearchParams, console, setTimeout() {}, navigator: {}});
+  const context = {document, location, window, history, StoreTimePicker, URL, URLSearchParams, console, setTimeout() {}, navigator: {}};
+  // The fake document has no index board; only the shared data is needed here.
+  const querySelector = document.querySelector;
+  document.querySelector = selector => selector === '[data-journey-board]' || selector === '[data-entry-paths]' ? null : querySelector(selector);
+  vm.runInNewContext(mapSource, context);
+  vm.runInNewContext(source, context);
   return {
     opened, navigations, location,
     click(href) {

@@ -100,7 +100,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible 
   letter-spacing: 2px;
 }
 .app {
-  height: calc(100% - 28px);
+  height: calc(100% - 92px);
   display: flex;
   flex-direction: column;
 }
@@ -837,7 +837,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible 
     bottom: calc(10px + var(--safe));
   }
   .app {
-    height: calc(100% - 28px);
+    height: calc(100% - 92px);
   }
   .body-scroll {
     padding-bottom: 25px;

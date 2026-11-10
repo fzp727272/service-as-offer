@@ -84,14 +84,17 @@
 @media(max-width:760px){body{background:#fff}.presentation{display:block;padding:0}.phone{width:100%;height:100dvh;min-height:0;box-shadow:none}.annotation{display:none}.statusbar{padding-top:env(safe-area-inset-top);height:calc(44px + env(safe-area-inset-top))}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
+  <link rel="stylesheet" href="journey-panel.css?v=20261109">
+  <script src="journey-map.js?v=20261109" defer></script>
+  <script src="service-journey.js?v=20261109-journey-map" defer></script>
+  <script src="components/prototype-nav.js?v=20261109-shared-nav" defer></script>
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
-  <script src="../figma-capture-toolbar.js" defer></script>
+  <script src="figma-capture-toolbar.js" defer></script>
 </head>
-<body>
+<body class="journey-standalone">
 <main class="presentation">
   <article class="phone" aria-label="AI 维修咨询演示">
-    <div class="statusbar" aria-hidden="true"><span>9:41</span><span class="status-icons">● ▮ ▰</span></div>
-    <header class="nav"><a class="back" href="../02-service-detail.html" aria-label="返回服务详情">‹</a><span class="nav-title">AI 维修咨询</span><span class="nav-more" aria-hidden="true">···</span></header>
+    <prototype-nav title="AI 维修咨询" back-href="02-service-detail.html" back-label="返回服务详情"></prototype-nav>
     <div class="chat" id="chat" role="log" aria-label="咨询对话" aria-live="polite" aria-relevant="additions">
       <section class="consult-intro" aria-label="装备服务咨询">
         <div class="consult-intro-copy"><div class="consult-intro-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5 14.6 9.4 22.5 12l-7.9 2.6L12 22.5l-2.6-7.9L1.5 12l7.9-2.6L12 1.5Z"/></svg>你的装备搭档</div><h1>装备闹脾气了？<br>说来听听。</h1><p>不用懂维修，说说哪里不对劲就好。</p></div>
@@ -113,7 +116,7 @@
       <p class="composer-hint" id="hint" role="status">照片仅本地预览 · 结果仅供参考</p>
     </div>
   </article>
-  <aside class="annotation"><p class="annotation-kicker">04 · CONVERSATION DEMO</p><h2>AI 维修咨询</h2><p>通过对话描述装备问题，可组合文字、语音转文字和照片一起发送，查看模拟分析和服务建议。</p><h3>演示说明</h3><ul><li>支持多轮对话；每次最多添加 3 张照片。</li><li>语音转文字依赖浏览器支持和麦克风授权。</li><li>回复基于本地规则，并非真实 AI；照片不上传、不识别。</li><li>服务卡片可进入现有购买流程。</li></ul><p><a href="../04-repair-request.html">查看原版维修需求页</a></p></aside>
+  <aside class="annotation"><p class="annotation-kicker">04 · CONVERSATION DEMO</p><h2>AI 维修咨询</h2><p>通过对话描述装备问题，可组合文字、语音转文字和照片一起发送，查看模拟分析和服务建议。</p><h3>演示说明</h3><ul><li>支持多轮对话；每次最多添加 3 张照片。</li><li>语音转文字依赖浏览器支持和麦克风授权。</li><li>回复基于本地规则，并非真实 AI；照片不上传、不识别。</li><li>服务卡片可进入现有购买流程。</li></ul><p><a href="04-repair-request.html">查看原版维修需求页</a></p></aside>
 </main>
 <script>
 (() => {

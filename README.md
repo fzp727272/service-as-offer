@@ -2,21 +2,38 @@
 
 Static interactive prototype. Open `index.html` to browse the pages.
 
+When generating or modifying buttons, follow the [Basic Button code generation rules](../design/components/button.md), then verify the required local implementation exists before using its classes. Existing page buttons are not automatically migrated.
+
 ## File layout
 
 Each HTML page references its page stylesheet, `{page}.css` (e.g.
 `02-service-detail.css`). Shared interactive components load their own stylesheet
-where needed, such as `store-time-picker.css`, keeping component presentation in
+where needed, such as `components/store-time-picker.css`, keeping component presentation in
 one reusable source. The numbered extracted fragments (`*-2.css`, `*-3.css`) have
 been removed.
 Page-specific JavaScript remains in external `{page}.js` files. Shared behavior lives in
 `service-journey.js`, `service-catalog.js`, `booking-fixtures.js`,
-`store-time-picker.js` and `figma-copy.js`. Tests are in `tests/`
+`figma-copy.js`. Tests are in `tests/`
 (run with `node tests/checkout.test.cjs` and
 `node tests/store-time-picker.test.cjs` from this folder).
 
+All product screens except the service homepage use the shared `<prototype-nav>`
+Web Component, maintained in `components/prototype-nav.js` and `components/prototype-nav.css`. Set
+`title`, `back-href`, and `back-label` attributes per screen; use `back-mode="history"`
+for same-origin history with the configured link as a fallback, and `sticky` for
+scrolling screens. The component owns the status bar, centered title, back-arrow
+asset and mini-program capsule so their alignment stays consistent. The homepage
+hero and its bottom tab bar intentionally remain page-specific.
+
+`journey-map.js` is the single source for the index journey lanes, entry paths,
+and the navigation labels, descriptions, branches and destination links shown
+on page sidebars. Load it before `service-journey.js`; update the map rather
+than editing individual navigation panels. Page-specific design notes and demo
+controls remain with their pages. The shared sidebar additions are styled in
+`journey-panel.css` and work when pages are opened directly via `file://`.
+
 Service detail now previews available stores plus date/time options before purchase.
-`store-time-picker.js` and `store-time-picker.css` own the shared store/date/time
+`components/store-time-picker.js` and `components/store-time-picker.css` own the shared store/date/time
 picker behavior and presentation used by service details, checkout,
 payment-result booking and order booking.
 `StoreTimePicker.open({root, value, mode, trigger})` resolves a confirmed selection
@@ -26,6 +43,12 @@ with city key, store ID/name, ISO date and time, or null on dismissal. Modes are
 on close; the nested city/store list commits only on its own confirmation.
 Use `10-service-order-detail.html?selectBooking=1` to enter the shared selector;
 existing bookings and unknown results cannot use it to bypass booking safeguards.
+Other shared UI modules live in `components/`: `dialog.js` binds native dialog
+open/close controls using `data-open-dialog` and `data-close-dialog`;
+`store-actions.js` renders the detail and picker variants of store navigation and
+contact controls; `order-summary.js` mounts the checkout and payment-result
+service summaries before their page scripts run. Page-specific business rules,
+dialog content, and styles remain in their respective pages.
 Checkout supports two modes: book now (select store/date/time in checkout) or
 book later (pay first, keep the service order in pending-booking state). Payment
 and booking are rendered as separate confirmations in the payment-result page.

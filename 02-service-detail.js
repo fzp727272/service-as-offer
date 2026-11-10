@@ -119,8 +119,8 @@ const app=$('.app');
 let storeTimePickerPromise;
 const ensureStoreTimePicker=()=>storeTimePickerPromise ||= window.StoreTimePicker
  ? Promise.resolve(window.StoreTimePicker)
- : new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='store-time-picker.js?v=20261104-one-css';script.onload=()=>resolve(window.StoreTimePicker);script.onerror=reject;document.head.append(script)});
-const mainContent=()=>`${isBenefitContext?'<p class="subtle" style="padding:12px 20px;margin:0;background:var(--container-commercial-light)">使用装备权益，无需再次支付。</p>':''}${D.sections.map((section,index)=>`${render(section)}${index===0&&(catalogCategory==="bike"||catalogGroup)?(isBenefitContext||selectableServices.length===0?'':render({type:'serviceSwitcher'}))+storeSummaryMarkup():''}`).join('')}${isBenefitContext?'':`<section class="service-help"><a class="text-action" href="04-repair-request.html"><span class="service-help-label"><span class="service-help-icon" aria-hidden="true"></span>不确定维修项目？描述维修需求</span><span aria-hidden="true">›</span></a></section>`}`;
+ : new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='components/store-time-picker.js?v=20261104-one-css';script.onload=()=>resolve(window.StoreTimePicker);script.onerror=reject;document.head.append(script)});
+const mainContent=()=>`${isBenefitContext?'<p class="subtle" style="padding:12px 20px;margin:0;background:var(--container-commercial-light)">使用装备权益，无需再次支付。</p>':''}${D.sections.map((section,index)=>`${render(section)}${index===0&&(catalogCategory==="bike"||catalogGroup)?(isBenefitContext||selectableServices.length===0?'':render({type:'serviceSwitcher'}))+storeSummaryMarkup():''}`).join('')}`;
 const main=()=>`<div class="body-scroll">${mainContent()}</div>`;
 let selectedCity=storeCities[0];
 const sortedStores=(city=selectedCity)=>[...city.stores].sort((a,b)=>a.distance-b.distance);
@@ -133,8 +133,7 @@ const previewFor=(cityKey,storeId,date,time)=>{const rows=bookingPreviewFixtures
 const currentBookingPreview=()=>{const preview=previewFor(selectedCityKey(),selectedStoreId,selectedPreviewDate,selectedPreviewTime);selectedPreviewDate=preview.date;selectedPreviewTime=preview.time;return preview;};
 const resetBookingPreview=()=>{selectedPreviewDate="";selectedPreviewTime="";currentBookingPreview();};
 function bookingSummaryText(){const preview=currentBookingPreview();return selectedPreviewDate&&selectedPreviewTime?`已选：${preview.date} ${selectedPreviewTime}`:"可约时间"}
-function storeMapUrl(store){return `https://map.qq.com/?q=${encodeURIComponent(`${store.name} ${store.address}`)}`}
-function storeContactMarkup(store){return `<div class="store-icon-actions" role="group" aria-label="${escapeHtml(store.name)}门店操作"><a class="store-icon-button is-navigation" href="${storeMapUrl(store)}" target="_blank" rel="noopener noreferrer" aria-label="导航到${escapeHtml(store.name)}" title="导航到门店"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21 3-7 18-3-8-8-3L21 3Z"/></svg></a><button type="button" class="store-contact-button store-icon-button is-message" data-store-wechat="${store.id}" data-store-name="${escapeHtml(store.name)}" data-store-phone="${escapeHtml(store.phone||"")}" aria-label="联系${escapeHtml(store.name)}" title="联系门店" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 11.5a8 8 0 0 1-8 8H5l-3 3v-11a9 9 0 0 1 18 0Z"/><path d="M7 10h8M7 14h5"/></svg></button></div>`}
+function storeContactMarkup(store){return window.StoreActions.render(store)}
 function storePhoneMarkup(store){return store.phone?`<a class="wechat-phone-link" href="tel:${escapeHtml(store.phone.replace(/[^0-9+]/g,""))}"><small>拨打电话</small><strong>${escapeHtml(store.phone)}</strong></a>`:'<p class="wechat-phone-unavailable">门店电话暂未接入，当前无法拨打。</p>'}
 function storeSummaryMarkup(){
  const store=selectedStore();
@@ -160,7 +159,7 @@ function setSheetOpen(isOpen){
  backdrop.classList.toggle('open',isOpen);
  backdrop.setAttribute('aria-hidden',String(!isOpen));
  trigger?.setAttribute('aria-expanded',String(isOpen));
- document.querySelectorAll('.body-scroll,.footer,.nav').forEach(element=>{element.inert=isOpen});
+document.querySelectorAll('.body-scroll,.footer,prototype-nav').forEach(element=>{element.inert=isOpen});
  if(isOpen){
   $('[data-close-compare-sheet]').focus({preventScroll:true});
   const packages=[...document.querySelectorAll('.compare-package')];
@@ -172,9 +171,9 @@ function setSheetOpen(isOpen){
 function setCompareSheetOpen(isOpen){setSheetOpen(isOpen)}
 function updateCompareSelection(){document.querySelectorAll('[data-package-id]').forEach(cell=>{cell.dataset.current=String(cell.dataset.packageId===selectedServiceId)})}
 const priceLabel=()=>{const price=activeService().price;if(Number.isFinite(price)&&price>0)return `¥${formatServicePrice(price)}`;if(Number.isFinite(catalogPrice)&&catalogPrice>0)return `¥${formatServicePrice(catalogPrice)}`;return "价格待确认"};
-const footer=`<footer class="footer${isBenefitContext?' benefit-footer':''}"><div class="purchase-summary" aria-live="polite" aria-atomic="true"><small id="purchase-service">${isBenefitContext?'服务价格':escapeHtml(activeService().title)}</small><strong id="purchase-price">${priceLabel()}</strong></div><button class="primary ${isBenefitContext?'benefit-purchase':''}" type="button" data-purchase>${isBenefitContext?'<span>返回权益详情 · 使用权益兑换</span>':'<span>购买服务</span>'}</button></footer>`;
+const footer=`<footer class="footer${isBenefitContext?' benefit-footer':''}"><div class="purchase-summary" aria-live="polite" aria-atomic="true"><small id="purchase-service">${isBenefitContext?'服务价格':escapeHtml(activeService().title)}</small><strong id="purchase-price">${priceLabel()}</strong></div><button class="primary ${isBenefitContext?'benefit-purchase':''}" type="button" data-purchase>${isBenefitContext?'<span>返回权益详情 · 使用权益兑换</span>':'<span>购买服务</span>'}</button>${isBenefitContext?'':`<a class="repair-consult-float" href="04-repair-request2.html" aria-label="不确定维修项目？描述维修需求" title="描述维修需求"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5 14.3 9.7 21.5 12l-7.2 2.3L12 21.5l-2.3-7.2L2.5 12l7.2-2.3L12 2.5Z"/></svg><span>维修咨询</span></a>`}</footer>`;
 app.className='app layout-a';
-app.innerHTML=`<div class="statusbar"><span>9:41</span><span class="status-icons">● ▮ ▰</span></div><header class="nav" aria-label="小程序导航"><button type="button" aria-label="返回" onclick="history.length>1?history.back():location.href='01-service-entry.html'">‹</button><div class="nav-title" aria-hidden="true">${D.nav||D.title}</div><button class="nav-more" type="button" aria-label="小程序菜单">···<i aria-hidden="true"></i><span class="nav-target" aria-hidden="true"></span></button></header>${main()}${footer}<div class="toast" role="status"></div><div class="modal-backdrop"><div class="modal"><h2>确认取消预约？</h2><p>取消预约后，已选时段将释放。服务单仍保留。</p><div class="modal-actions"><button data-close>暂不取消</button><button class="confirm" data-confirm>确认取消</button></div></div></div>${wechatDialogMarkup()}${comparisonSheetMarkup()}`;
+app.innerHTML=`<prototype-nav title="${escapeHtml(D.nav||D.title)}" back-href="01-service-entry.html" back-label="返回服务首页" back-mode="history"></prototype-nav>${main()}${footer}<div class="toast" role="status"></div><div class="modal-backdrop"><div class="modal"><h2>确认取消预约？</h2><p>取消预约后，已选时段将释放。服务单仍保留。</p><div class="modal-actions"><button data-close>暂不取消</button><button class="confirm" data-confirm>确认取消</button></div></div></div>${wechatDialogMarkup()}${comparisonSheetMarkup()}`;
 document.addEventListener('click',e=>{
  const serviceChoice=e.target.closest('[data-service-id]');if(serviceChoice){const scrollTop=$('.body-scroll').scrollTop;selectedServiceId=serviceChoice.dataset.serviceId;$('.body-scroll').innerHTML=mainContent();$('#purchase-price').textContent=priceLabel();$('#purchase-service').textContent=activeService().title;updateCompareSelection();document.querySelector(`[data-service-id="${selectedServiceId}"]`).focus({preventScroll:true});$('.body-scroll').scrollTo({top:scrollTop,behavior:'instant'});return}
  if(e.target.closest('[data-toggle-compare]')){setCompareSheetOpen(true);return}

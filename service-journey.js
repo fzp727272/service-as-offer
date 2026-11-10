@@ -1,4 +1,5 @@
 (() => {
+  const scriptBase = document.currentScript?.src || location.href;
   document.body.classList.add("vitamin-app");
   const params = new URLSearchParams(location.search);
   const file = location.pathname.split("/").pop();
@@ -28,7 +29,7 @@
   let pickerReady;
   const loadScript = name => new Promise((resolve, reject) => {
     const script = document.createElement("script");
-    script.src = new URL(name, location.href).href;
+    script.src = new URL(name, scriptBase).href;
     script.onload = resolve;
     script.onerror = reject;
     document.head.append(script);
@@ -42,7 +43,7 @@
       ["unpaid", "booked", "queued", "active", "completed", "cancelled", "payment-unknown", "booking-unknown"].includes(demo);
     if (blocked) return;
     try {
-      pickerReady ||= window.StoreTimePicker ? Promise.resolve() : (typeof storeCities !== 'undefined' ? Promise.resolve() : loadScript("booking-fixtures.js?v=20261104-one-css")).then(() => loadScript("store-time-picker.js?v=20261104-one-css"));
+      pickerReady ||= window.StoreTimePicker ? Promise.resolve() : (typeof storeCities !== 'undefined' ? Promise.resolve() : loadScript("booking-fixtures.js?v=20261104-one-css")).then(() => loadScript("components/store-time-picker.js?v=20261104-one-css"));
       await pickerReady;
       const repairPreview = context.get("context") === "repair";
       const selection = await StoreTimePicker.open({root: document.querySelector(".page-artboard,.artboard,.app"), value: Object.fromEntries(context), mode: repairPreview ? "preview" : "order", trigger, demoState: document.querySelector('[data-booking-preview][aria-pressed="true"]')?.dataset.bookingPreview || "available"});
@@ -214,26 +215,14 @@
     location.replace(destination.href);
     return;
   }
-  const groups = [
-    { title: "选服务与下单", pages: [
-      ["01-service-entry.html", "服务首页", "从服务、装备权益或进行中订单进入。"],
-      ["02-service-detail.html", "服务详情", "了解服务内容和费用，再确认订单。"],
-      ["05-order-checkout.html", "确认订单", "核对项目与金额，并选择“现在预约”或“暂不预约”。"],
-      ["05-payment-result.html", "支付结果", "查看支付与预约结果；支付成功不等于预约成功。"],
-    ] },
-    { title: "预约到店", pages: [
-      ["10-service-order-detail.html?selectBooking=1", "选择门店与时间", "在当前页面打开共享选择弹框，提交后回同一服务单查看结果。"],
-      ["10-service-order-detail.html", "订单详情", "预约结果作为订单状态反馈；扫码前查看预约信息，到店扫码成功后在订单内查看门店排队号。"],
-    ] },
-    { title: "权益、维修与其他入口", pages: [
-      ["equipment-library.html", "我的装备", "从具体装备查看相关服务与可用权益。"],
-      ["03-benefit-detail.html", "权益详情", "核对来源商品，使用权益后继续预约，无需再次支付。"],
-      ["04-repair-request.html", "描述维修需求", "无法判断项目时先描述问题，不直接生成诊断或报价。"],
-      ["my-orders.html", "我的订单", "按状态筛选，从对应订单继续付款、预约或查看记录。"],
-      ["13-message-landing.html", "服务消息", "消息进入关联服务单，不跳转泛订单列表。"],
-    ] },
-  ];
-  const current = groups.flatMap(group => group.pages).find(item => item[0] === file);
+  const groups = window.ServiceJourneyMap.groups;
+  const nodes = groups.flatMap(group => group.pages);
+  const currentId = file === "10-service-order-detail.html"
+    ? params.get("selectBooking") === "1" ? "select-booking"
+      : params.get("demoState") === "queued" ? "queued"
+      : params.get("demoState") === "completed" ? "completed" : "booking-created"
+    : nodes.find(item => item.page === file)?.id;
+  const current = nodes.find(item => item.id === currentId);
   const contextKeys = ["category", "name", "description", "price", "context", "benefit", "equipment", "order", "sourceOrder", "entry", "city", "store", "date", "time", "booking", "serviceState", "checkin", "payment", "paymentState"];
   const withContext = (href) => {
     const url = new URL(href, location.href);
@@ -261,43 +250,71 @@
     }
   }, true);
 
+  const homePanel = file === "01-service-entry.html" ? document.querySelector("aside.journey-panel") : null;
   const oldPanel = document.querySelector("aside.annotation, aside.page-annotation, aside.design-panel, aside.scenario-panel");
-  const panel = document.createElement("aside");
+  const panel = homePanel || document.createElement("aside");
   panel.className = "journey-panel";
   panel.setAttribute("aria-label", "完整服务流程与设计说明");
-  const home = document.createElement("a");
-  home.className = "journey-home";
-  home.href = "index.html";
-  home.textContent = "完整流程";
-  panel.append(home);
-  const title = document.createElement("h2");
-  title.textContent = current?.[1] || "服务流程";
-  const description = document.createElement("p");
-  description.textContent = current?.[2] || "按顾客任务串联服务页面。";
-  panel.append(title, description);
+  if (homePanel && current) {
+    const description = document.createElement("p");
+    description.className = "journey-current-description";
+    description.textContent = current.description;
+    homePanel.querySelector(".panel-intro")?.before(description);
+  } else {
+    const home = document.createElement("a");
+    home.className = "journey-home";
+    home.href = "index.html";
+    home.textContent = "完整流程";
+    panel.append(home);
+    const title = document.createElement("h2");
+    title.textContent = current?.title || "服务流程";
+    const description = document.createElement("p");
+    description.textContent = current?.description || "按顾客任务串联服务页面。";
+    panel.append(title, description);
+  }
   const nav = document.createElement("nav");
+  if (homePanel) nav.className = "flow-nav";
   nav.setAttribute("aria-label", "服务流程导航");
   groups.forEach(group => {
     const section = document.createElement("section");
-    section.className = "journey-group";
-    const heading = document.createElement("h3");
+    section.className = homePanel ? "flow-group" : "journey-group";
+    const heading = document.createElement(homePanel ? "h2" : "h3");
     heading.textContent = group.title;
     const list = document.createElement("ol");
-    list.className = "journey-steps";
-    group.pages.forEach(([path, label]) => {
+    list.className = homePanel ? "flow-steps" : "journey-steps";
+    group.pages.forEach(page => {
       const item = document.createElement("li");
       const link = document.createElement("a");
-      const destination = withContext(path);
+      const destination = withContext(page.href);
       link.href = destination.href;
-      link.textContent = label;
-      if (path.split("?")[0] === file) link.setAttribute("aria-current", "page");
-      item.append(link);
+      link.textContent = page.title;
+      if (page.id === currentId) link.setAttribute("aria-current", "page");
+      const note = document.createElement("p");
+      note.className = "journey-step-description";
+      note.textContent = page.description;
+      item.append(link, note);
+      (page.branches || []).forEach(branch => {
+        const branchContent = document.createElement("div");
+        branchContent.className = "journey-step-branch";
+        const branchTitle = document.createElement("strong");
+        branchTitle.textContent = branch.title;
+        branchContent.append(branchTitle);
+        (branch.options || branch.links || []).forEach(option => {
+          const branchLink = document.createElement("a");
+          branchLink.href = withContext(option.href).href;
+          branchLink.textContent = option.title;
+          branchContent.append(branchLink);
+        });
+        item.append(branchContent);
+      });
       list.append(item);
     });
     section.append(heading, list);
     nav.append(section);
   });
-  if (oldPanel) {
+  if (homePanel) {
+    homePanel.querySelector(".flow-nav")?.replaceWith(nav);
+  } else if (oldPanel) {
     const details = document.createElement("details");
     details.className = "journey-details";
     const summary = document.createElement("summary");
@@ -312,7 +329,8 @@
   } else {
     document.querySelector(".presentation, .page-presentation, .preview, .stage")?.append(panel);
   }
-  panel.append(nav);
+  if (!homePanel) panel.append(nav);
+  if (homePanel) return;
   const tools = document.createElement("div");
   tools.className = "journey-tools";
   [["../design/service-as-offer-ux-spec.html#journey", "需求与流程说明"], ["../design/design-guide/design.md", "Vitamin C 规范"]].forEach(([href, label]) => {
@@ -600,11 +618,7 @@
         if (state === "booking-unknown") {
           event.preventDefault();
           showBookingResult("unknown");
-          return;
         }
-        if (state !== "booked") return;
-        event.preventDefault();
-        document.querySelector("#store-navigation-dialog").showModal();
       });
       document.querySelector("[data-cancel-order]").addEventListener("click", () => {
         document.querySelector("#cancel-order-dialog").close();
@@ -639,19 +653,24 @@
         setText("#order-store-address", storeLocation.address);
         setText("#order-store-distance", storeLocation.distance || "");
         root.querySelector("#order-store-distance").hidden = !storeLocation.distance;
-        setText("#order-store-hours", storeLocation.hours);
+        setText("#order-store-hours", `营业时间 ${storeLocation.hours}`);
         setText("#order-store-appointment-time", appointment);
-        const hasPrimaryAction = !["queued", "completed"].includes(state);
+        const isCurrentOrderDetail = file === "10-service-order-detail.html";
+        const hasPrimaryAction = isCurrentOrderDetail
+          ? !["queued", "active"].includes(state)
+          : !["queued", "completed"].includes(state);
         primaryAction.hidden = !hasPrimaryAction;
         if (hasPrimaryAction) {
-          setText("#order-primary-action", current.action);
-          primaryAction.href = current.outline ? new URL(current.href, location.href).href : withContext(current.href).href;
+          const action = isCurrentOrderDetail && state === "completed" ? "查看更多服务" : current.action;
+          const href = isCurrentOrderDetail && state === "completed" ? "01-service-entry.html?scenario=all" : current.href;
+          setText("#order-primary-action", action);
+          primaryAction.href = current.outline ? new URL(href, location.href).href : withContext(href).href;
           primaryAction.classList.toggle("brand-outline", Boolean(current.outline));
           primaryAction.toggleAttribute("data-fresh-start", Boolean(current.outline));
         }
         root.querySelector("#order-cancel-action").hidden = state !== "unpaid";
         const footActions = root.querySelector("#order-foot-actions");
-        footActions.hidden = !hasPrimaryAction;
+        footActions.hidden = !hasPrimaryAction && !(isCurrentOrderDetail && state === "booked");
         footActions.classList.toggle("single-action", state !== "unpaid");
         root.querySelector("#service-record").hidden = state !== "completed";
         root.querySelector("#store-queue-result").hidden = state !== "queued";
@@ -684,9 +703,11 @@
         root.querySelector("#appointment-qr").hidden = state !== "booked";
         const cancelFeedback = root.querySelector("#cancel-feedback");
         const statusMessage = root.querySelector("#order-status-message");
-        statusMessage.hidden = !current.statusMessage;
-        statusMessage.textContent = current.statusMessage || "";
-        const hasCancelFeedback = Boolean(current.feedback) && !bookingCancelled && !orderCancelled;
+        const inlinePaymentFeedback = isCurrentOrderDetail && state === "payment-unknown";
+        const message = inlinePaymentFeedback ? current.feedback : current.statusMessage;
+        statusMessage.hidden = !message;
+        statusMessage.textContent = message || "";
+        const hasCancelFeedback = Boolean(current.feedback) && !bookingCancelled && !orderCancelled && !inlinePaymentFeedback;
         cancelFeedback.hidden = !hasCancelFeedback;
         cancelFeedback.textContent = hasCancelFeedback ? current.feedback : "";
         root.querySelector("#cancel-appointment-action").hidden = state !== "booked";
@@ -703,6 +724,15 @@
         const storeNavigationLink = root.querySelector("#order-store-navigation-link");
         storeNavigationLink.href = navigationUrl.href;
         storeNavigationLink.setAttribute("aria-label", `导航到${store}`);
+        if (isCurrentOrderDetail && state === "booked") {
+          current.navigationHref = navigationUrl.href;
+          primaryAction.href = current.navigationHref;
+          primaryAction.target = "_blank";
+          primaryAction.rel = "noopener noreferrer";
+        } else {
+          primaryAction.removeAttribute("target");
+          primaryAction.removeAttribute("rel");
+        }
         root.querySelector("#order-timeline").closest(".page-section").hidden = unpaid || current.progress < 0;
         root.querySelectorAll("#order-timeline .page-timeline-item").forEach((item, index) => {
           const progress = state === "completed" ? 4 : current.progress;
@@ -724,7 +754,8 @@
         else next.searchParams.delete("serviceState");
         history.replaceState(null, "", next);
         if (hasPrimaryAction) {
-          primaryAction.href = current.outline || current.href.startsWith("#") ? current.href : withContext(current.href).href;
+          const href = isCurrentOrderDetail && state === "completed" ? "01-service-entry.html?scenario=all" : current.href;
+          primaryAction.href = current.navigationHref || (current.outline || href.startsWith("#") ? href : withContext(href).href);
         }
       };
       document.querySelectorAll("[data-order-state]").forEach(button => {

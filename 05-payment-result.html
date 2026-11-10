@@ -6,28 +6,26 @@
   <meta name="description" content="Service as Offer 购后预约流程设计稿：查看支付与预约结果">
   <title>05 · 支付结果 · Service as Offer</title>
   <link rel="stylesheet" href="05-payment-result.css?v=20261104-one-css">
-  <link rel="stylesheet" href="store-time-picker.css?v=20261106-shared-picker">
-  <script src="service-journey.js?v=20261104-one-css" defer></script>
+  <link rel="stylesheet" href="components/store-time-picker.css?v=20261109-rule-alignment">
+  <link rel="stylesheet" href="journey-panel.css?v=20261109">
+  <script src="components/order-summary.js?v=20261109"></script>
+  <script src="journey-map.js?v=20261109" defer></script>
+  <script src="service-journey.js?v=20261109-journey-map" defer></script>
+  <script src="components/prototype-nav.js?v=20261109-shared-nav" defer></script>
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <script src="figma-capture-toolbar.js" defer></script>
 </head>
 <body data-page="order">
   <main class="presentation">
     <article class="artboard" aria-label="小程序设计画板：支付结果">
-      <div class="statusbar"><span>9:41</span><div class="status-icons"><span class="signal">▂▄▆</span><span>⌁</span><span class="battery"></span></div></div>
-      <header class="nav"><a class="back" href="02-service-detail.html" aria-label="返回服务详情">‹</a><span class="nav-title">支付结果</span><span class="more" aria-hidden="true">···</span></header>
+      <prototype-nav title="支付结果" back-href="02-service-detail.html" back-label="返回服务详情"></prototype-nav>
       <section class="body">
         <div class="status-card" data-payment-state="paid" role="status" aria-live="polite">
           <div class="status-head"><span class="check" aria-hidden="true"><img src="assets/figma/selection-check.svg" alt=""></span><div><div class="status-title">支付成功</div><div class="status-sub" id="status-subtitle">支付已完成，现在可以预约服务</div></div></div>
         </div>
         <section class="section">
           <h3 class="section-title">已购服务</h3>
-          <div class="service">
-            <div class="service-thumb" aria-hidden="true">
-              <svg viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="#5e5e5e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="32" r="8"/><circle cx="37" cy="32" r="8"/><path d="m11 32 9-15 8 15H11l13-9 13 9M20 17h8m-8 0-2-4m12 4 2-5h5"/></g></svg>
-            </div>
-            <div class="service-info"><div class="service-name" id="result-service-name">自行车标准保养套餐</div><div class="service-meta" id="result-service-meta">到店服务 · 支付后选择门店和时间</div></div>
-          </div>
+          <div class="service"></div><script>OrderSummary.mount(document.currentScript.previousElementSibling, "paymentResult");</script>
           <div class="rows">
             <div class="row"><span id="payment-amount-label">实付金额</span><strong id="payment-amount" class="price"><span class="price-currency">¥</span><span class="price-major">199</span><span class="price-decimal">.90</span></strong></div>
             <div class="row"><span>支付方式</span><strong id="payment-method">微信支付</strong></div>

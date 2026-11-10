@@ -6,16 +6,18 @@
   <meta name="description" content="Service as Offer 15：微信消息落地页评审原型">
   <title>13 · 微信消息落地 · Service as Offer</title>
   <link rel="stylesheet" href="13-message-landing.css?v=20261104-one-css">
-  <link rel="stylesheet" href="store-time-picker.css?v=20261106-shared-picker">
-  <script src="service-journey.js?v=20261104-one-css" defer></script>
+  <link rel="stylesheet" href="components/store-time-picker.css?v=20261109-rule-alignment">
+  <link rel="stylesheet" href="journey-panel.css?v=20261109">
+  <script src="journey-map.js?v=20261109" defer></script>
+  <script src="service-journey.js?v=20261109-journey-map" defer></script>
+  <script src="components/prototype-nav.js?v=20261109-shared-nav" defer></script>
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <script src="figma-capture-toolbar.js" defer></script>
 </head>
 <body class="gray-section-layout">
   <main class="page-presentation">
     <article class="page-artboard" aria-label="微信消息落地评审原型">
-      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
-      <header class="page-nav"><a class="page-back" href="01-service-entry.html" aria-label="返回服务首页">‹</a><span class="page-nav-title">服务消息</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <prototype-nav title="服务消息" back-href="01-service-entry.html" back-label="返回服务首页"></prototype-nav>
       <div class="page-body">
         <header class="page-intro">
           <h1 class="page-heading" id="message-title" style="margin-top:10px">您的服务有新进展</h1>

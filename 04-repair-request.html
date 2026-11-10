@@ -6,16 +6,18 @@
   <meta name="description" content="Service as Offer 04：维修需求评审原型">
   <title>04 · 维修需求 · Service as Offer</title>
   <link rel="stylesheet" href="04-repair-request.css?v=20261104-one-css">
-  <link rel="stylesheet" href="store-time-picker.css?v=20261106-shared-picker">
-  <script src="service-journey.js?v=20261104-one-css" defer></script>
+  <link rel="stylesheet" href="components/store-time-picker.css?v=20261109-rule-alignment">
+  <link rel="stylesheet" href="journey-panel.css?v=20261109">
+  <script src="journey-map.js?v=20261109" defer></script>
+  <script src="service-journey.js?v=20261109-journey-map" defer></script>
+  <script src="components/prototype-nav.js?v=20261109-shared-nav" defer></script>
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <script src="figma-capture-toolbar.js" defer></script>
 </head>
 <body class="gray-section-layout repair-request">
   <main class="page-presentation">
     <article class="page-artboard" aria-label="维修需求原型">
-      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
-      <header class="page-nav"><a class="page-back" href="02-service-detail.html" aria-label="返回服务详情">‹</a><span class="page-nav-title">描述维修需求</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <prototype-nav title="描述维修需求" back-href="02-service-detail.html" back-label="返回服务详情"></prototype-nav>
       <div class="page-body">
         <header class="page-intro">
           <h1 class="page-heading">告诉我们遇到的问题</h1>

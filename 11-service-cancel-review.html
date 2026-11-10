@@ -6,16 +6,18 @@
   <meta name="description" content="Service as Offer 13：服务单取消评审原型">
   <title>11 · 服务单取消 · Service as Offer</title>
   <link rel="stylesheet" href="11-service-cancel-review.css?v=20261104-one-css">
-  <link rel="stylesheet" href="store-time-picker.css?v=20261106-shared-picker">
-  <script src="service-journey.js?v=20261104-one-css" defer></script>
+  <link rel="stylesheet" href="components/store-time-picker.css?v=20261109-rule-alignment">
+  <link rel="stylesheet" href="journey-panel.css?v=20261109">
+  <script src="journey-map.js?v=20261109" defer></script>
+  <script src="service-journey.js?v=20261109-journey-map" defer></script>
+  <script src="components/prototype-nav.js?v=20261109-shared-nav" defer></script>
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <script src="figma-capture-toolbar.js" defer></script>
 </head>
 <body class="gray-section-layout">
   <main class="page-presentation">
     <article class="page-artboard" aria-label="服务单取消评审原型">
-      <div class="page-statusbar"><span>9:41</span><span class="page-status-icons" aria-hidden="true">● ▮ ▰</span></div>
-      <header class="page-nav"><a class="page-back" href="10-service-order-detail.html" aria-label="返回服务单详情">‹</a><span class="page-nav-title">取消服务单</span><span class="page-nav-more" aria-hidden="true">···</span></header>
+      <prototype-nav title="取消服务单" back-href="10-service-order-detail.html" back-label="返回服务单详情"></prototype-nav>
       <div class="page-body">
         <header class="page-intro">
           <h1 class="page-heading">取消待付款服务单</h1>
@@ -65,6 +67,7 @@
       <button class="page-button secondary" type="button" data-close-dialog autofocus>保留服务单</button>
     </div>
   </dialog>
+  <script src="components/dialog.js"></script>
   <script src="remaining-pages.js"></script>
 </body>
 </html>

@@ -1,5 +1,17 @@
 (() => {
   // Picker styles are included in each page's single CSS file.
+  const componentBase = document.currentScript?.src || document.baseURI;
+  let componentReady;
+  const ensureStoreActions = () => {
+    if (window.StoreActions) return Promise.resolve(window.StoreActions);
+    return componentReady ||= new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = new URL('store-actions.js?v=20261109', componentBase).href;
+      script.onload = () => window.StoreActions ? resolve(window.StoreActions) : reject(new Error('Store actions did not initialize'));
+      script.onerror = () => reject(new Error('Could not load store actions'));
+      document.head.append(script);
+    }).catch(error => { componentReady = undefined; throw error; });
+  };
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const isoDate = label => {
     if (/^\d{4}-\d{2}-\d{2}$/.test(label || '')) return label;
@@ -18,7 +30,7 @@
   let activeClose;
   let activeSetDemoState;
   /** Resolves a confirmed selection (ISO date), or null when dismissed. No order/payment side effects. */
-  const open = ({root = document.querySelector('.artboard,.app'), value = {}, mode = 'checkout', trigger = document.activeElement, demoState: initialDemoState = 'available', initialView = 'booking'} = {}) => {
+  const openPicker = ({root = document.querySelector('.artboard,.app'), value = {}, mode = 'checkout', trigger = document.activeElement, demoState: initialDemoState = 'available', initialView = 'booking'} = {}) => {
     activeClose?.(null);
     return new Promise(resolve => {
       let draft = normalize(value.location === 'denied' ? {...value, city: 'shanghai', store: '', storeId: '', date: '', time: ''} : value);
@@ -52,7 +64,7 @@
       activeClose = finish;
       const cityFor = selection => storeCities.find(city => city.key === selection.city);
       const storeFor = selection => cityFor(selection).stores.find(store => store.id === selection.storeId);
-      const actions = store => `<div class="stp-store-actions"><a href="https://map.qq.com/?q=${encodeURIComponent(`${store.name} ${store.address}`)}" target="_blank" rel="noopener noreferrer" aria-label="导航到${escape(store.name)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 3-7 18-3-8-8-3L21 3Z"/></svg></a><button type="button" data-stp-contact="${escape(store.id)}" aria-label="联系${escape(store.name)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-8 8H5l-3 3v-11a9 9 0 0 1 18 0Z"/><path d="M7 10h8M7 14h5"/></svg></button></div>`;
+      const actions = store => window.StoreActions.render(store, {variant: 'picker'});
       const render = focusSelector => {
         clearTimeout(toastTimer);
         const city = cityFor(draft);
@@ -172,6 +184,14 @@
         contact.querySelector('button').focus();
       }
     });
+  };
+  let latestOpen = 0;
+  const open = (options = {}) => {
+    const request = ++latestOpen;
+    activeClose?.(null);
+    const capturedOptions = {...options, trigger: options.trigger === undefined ? document.activeElement : options.trigger};
+    if (window.StoreActions) return openPicker(capturedOptions);
+    return ensureStoreActions().then(() => request === latestOpen ? openPicker(capturedOptions) : null);
   };
   window.StoreTimePicker = Object.freeze({open, normalize, isoDate, setDemoState: state => activeSetDemoState?.(state)});
 })();

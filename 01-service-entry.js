@@ -12,10 +12,14 @@
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
   })[char]);
 
-  const scenarios = ["all", "orders", "benefits", "recommendations"];
-
   let equipmentState = "has";
+  let benefitState = "has";
+  let orderPresence = "none";
   let selectedEquipment = equipmentItems[0];
+
+  document.querySelector("#home-design-notes-link").addEventListener("click", () => {
+    document.querySelector("#home-design-notes").open = true;
+  });
 
   function recommendedServiceIds() {
     return {
@@ -108,25 +112,49 @@
     return { path: "07-appointment-detail-cancel.html", params: { ...base, booking: "created", date: "2026-10-24", time: "14:00" } };
   }
 
-  function setScenario(scenario, updateURL = false) {
-    const selected = scenarios.includes(scenario) ? scenario : "benefits";
-    const hasOrder = selected === "all" || selected === "orders";
-    const hasBenefits = selected === "all" || selected === "benefits";
+  function orderCardTarget() {
+    const base = { name: "自行车基础保养", equipment: "Rockrider ST 530", order: "SO-2601024", category: "bike" };
+    if (orderState === "pending") return { path: "10-service-order-detail.html", params: { ...base, booking: "none", selectBooking: "1" } };
+    if (orderState === "queued") return { path: "10-service-order-detail.html", params: { ...base, booking: "created", checkin: "done", demoState: "queued" } };
+    return { path: "10-service-order-detail.html", params: { ...base, booking: "created", date: "2026-10-24", time: "14:00", demoState: "booked" } };
+  }
+
+  function renderPersonalState(updateURL = false) {
+    const hasOrder = orderPresence === "has";
+    const hasBenefits = benefitState === "has";
     document.querySelector(".personal-order").hidden = !hasOrder;
     document.querySelector(".personal-benefits").hidden = !hasBenefits;
     renderRecommendations();
-    document.querySelectorAll("[data-scenario]").forEach(button => {
-      button.setAttribute("aria-pressed", String(button.dataset.scenario === selected));
+    document.querySelectorAll("[data-benefit-state]").forEach(button => {
+      button.setAttribute("aria-pressed", String(button.dataset.benefitState === benefitState));
+    });
+    document.querySelectorAll("[data-order-presence]").forEach(button => {
+      button.setAttribute("aria-pressed", String(button.dataset.orderPresence === orderPresence));
     });
     if (updateURL) {
       const url = new URL(location.href);
-      url.searchParams.set("scenario", selected);
+      url.searchParams.delete("scenario");
+      url.searchParams.set("benefitState", benefitState);
+      url.searchParams.set("orderPresence", orderPresence);
       history.replaceState(history.state, "", url);
     }
     app.scrollTop = 0;
     syncStickyCategory();
     markCategory("all");
-    live.textContent = `已切换至${document.querySelector(`[data-scenario="${selected}"]`).textContent}场景。`;
+    live.textContent = `首页状态已更新：${hasBenefits ? "有权益" : "无权益"}，${hasOrder ? "有订单" : "无订单"}。`;
+  }
+
+  function readPersonalState(params) {
+    const legacyScenario = params.get("scenario");
+    const legacyStates = {
+      all: { benefit: "has", order: "has" },
+      orders: { benefit: "none", order: "has" },
+      benefits: { benefit: "has", order: "none" },
+      recommendations: { benefit: "none", order: "none" },
+    };
+    const legacy = legacyStates[legacyScenario];
+    benefitState = params.get("benefitState") === "none" ? "none" : params.get("benefitState") === "has" ? "has" : legacy?.benefit || "has";
+    orderPresence = params.get("orderPresence") === "has" ? "has" : params.get("orderPresence") === "none" ? "none" : legacy?.order || "none";
   }
 
   function serviceCard(service) {
@@ -192,12 +220,23 @@
   renderServices();
   const initialParams = new URLSearchParams(location.search);
   selectedEquipment = equipmentItems.find(item => item.id === initialParams.get("selectedEquipment")) || equipmentItems[0];
-  setScenario(initialParams.get("scenario"));
+  readPersonalState(initialParams);
+  renderPersonalState();
   setEquipmentState(initialParams.get("equipmentState"));
   setOrderState(initialParams.get("orderState"));
-  document.querySelector(".scenario-options").addEventListener("click", event => {
-    const button = event.target.closest("[data-scenario]");
-    if (button) setScenario(button.dataset.scenario, true);
+  document.querySelector("[data-benefit-state]").closest(".scenario-options").addEventListener("click", event => {
+    const button = event.target.closest("[data-benefit-state]");
+    if (button) {
+      benefitState = button.dataset.benefitState;
+      renderPersonalState(true);
+    }
+  });
+  document.querySelector("[data-order-presence]").closest(".scenario-options").addEventListener("click", event => {
+    const button = event.target.closest("[data-order-presence]");
+    if (button) {
+      orderPresence = button.dataset.orderPresence;
+      renderPersonalState(true);
+    }
   });
   document.querySelector("[data-equipment-state]").closest(".scenario-options").addEventListener("click", event => {
     const button = event.target.closest("[data-equipment-state]");
@@ -207,7 +246,10 @@
     const button = event.target.closest("[data-order-state]");
     if (button) setOrderState(button.dataset.orderState, true);
   });
-  window.addEventListener("popstate", () => setScenario(new URLSearchParams(location.search).get("scenario")));
+  window.addEventListener("popstate", () => {
+    readPersonalState(new URLSearchParams(location.search));
+    renderPersonalState();
+  });
   document.querySelector(".category-nav").addEventListener("click", event => {
     const button = event.target.closest("[data-category]");
     if (button) selectCategory(button.dataset.category);
@@ -242,7 +284,26 @@
     if (event.target.closest('[data-action="appointment"]')) {
       const target = orderActionTarget();
       navigate(target.path, target.params);
+      return;
     }
+    const orderCard = event.target.closest(".order-card");
+    if (orderCard) {
+      const target = orderCardTarget();
+      navigate(target.path, target.params);
+      return;
+    }
+    const benefitCard = event.target.closest(".benefit-card");
+    if (benefitCard) {
+      const benefit = benefitCard.querySelector("[data-benefit]");
+      if (benefit) navigate("03-benefit-detail.html", { benefit: benefit.dataset.benefit, entry: "service", sourceOrder: "810263" });
+    }
+  });
+  document.querySelectorAll(".order-card, .benefit-card").forEach(card => {
+    card.addEventListener("keydown", event => {
+      if (!(event.key === "Enter" || event.key === " ") || event.target !== card) return;
+      event.preventDefault();
+      card.click();
+    });
   });
   document.querySelector("#home-tab").addEventListener("click", () => {
     app.scrollTop = 0;

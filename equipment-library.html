@@ -6,8 +6,11 @@
   <meta name="color-scheme" content="light">
   <title>我的装备设计稿 · Service as Offer</title>
   <link rel="stylesheet" href="equipment-library.css?v=20261106-cart-selection">
-  <link rel="stylesheet" href="store-time-picker.css?v=20261106-shared-picker">
-  <script src="service-journey.js?v=20261104-one-css" defer></script>
+  <link rel="stylesheet" href="components/store-time-picker.css?v=20261109-rule-alignment">
+  <link rel="stylesheet" href="journey-panel.css?v=20261109">
+  <script src="journey-map.js?v=20261109" defer></script>
+  <script src="service-journey.js?v=20261109-journey-map" defer></script>
+  <script src="components/prototype-nav.js?v=20261109-shared-nav" defer></script>
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <script src="figma-capture-toolbar.js" defer></script>
 </head>
@@ -16,14 +19,7 @@
     <div class="phone" aria-label="小程序装备库画板">
       <div class="screen">
         <div class="scroll-area" id="scroll-area">
-          <header class="page-nav" aria-label="装备库导航">
-            <div class="system-bar" aria-hidden="true"><span>9:41</span><span class="system-right"><span class="signal"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"><i></i></span></span></div>
-            <div class="page-nav-row">
-              <button type="button" class="page-nav-back" id="back" aria-label="返回上一页"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h12"/></svg></button>
-              <h1 class="page-nav-title">我的装备</h1>
-              <div class="mini-capsule" aria-hidden="true"><button type="button" tabindex="-1"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="2.4"/><circle cx="19" cy="12" r="1.8"/></svg></button><button type="button" tabindex="-1"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></button></div>
-            </div>
-          </header>
+          <prototype-nav id="back" title="我的装备" back-href="01-service-entry.html" back-label="返回上一页" back-mode="history" sticky></prototype-nav>
           <div class="equipment-summary">
             <div class="equipment-summary-top">
               <div><h2 class="equipment-summary-title">我的运动装备</h2><p class="equipment-summary-note"><strong>4</strong> 件迪卡侬设备 · <strong>1</strong> 件其他品牌</p></div>

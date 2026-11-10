@@ -8,8 +8,11 @@
   <title>我的订单设计稿 · Service as Offer</title>
   <link rel="stylesheet" href="01-service-entry.css?v=20261106-empty-equipment-copy">
   <link rel="stylesheet" href="my-orders.css?v=20261106-shared-home-tabbar">
-  <link rel="stylesheet" href="store-time-picker.css?v=20261106-shared-picker">
-  <script src="service-journey.js?v=20261104-one-css" defer></script>
+  <link rel="stylesheet" href="components/store-time-picker.css?v=20261109-rule-alignment">
+  <link rel="stylesheet" href="journey-panel.css?v=20261109">
+  <script src="journey-map.js?v=20261109" defer></script>
+  <script src="service-journey.js?v=20261109-journey-map" defer></script>
+  <script src="components/prototype-nav.js?v=20261109-shared-nav" defer></script>
   <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
   <script src="figma-capture-toolbar.js" defer></script>
 </head>
@@ -17,12 +20,7 @@
   <main class="stage">
     <article class="artboard" aria-label="我的订单页面设计画板">
       <div class="screen">
-        <div class="statusbar"><span>9:41</span><img src="assets/figma/navbar-status-icons.svg" alt="" aria-hidden="true"></div>
-        <header class="page-nav">
-          <a href="01-service-entry.html?scenario=all" aria-label="返回服务首页"><img src="assets/figma/navbar-back.svg" alt="" aria-hidden="true"></a>
-          <h1>我的订单</h1>
-          <img class="more" src="assets/figma/navbar-wechat-capsule.svg" alt="" aria-hidden="true">
-        </header>
+        <prototype-nav title="我的订单" back-href="01-service-entry.html?scenario=all" back-label="返回服务首页"></prototype-nav>
         <section class="orders-main" aria-label="服务订单列表">
           <div class="orders-tabs" role="tablist" aria-label="订单状态" id="order-filters"></div>
           <div class="orders-list" role="tabpanel" id="order-list"></div>

@@ -12,6 +12,7 @@
     const live = document.getElementById("live");
     const params = new URLSearchParams(location.search);
     const selectionMode = params.get("mode") === "select";
+    const navigation = document.querySelector("prototype-nav");
     const availableItems = selectionMode && params.get("equipmentState") === "none" ? [] : equipmentItems;
     let selectedId = availableItems.find(item => item.id === params.get("selectedEquipment"))?.id || availableItems[0]?.id;
     let activeFilter = "all";
@@ -43,7 +44,7 @@
       </section>`).join("");
     }
     if (selectionMode) {
-      document.querySelector(".page-nav-title").textContent = "选择装备";
+      navigation.setAttribute("title", "选择装备");
       document.getElementById("equipment-selection-footer").hidden = false;
       updateSelectionSummary();
       if (!availableItems.length) {
@@ -79,6 +80,7 @@
         return fallback;
       }
     }
+    navigation.setAttribute("back-href", returnDestination().href);
     function selectCategory(id) {
       const tab = tabs.querySelector(`#equipment-tab-${id}`);
       if (!tab) throw new Error(`未知装备分类：${id}`);
@@ -87,7 +89,7 @@
         button.setAttribute("aria-selected", String(button.dataset.equipmentCategory === id));
       });
       const target = id === "all" ? document.getElementById("equipment-list") : document.getElementById(`equipment-group-${id}`);
-      const stickyHeight = document.querySelector(".page-nav").offsetHeight + tabs.offsetHeight;
+      const stickyHeight = navigation.offsetHeight + tabs.offsetHeight;
       const top = scrollArea.scrollTop + target.getBoundingClientRect().top - scrollArea.getBoundingClientRect().top - stickyHeight;
       scrollArea.scrollTo({ top: Math.max(0, top), behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
       live.textContent = id === "all" ? "已定位到全部装备。" : `已定位到${filters.find(filter => filter.id === id).label}装备。`;
@@ -119,11 +121,7 @@
         location.assign(next);
       }
     });
-    document.getElementById("back").addEventListener("click", () => {
-      if (history.length > 1 && document.referrer && new URL(document.referrer).origin === location.origin) {
-        history.back();
-        return;
-      }
-      location.assign(returnDestination());
-    });
+    navigation.setAttribute("back-label", "返回上一页");
+    navigation.setAttribute("back-mode", "history");
+    if (selectionMode) navigation.setAttribute("title", "选择装备");
     render();

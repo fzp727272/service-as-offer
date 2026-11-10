@@ -1108,6 +1108,37 @@ h1 {
   padding: 4px 0;
   font-weight: 700;
 }
+.repair-version-switch > strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 20px;
+}
+.repair-version-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
+.repair-version-options button {
+  min-height: 40px;
+  padding: 6px 8px;
+  border: 1px solid var(--border-quiet);
+  background: white;
+  color: var(--content-neutral);
+  font: inherit;
+  font-size: 12px;
+  line-height: 18px;
+  cursor: pointer;
+}
+.repair-version-options button[aria-pressed="true"] {
+  border-color: var(--content-brand);
+  background: white;
+  color: var(--content-brand);
+  font-weight: 700;
+}
+.repair-version-switch p { margin: 8px 0 0; font-size: 12px; line-height: 18px; }
+.repair-version-switch > a { margin-top: 4px; }
+.repair-version-options button:focus-visible { outline: 2px solid var(--content-brand); outline-offset: 2px; }
 .entry-paths {
   margin-top: 32px;
 }
@@ -1219,7 +1250,7 @@ footer {
   }
 }
 
-/* Shared store/date/time picker styles are loaded from store-time-picker.css. */
+/* Shared store/date/time picker styles are loaded from components/store-time-picker.css. */
 .stp-head{display:flex;align-items:center;gap:8px;flex:none;padding:0 16px;}
 .stp-head h2{flex:1;margin:0;font-size:18px;line-height:26px;font-weight:700}
 .stp-head button{width:44px;height:44px;flex:none;padding:0;border:0;background:transparent;color:var(--stp-muted);font-size:26px}

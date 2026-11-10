@@ -37,7 +37,7 @@ const orders = [
         <div class="order-card-body"><img src="assets/figma/${order.image}" alt="" width="64" height="64"><div class="order-service-copy"><strong>${escapeHtml(order.title)}</strong><small>设备：${escapeHtml(order.equipment)}</small><small>门店：${escapeHtml(order.store)}</small></div></div>
         ${order.appointment ? `<div class="order-info-banner">${escapeHtml(order.appointment)}</div>` : ""}
         ${order.warning ? `<div class="order-info-banner">ⓘ ${escapeHtml(order.warning)}</div>` : ""}
-        <div class="order-card-foot">${order.benefit ? '<strong class="order-benefit-label">免费权益</strong>' : order.price ? `<strong class="order-price"><span>¥</span>${escapeHtml(order.price)}</strong>` : "<span></span>"}<div class="order-card-foot-actions">${order.actions.map(action => `<button type="button" class="order-action ${action === primaryActions[order.status] ? "primary" : ""} ${action === "立即预约" ? "medium" : ""}" data-order-index="${orders.indexOf(order)}" data-order-action="${escapeHtml(action)}">${escapeHtml(action)}</button>`).join("")}</div></div>
+        <div class="order-card-foot">${order.benefit ? '<strong class="order-benefit-label">免费权益</strong>' : order.price ? `<strong class="order-price"><span>¥</span>${escapeHtml(order.price)}</strong>` : "<span></span>"}<div class="order-card-foot-actions">${order.actions.map(action => `<button type="button" class="order-action ${action === primaryActions[order.status] ? "primary" : ""}" data-order-index="${orders.indexOf(order)}" data-order-action="${escapeHtml(action)}">${escapeHtml(action)}</button>`).join("")}</div></div>
       </article>`;
     }
 

@@ -14,8 +14,8 @@
     reader.readAsDataURL(blob);
   });
 
-  const embedUrl = async rawUrl => {
-    const url = new URL(rawUrl, document.baseURI);
+  const embedUrl = async (rawUrl, base = document.baseURI) => {
+    const url = new URL(rawUrl, base);
     if (!/^https?:$/.test(url.protocol) || url.origin !== location.origin) return url.href;
     try {
       return await toDataUrl(await (await fetch(url.href)).blob());
@@ -24,13 +24,13 @@
     }
   };
 
-  const inlineCssUrls = async css => {
+  const inlineCssUrls = async (css, base) => {
     const matches = [...css.matchAll(/url\((['"]?)(.*?)\1\)/gi)];
     let output = css;
     for (const match of matches) {
       const source = match[2].trim();
       if (!source || source.startsWith("data:") || source.startsWith("#")) continue;
-      const embedded = await embedUrl(source);
+      const embedded = await embedUrl(source, base);
       output = output.replace(match[0], `url("${embedded.replaceAll('"', '%22')}")`);
     }
     return output;
@@ -83,18 +83,25 @@
     clone.querySelectorAll("script, .journey-panel, [data-figma-copy-ui]").forEach(node => node.remove());
     for (const image of clone.querySelectorAll("img[src]")) image.src = await embedUrl(image.src);
 
-    const styles = [];
-    for (const sheet of document.styleSheets) {
+    const collectSheet = async sheet => {
+      const base = sheet.href || document.baseURI;
       try {
-        styles.push([...sheet.cssRules].map(rule => rule.cssText).join("\n"));
+        const rules = [];
+        for (const rule of sheet.cssRules) {
+          rules.push(rule.styleSheet ? await collectSheet(rule.styleSheet) : await inlineCssUrls(rule.cssText, base));
+        }
+        return rules.join("\n");
       } catch {
         if (sheet.href) {
-          try { styles.push(await (await fetch(sheet.href)).text()); } catch { /* inaccessible stylesheet */ }
+          try { return await inlineCssUrls(await (await fetch(sheet.href)).text(), base); } catch { /* inaccessible stylesheet */ }
         }
+        return "";
       }
-    }
+    };
+    const styles = [];
+    for (const sheet of document.styleSheets) styles.push(await collectSheet(sheet));
 
-    const css = await inlineCssUrls(styles.join("\n"));
+    const css = styles.join("\n");
     const bodyClasses = [...document.body.classList].join(" ");
     const png = await renderArtboardToPng(clone, css, bodyClasses);
     const html = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=375, initial-scale=1"><style>${css}</style><style>html,body{margin:0;width:375px;min-height:0}body{overflow:hidden}.figma-copy-canvas{width:375px;height:812px;overflow:hidden;background:#fff}</style></head><body class="${bodyClasses}"><main class="figma-copy-canvas">${clone.outerHTML}</main></body></html>`;

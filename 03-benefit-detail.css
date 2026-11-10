@@ -78,58 +78,6 @@ svg {
   isolation: isolate;
   overflow: hidden;
 }
-.statusbar {
-  height: 32px;
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  font-size: 12px;
-  font-weight: 650;
-}
-.statusbar svg {
-  width: 48px;
-  height: 13px;
-  stroke-width: 1.4;
-}
-.nav {
-  height: 48px;
-  flex: none;
-  display: grid;
-  grid-template-columns: 80px 1fr 80px;
-  align-items: center;
-  padding: 0 16px;
-}
-.nav h1 {
-  font-size: 16px;
-  font-weight: 650;
-  text-align: center;
-}
-.back {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  margin-left: -8px;
-}
-.capsule {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  height: 30px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-}
-.capsule i {
-  width: 1px;
-  height: 16px;
-  background: var(--line);
-}
-.capsule svg {
-  width: 18px;
-  height: 18px;
-}
 main {
   flex: 1;
   min-height: 0;
@@ -381,7 +329,7 @@ details[open] summary svg {
 }
 .footer {
   flex: none;
-  padding: 12px 20px calc(14px + env(safe-area-inset-bottom,0px));
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom,0px));
   border-top: 1px solid var(--line);
   background: white;
 }
@@ -413,7 +361,7 @@ details[open] summary svg {
   font: inherit;
   font-size: 14px;
   font-weight: 650;
-  border-radius: 4px;
+  border-radius: 0;
 }
 .primary:active {
   background: #29338f;
@@ -486,9 +434,9 @@ details[open] summary svg {
   width: 100%;
   max-height: 90%;
   overflow: auto;
-  padding: 10px 20px calc(20px + env(safe-area-inset-bottom,0px));
+  padding: 12px 20px calc(12px + env(safe-area-inset-bottom,0px));
   background: white;
-  border-radius: 18px 18px 0 0;
+  border-radius: 0;
 }
 .handle {
   width: 32px;
@@ -498,8 +446,9 @@ details[open] summary svg {
   border-radius: 4px;
 }
 .sheet h2 {
-  font-size: 22px;
-  line-height: 1.4;
+  text-align: left;
+  font-size: 20px;
+  line-height: 28px;
 }
 .sheet > p {
   margin: 8px 0 18px;
@@ -1422,7 +1371,7 @@ body[data-page="result"] .presentation .artboard .body .section {
 .page-status-icons > *,
 .page-nav .system-right > * { display: none !important; }
 
-.nav,
+.nav:not(prototype-nav .nav),
 .page-nav:not(:has(.page-nav-row)) {
   position: relative;
   height: 48px;
@@ -1448,7 +1397,7 @@ body[data-page="result"] .presentation .artboard .body .section {
   align-items: center;
   padding: 0 8px 0 12px;
 }
-.nav-title,
+.nav-title:not(prototype-nav .nav-title),
 .nav h1,
 .page-nav-title,
 .page-nav h1 {
@@ -1471,7 +1420,7 @@ body[data-page="result"] .presentation .artboard .body .section {
   transform: translate(-50%, -50%);
   white-space: nowrap;
 }
-.nav .back,
+.nav .back:not(prototype-nav .back),
 .nav > button:first-child,
 .page-nav .page-back,
 .page-nav a:first-child,
@@ -1493,7 +1442,7 @@ body[data-page="result"] .presentation .artboard .body .section {
   text-decoration: none;
 }
 .nav .back > svg { visibility: hidden; }
-.nav .more,
+.nav .more:not(prototype-nav .capsule),
 .nav .nav-more,
 .nav .capsule,
 .page-nav-more,
@@ -1511,10 +1460,10 @@ body[data-page="result"] .presentation .artboard .body .section {
   font-size: 0;
   letter-spacing: 0;
 }
-.nav .capsule {
+.nav .capsule:not(prototype-nav .capsule) {
   display: block;
 }
-.nav .capsule > *,
+.nav .capsule:not(prototype-nav .capsule) > *,
 .nav .nav-more > *,
 .page-nav .mini-capsule button {
   opacity: 0;

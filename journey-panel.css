@@ -1,0 +1,56 @@
+/* Shared descriptions and branches for the index-derived journey navigation. */
+.journey-panel .journey-step-description {
+  margin: 0 12px 12px;
+  color: #616161;
+  font-size: 12px;
+  line-height: 18px;
+}
+.journey-panel .journey-step-branch {
+  margin: 0 12px 12px;
+  padding: 8px 10px;
+  border-left: 2px solid #c8cdef;
+  background: #f5f6fc;
+  font-size: 12px;
+  line-height: 18px;
+}
+.journey-panel .journey-step-branch strong { display: block; }
+.journey-panel .journey-step-branch a {
+  display: inline-flex;
+  min-height: 36px;
+  padding: 4px 12px 4px 0;
+  color: #3643ba;
+}
+
+/* The AI consultation page is self-contained and does not load the shared page CSS. */
+.journey-standalone .journey-panel {
+  position: sticky;
+  top: 28px;
+  max-height: calc(100vh - 56px);
+  overflow: auto;
+  padding: 24px;
+  border: 1px solid #e1e0df;
+  background: #fff;
+  font-size: 14px;
+  line-height: 20px;
+}
+.journey-standalone .journey-panel a { color: inherit; text-decoration: none; }
+.journey-standalone .journey-home { display: inline-flex; min-height: 32px; align-items: center; color: #3643ba !important; }
+.journey-standalone .journey-panel h2 { margin: 12px 0 8px; font-size: 24px; line-height: 36px; }
+.journey-standalone .journey-panel > p { margin: 8px 0 20px; color: #616161; }
+.journey-standalone .journey-group { padding: 12px 0; border-top: 1px solid #e1e0df; }
+.journey-standalone .journey-group h3 { margin: 0 0 8px; font-size: 14px; line-height: 20px; }
+.journey-standalone .journey-steps { margin: 0 0 0 7px; padding: 0 0 0 16px; border-left: 2px solid #e1e0df; list-style: none; }
+.journey-standalone .journey-steps li { position: relative; }
+.journey-standalone .journey-steps li::before { position: absolute; top: 17px; left: -23px; width: 8px; height: 8px; border: 2px solid #e1e0df; border-radius: 50%; background: #fff; content: ""; }
+.journey-standalone .journey-steps li:has(> a[aria-current="page"])::before { border-color: #3643ba; background: #3643ba; }
+.journey-standalone .journey-steps li > a { display: flex; min-height: 44px; align-items: center; padding: 8px 12px; }
+.journey-standalone .journey-steps a[aria-current="page"] { background: #f0f1ff; color: #3643ba; font-weight: 700; }
+.journey-standalone .journey-step-branch a { color: #3643ba; }
+.journey-standalone .journey-details { padding-top: 16px; border-top: 1px solid #e1e0df; }
+.journey-standalone .journey-details summary { min-height: 44px; cursor: pointer; font-weight: 700; }
+.journey-standalone .journey-details > div { color: #616161; font-size: 12px; line-height: 18px; }
+.journey-standalone .journey-tools { display: flex; flex-wrap: wrap; gap: 8px 16px; padding-top: 16px; border-top: 1px solid #e1e0df; }
+.journey-standalone .journey-tools a { min-height: 32px; color: #3643ba; font-size: 12px; }
+@media (max-width: 760px) {
+  .journey-standalone .journey-panel { position: static; max-height: none; border-width: 1px 0 0; }
+}

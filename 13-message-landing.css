@@ -55,36 +55,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   background: #fff;
   box-shadow: 0 20px 64px #10102424;
 }
-.page-statusbar {
-  height: 44px;
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 22px;
-  font-size: 14px;
-  font-weight: 650;
-}
-.page-status-icons { font-size: 11px; letter-spacing: 2px; }
-.page-nav {
-  height: 48px;
-  flex: none;
-  display: grid;
-  grid-template-columns: 44px 1fr 44px;
-  align-items: center;
-  padding: 0 16px;
-  border-bottom: 1px solid var(--page-line);
-}
-.page-back {
-  display: flex;
-  min-height: 44px;
-  align-items: center;
-  font-size: 26px;
-  font-weight: 300;
-  text-decoration: none;
-}
-.page-nav-title { text-align: center; font-size: 16px; font-weight: 650; }
-.page-nav-more { text-align: right; font-size: 20px; letter-spacing: 2px; }
 .page-body {
   min-height: 0;
   flex: 1;
