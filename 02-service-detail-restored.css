@@ -1,6 +1,7 @@
 .service-detail .app{height:calc(100% - 44px);font-family:"Decathlon Text","Source Han Sans CN","PingFang SC","Microsoft YaHei",sans-serif}
 .service-detail .app{height:100%;font-family:"Decathlon Text","Source Han Sans CN","PingFang SC","Microsoft YaHei",sans-serif}
 .service-detail .app .body-scroll{padding:0;scroll-behavior:smooth;overscroll-behavior:contain;display:flex;flex-direction:column;gap:8px;background:var(--background-alternative)}
+.service-detail .app .body-scroll > *{flex-shrink:0}
 .service-detail .app .body-scroll > .section{margin:0;padding:12px 16px;border:0;border-radius:0;background:#fff}
 .service-detail .app .body-scroll > .hero{padding:0}
 .service-detail .app .hero{margin:0;border:0;background:#fff}
