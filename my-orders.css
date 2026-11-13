@@ -142,7 +142,7 @@ button:focus-visible, a:focus-visible {
   flex: 1;
   display: grid;
   align-content: start;
-  gap: 12px;
+  gap: 8px;
   overflow: auto;
   padding: 12px;
   scrollbar-width: thin;
